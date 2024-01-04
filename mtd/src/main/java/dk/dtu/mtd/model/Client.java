@@ -13,6 +13,10 @@ public class Client {
     int id;
     int gameId;
 
+    public static void main(String[] args) {
+        Client client = new Client("10.209.240.41");
+    }
+
     public Client(String hostIP){
         try {
             lobby = new RemoteSpace("tcp://"+ hostIP +":37331/lobby?keep");
