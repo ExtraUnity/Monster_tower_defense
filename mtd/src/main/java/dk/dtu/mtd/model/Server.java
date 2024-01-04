@@ -19,6 +19,7 @@ public class Server {
             e.printStackTrace();
         }
         server.addGate("tcp://" + ip + ":37331/?keep");
+        System.out.println("Server ip: " + ip);
     }
 
     public static void main(String[] args) {
