@@ -34,6 +34,10 @@ public class Client {
 
     public void joinGame() {
         try {
+            System.out.println("im here2");
+            // Get uniqe id from server
+            lobby.put("request", "id", -1); // Request new id
+            id = (int)lobby.get(new ActualField("id"), new FormalField(Integer.class))[1];
             // Look for a game
             lobby.put("request", "game", id);
             int gameId = (int)lobby.get(new ActualField("game"), new ActualField(id), new FormalField(Integer.class))[2];
