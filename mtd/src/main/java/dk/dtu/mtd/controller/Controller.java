@@ -1,4 +1,4 @@
-package dk.controller;
+package dk.dtu.mtd.controller;
 
 import org.jspace.ActualField;
 
