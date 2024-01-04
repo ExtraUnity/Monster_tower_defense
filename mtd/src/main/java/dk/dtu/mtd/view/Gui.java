@@ -4,7 +4,7 @@ import org.jspace.FormalField;
 import org.jspace.SequentialSpace;
 import org.jspace.Space;
 
-import dk.controller.Controller;
+import dk.dtu.mtd.controller.Controller;
 import javafx.application.Application;
 import javafx.event.*;
 import javafx.scene.control.Button;
