@@ -4,6 +4,7 @@ import org.jspace.FormalField;
 import org.jspace.SequentialSpace;
 import org.jspace.Space;
 
+import dk.controller.Controller;
 import javafx.application.Application;
 import javafx.event.*;
 import javafx.scene.control.Button;
@@ -53,7 +54,7 @@ public class Gui extends Application {
     }
 
     private void handleClick(ActionEvent event) {
-        
+        Controller.joinLobby();
     }
 
 
