@@ -28,10 +28,11 @@ public class Server {
     public void launch(){
         while(true){
             try {
+
                 Object[] request = lobby.get(new ActualField("request"), new FormalField(String.class), new FormalField(Integer.class));
                 
                 if((request[1].toString()).equals("id")){
-                    lobby.put(IDrequest);
+                    lobby.put("id", IDrequest);
                     IDrequest++;
                 } else if ((request[1].toString()).equals("game")){
                     
