@@ -16,7 +16,6 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
 public class Gui extends Application {
-    private int counter = 0;
     private Button button = new Button();
 
     static Thread guiMainThread;

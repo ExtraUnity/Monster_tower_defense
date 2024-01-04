@@ -11,7 +11,6 @@ public class Client {
     public RemoteSpace lobby;
     RemoteSpace gameSpace;
     int id;
-    int gameId;
 
     public static void main(String[] args) {
         Client client = new Client("10.209.240.41");
@@ -19,6 +18,7 @@ public class Client {
 
     public Client(String hostIP){
         try {
+            System.out.println("im here 1");
             lobby = new RemoteSpace("tcp://"+ hostIP +":37331/lobby?keep");
             start(hostIP);
         } catch (IOException e) {
@@ -28,17 +28,17 @@ public class Client {
 
     public void start(String hostIP) {
         try {
+            System.out.println("im here2");
             // Get uniqe id from server
             lobby.put("request", "id", -1); // Request new id
             id = (int)lobby.get(new ActualField("id"), new FormalField(Integer.class))[1];
             // Look for a game
             lobby.put("request", "game", id);
-            gameId = (int)lobby.get(new ActualField("game"), new ActualField(id), new FormalField(Integer.class))[2];
+            int gameId = (int)lobby.get(new ActualField("game"), new ActualField(id), new FormalField(Integer.class))[2];
             // Join game
             try {
-                System.out.println("test");
-                gameSpace = new RemoteSpace("tcp://"+ hostIP +":37331/"+ gameId +"?keep");
-                System.out.println("Success!");
+                gameSpace = new RemoteSpace("tcp://"+ hostIP +":37331/game"+ gameId +"?keep");
+                System.out.println("Successful connection to game");
             } catch (Exception e) {
                 e.printStackTrace();
             }
