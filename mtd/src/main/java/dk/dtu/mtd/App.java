@@ -4,6 +4,7 @@ import org.jspace.FormalField;
 import org.jspace.SequentialSpace;
 import org.jspace.Space;
 
+import dk.dtu.mtd.controller.Controller;
 import dk.dtu.mtd.view.Gui;
 import javafx.application.Application;
 import javafx.event.*;
@@ -17,7 +18,7 @@ public class App {
 
     public static void main(String[] args) {
         Gui.initGui();
-
+        Controller.initController();
     }
    
 }

@@ -18,6 +18,7 @@ public class Client {
 
     public Client(String hostIP){
         try {
+            System.out.println("im here 1");
             lobby = new RemoteSpace("tcp://"+ hostIP +":37331/lobby?keep");
             start(hostIP);
         } catch (IOException e) {
@@ -27,6 +28,7 @@ public class Client {
 
     public void start(String hostIP) {
         try {
+            System.out.println("im here2");
             // Get uniqe id from server
             lobby.put("request", "id", -1); // Request new id
             id = (int)lobby.get(new ActualField("id"), new FormalField(Integer.class))[1];
