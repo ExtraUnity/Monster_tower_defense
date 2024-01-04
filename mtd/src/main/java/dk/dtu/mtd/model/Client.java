@@ -6,7 +6,7 @@ import org.jspace.ActualField;
 import org.jspace.RemoteSpace;
 
 public class Client {
-    RemoteSpace lobby;
+    public RemoteSpace lobby;
 
     public Client(String hostIP){
         try {
