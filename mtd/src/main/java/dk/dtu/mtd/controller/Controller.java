@@ -14,8 +14,9 @@ public class Controller {
     }
     public static void joinLobby() {
         try {
+            client.joinLobby();
             client.lobby.put("hey");
-            client.lobby.get(new ActualField("hey back"));
+            client.lobby.get(new ActualField("hey"));
             System.out.println("Got hey back");
         } catch (InterruptedException e) {
             e.printStackTrace();

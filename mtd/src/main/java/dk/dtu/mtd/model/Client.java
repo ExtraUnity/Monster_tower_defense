@@ -30,6 +30,7 @@ public class Client {
             // Get uniqe id from server
             lobby.put("request", "id", -1); // Request new id
             id = (int)lobby.get(new ActualField("id"), new FormalField(Integer.class))[1];
+            System.out.println("Successful connection to lobby");
         } catch (Exception e) {
             e.printStackTrace();
         }
