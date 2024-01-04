@@ -4,13 +4,16 @@ import org.jspace.FormalField;
 import org.jspace.SequentialSpace;
 import org.jspace.Space;
 
+import dk.controller.Controller;
 import javafx.application.Application;
 import javafx.event.*;
 import javafx.scene.control.Button;
+import javafx.scene.image.Image;
 import javafx.scene.input.*;
 import javafx.scene.layout.StackPane;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 public class Gui extends Application {
     private int counter = 0;
@@ -33,36 +36,34 @@ public class Gui extends Application {
     }
 
     static Stage stage;
-    
+    static StackPane root;
 
     @Override
     public void start(Stage primaryStage) {
-        primaryStage.setTitle("Hello World!");
-        this.button.setText("Im a counter! Click ME!!!");
-        this.button.setOnAction(this::handleClick);
-        StackPane root = new StackPane();
+        setupStageMeta(primaryStage);
+        Gui.stage = primaryStage;
+        root = new StackPane();
+        button.setText("Click to join lobby");
+        button.setOnAction(this::handleClick);
         root.getChildren().add(this.button);
-        Scene scene = new Scene(root, 300, 250);
-        scene.addEventFilter(KeyEvent.KEY_PRESSED, this::handleKey);
+
+        Scene scene = new Scene(root);
+
         primaryStage.setScene(scene);
         primaryStage.show();
     }
 
     private void handleClick(ActionEvent event) {
-        this.counter++;
-        this.button.setText("" + this.counter);
+        Controller.joinLobby();
     }
 
-    private void handleKey(KeyEvent event) {
-        if (event.getCode() == KeyCode.UP) {
-            this.counter++;
-        } else if (event.getCode() == KeyCode.DOWN) {
-            this.counter--;
-        } else {
-            return;
-        }
-        this.button.setText("" + this.counter);
-    }
 
+    
+    void setupStageMeta(Stage stage) {
+        stage.setTitle("Monster Tower Defense");
+        stage.setMaximized(true);
+        stage.setMinWidth(400);
+        stage.setMinHeight(400);
+    }
 
 }
