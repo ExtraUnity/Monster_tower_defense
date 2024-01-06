@@ -4,10 +4,14 @@ import org.jspace.ActualField;
 import org.jspace.FormalField;
 import org.jspace.RemoteSpace;
 
+import dk.dtu.mtd.controller.Controller;
+
 public class Client {
     public RemoteSpace lobby;
     public RemoteSpace gameSpace;
+    GameMonitor gameMonitor;
     public int id;
+    private int gameId;
     String hostIP;
 
     public static void main(String[] args) {
@@ -37,24 +41,57 @@ public class Client {
         try {
             // Look for a game
             lobby.put("request", "game", id);
-            int gameId = (int) lobby.get(new ActualField("game"), new ActualField(id),
+            gameId = (int) lobby.get(new ActualField("game"), new ActualField(id),
                     new FormalField(Integer.class))[2];
             // Join game
             gameSpace = new RemoteSpace("tcp://" + hostIP + ":37331/game" + gameId + "?keep");
+            gameMonitor = new GameMonitor(gameSpace, lobby, id, gameId);
+            new Thread(gameMonitor).start();
             System.out.println("Successful connection to game");
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public void exitGame(){
+    public void exitGame() {
         try {
             // Exit a game
+            System.out.println("exeting game");
             gameSpace.put("request", "exit", id);
-            System.out.println(gameSpace.get(new ActualField("exit"), new ActualField(id))[0].toString());
+            gameSpace.get(new ActualField("exit"), new ActualField(id));
             gameSpace.close();
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+}
+
+class GameMonitor implements Runnable {
+    RemoteSpace gameSpace;
+    RemoteSpace lobby;
+    int gameId;
+    int playerId;
+
+    GameMonitor(RemoteSpace gameSpace, RemoteSpace lobby, int playerId, int gameId) {
+        this.gameSpace = gameSpace;
+        this.lobby = lobby;
+        this.playerId = playerId;
+        this.gameId = gameId;
+
+    }
+
+    @Override
+    public void run() {
+        try {
+            gameSpace.get(new ActualField("gameClosed"), new ActualField(playerId));
+
+            System.out.println("Other player left the game");
+            Controller.exitGame();
+
+            lobby.put("request", "exit", gameId);
+        } catch (Exception e) {
+
         }
     }
 

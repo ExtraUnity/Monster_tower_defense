@@ -1,6 +1,8 @@
 package dk.dtu.mtd.controller;
 
 import dk.dtu.mtd.model.Client;
+import dk.dtu.mtd.view.GameGui;
+import dk.dtu.mtd.view.Gui;
 
 public class Controller {
     private static Controller controller;
@@ -19,6 +21,7 @@ public class Controller {
     }
 
     public static void exitGame() {
+        Gui.closeGame();
         client.exitGame();
     }
 }

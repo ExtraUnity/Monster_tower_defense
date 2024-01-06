@@ -5,15 +5,12 @@ import javafx.application.Application;
 import javafx.event.*;
 import javafx.scene.control.Button;
 import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 
 public class Gui extends Application {
     private Button button = new Button();
-
     static Thread guiMainThread;
 
     public static void initGui() {
@@ -32,6 +29,7 @@ public class Gui extends Application {
 
     static Stage stage;
     static StackPane root;
+    static GameGui game;
 
     @Override
     public void start(Stage primaryStage) {
@@ -53,21 +51,19 @@ public class Gui extends Application {
 
         //temporary for testing purpose
         Button joinGameButton = new Button("join game");
-        Button exitGameButton = new Button("exit");
-        exitGameButton.setOnAction(e -> {
-            Controller.exitGame();
-        });
+        
         joinGameButton.setOnAction(e -> {
             root.getChildren().remove(0);
-            VBox vbox = new VBox();
-            vbox.getChildren().add(new Text("Game joined"));
-            vbox.getChildren().add(exitGameButton);
-            root.getChildren().add(vbox);
-
+            game = new GameGui();
+            root.getChildren().add(game);
             Controller.joinGame();
         });
         root.getChildren().remove(0);
         root.getChildren().add(joinGameButton);
+    }
+
+    public static void closeGame(){
+        root.getChildren().remove(game);
     }
 
 
