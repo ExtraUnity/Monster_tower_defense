@@ -1,21 +1,15 @@
 package dk.dtu.mtd.view;
 
-import org.jspace.FormalField;
-import org.jspace.SequentialSpace;
-import org.jspace.Space;
-
 import dk.dtu.mtd.controller.Controller;
 import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.event.*;
 import javafx.scene.control.Button;
-import javafx.scene.image.Image;
-import javafx.scene.input.*;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
+
 
 public class Gui extends Application {
     private Button button = new Button();
@@ -59,11 +53,18 @@ public class Gui extends Application {
 
         //temporary for testing purpose
         Button joinGameButton = new Button("join game");
+        Button exitGameButton = new Button("exit");
+        exitGameButton.setOnAction(e -> {
+            Controller.exitGame();
+        });
         joinGameButton.setOnAction(e -> {
             root.getChildren().remove(0);
-            int game = Controller.joinGame();
-            root.getChildren().add(new Text("Connected to game" + game));
-            
+            VBox vbox = new VBox();
+            vbox.getChildren().add(new Text("Game joined"));
+            vbox.getChildren().add(exitGameButton);
+            root.getChildren().add(vbox);
+
+            Controller.joinGame();
         });
         root.getChildren().remove(0);
         root.getChildren().add(joinGameButton);

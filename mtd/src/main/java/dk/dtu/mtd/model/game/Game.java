@@ -17,6 +17,7 @@ public class Game implements Runnable{
         this.player2 = playerID2;
         space = new SequentialSpace();
     }
+    
     @Override
     public void run() {
         RequestHandeler gameRequestHandeler = new RequestHandeler(space);
@@ -24,7 +25,6 @@ public class Game implements Runnable{
             try {
                 //Tuple contens: ("request" , 'type of request' , 'player ID')
                 gameRequestHandeler.handleGameRequest(space.get(new ActualField("request"), new FormalField(String.class), new FormalField(Integer.class)));
-
 
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -41,9 +41,7 @@ class RequestHandeler{
     }
 
     void handleGameRequest(Object[] request) throws InterruptedException{
-        if (request[1].toString().equals("hey")){
-            space.put("hey", (Integer) request[2]);
-        } else if(request[1].toString().equals("exit")){
+        if(request[1].toString().equals("exit")){
             space.put("exit", (Integer) request[2]);
         }
     }

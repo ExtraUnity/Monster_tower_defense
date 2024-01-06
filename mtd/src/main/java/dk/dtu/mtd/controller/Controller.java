@@ -1,7 +1,5 @@
 package dk.dtu.mtd.controller;
 
-import org.jspace.ActualField;
-
 import dk.dtu.mtd.model.Client;
 
 public class Controller {
@@ -10,22 +8,17 @@ public class Controller {
 
     public static void initController() {
         controller = new Controller();
-
     }
 
     public static void joinLobby() {
-        try {
-            client.joinLobby();
-            client.lobby.put("hey");
-            client.lobby.get(new ActualField("hey"));
-            System.out.println("Got hey back");
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        client.joinLobby();
     }
 
-    public static int joinGame() {
+    public static void joinGame() {
         client.joinGame();
-        return -1; 
+    }
+
+    public static void exitGame() {
+        client.exitGame();
     }
 }

@@ -1,8 +1,5 @@
 package dk.dtu.mtd.model;
 
-import java.io.IOException;
-import java.net.UnknownHostException;
-
 import org.jspace.ActualField;
 import org.jspace.FormalField;
 import org.jspace.RemoteSpace;
@@ -50,11 +47,12 @@ public class Client {
         }
     }
 
-    public void hey() {
+    public void exitGame(){
         try {
-            // Look for a game
-            gameSpace.put("request", "hey", id);
-            System.out.println(gameSpace.get(new ActualField("hey"), new ActualField(id))[0].toString());
+            // Exit a game
+            gameSpace.put("request", "exit", id);
+            System.out.println(gameSpace.get(new ActualField("exit"), new ActualField(id))[0].toString());
+            gameSpace.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
