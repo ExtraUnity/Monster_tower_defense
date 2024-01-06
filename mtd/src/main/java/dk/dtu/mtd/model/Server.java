@@ -65,7 +65,7 @@ public class Server {
     }
 
     void createGame(int playerID1, int playerID2) {
-        Game newGame = new Game(IDgame);
+        Game newGame = new Game(IDgame, playerID1, playerID2);
         System.out.println("Creating game...");
         server.add(("game" + IDgame), newGame.space);
         new Thread(newGame).start();

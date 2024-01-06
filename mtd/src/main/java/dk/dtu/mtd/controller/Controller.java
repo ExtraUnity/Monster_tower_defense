@@ -6,12 +6,13 @@ import dk.dtu.mtd.model.Client;
 
 public class Controller {
     private static Controller controller;
-    private static Client client = new Client("10.209.240.41");;
+    private static Client client = new Client("192.168.1.125");;
 
     public static void initController() {
         controller = new Controller();
 
     }
+
     public static void joinLobby() {
         try {
             client.joinLobby();
@@ -21,5 +22,10 @@ public class Controller {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+    public static int joinGame() {
+        client.joinGame();
+        return -1; 
     }
 }

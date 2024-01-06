@@ -6,11 +6,13 @@ import org.jspace.Space;
 
 import dk.dtu.mtd.controller.Controller;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.event.*;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.input.*;
 import javafx.scene.layout.StackPane;
+import javafx.scene.text.Text;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
@@ -54,6 +56,17 @@ public class Gui extends Application {
 
     private void handleClick(ActionEvent event) {
         Controller.joinLobby();
+
+        //temporary for testing purpose
+        Button joinGameButton = new Button("join game");
+        joinGameButton.setOnAction(e -> {
+            root.getChildren().remove(0);
+            int game = Controller.joinGame();
+            root.getChildren().add(new Text("Connected to game" + game));
+            
+        });
+        root.getChildren().remove(0);
+        root.getChildren().add(joinGameButton);
     }
 
 
