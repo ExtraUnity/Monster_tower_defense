@@ -8,9 +8,8 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-
 public class Gui extends Application {
-    private Button button = new Button();
+
     static Thread guiMainThread;
 
     public static void initGui() {
@@ -30,45 +29,38 @@ public class Gui extends Application {
     static Stage stage;
     static StackPane root;
     static GameGui game;
+    static MainMenuGui mainMenu;
 
     @Override
     public void start(Stage primaryStage) {
         setupStageMeta(primaryStage);
         Gui.stage = primaryStage;
         root = new StackPane();
-        button.setText("Click to join lobby");
-        button.setOnAction(this::handleClick);
-        root.getChildren().add(this.button);
+
+        Button joinLobbyButton = new Button("Join lobby");
+        joinLobbyButton.setOnAction(e -> {
+            Controller.joinLobby();
+
+            root.getChildren().remove(0);
+            mainMenu = new MainMenuGui();
+            root.getChildren().add(mainMenu);
+        });
 
         Scene scene = new Scene(root);
-
+        root.getChildren().add(joinLobbyButton);
         primaryStage.setScene(scene);
         primaryStage.show();
     }
 
-    private void handleClick(ActionEvent event) {
-        Controller.joinLobby();
-
-        //temporary for testing purpose
-        Button joinGameButton = new Button("join game");
-        
-        joinGameButton.setOnAction(e -> {
-            root.getChildren().remove(0);
-            game = new GameGui();
-            root.getChildren().add(game);
-            Controller.joinGame();
-        });
-        root.getChildren().remove(0);
-        root.getChildren().add(joinGameButton);
-    }
-
-    public static void closeGame(){
+    public static void closeGame() {
         root.getChildren().remove(game);
+        root.getChildren().add(mainMenu);
     }
 
-
-    
     void setupStageMeta(Stage stage) {
+        stage.setOnCloseRequest(e -> {
+            Controller.exit();
+        });
         stage.setTitle("Monster Tower Defense");
         stage.setMaximized(true);
         stage.setMinWidth(400);

@@ -1,5 +1,7 @@
 package dk.dtu.mtd.model;
 
+import java.io.IOException;
+
 import org.jspace.ActualField;
 import org.jspace.FormalField;
 import org.jspace.RemoteSpace;
@@ -61,6 +63,15 @@ public class Client {
             gameSpace.get(new ActualField("exit"), new ActualField(id));
             gameSpace.close();
         } catch (Exception e) {
+            System.out.println("Not able to close a game");
+        }
+    }
+
+    public void exit() {
+        try {
+            exitGame();
+            lobby.close();
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
@@ -87,9 +98,12 @@ class GameMonitor implements Runnable {
             gameSpace.get(new ActualField("gameClosed"), new ActualField(playerId));
 
             System.out.println("Other player left the game");
-            Controller.exitGame();
+            System.out.println("exiting game");
+            gameSpace.close();
+            lobby.put("request", "closeGame", gameId);
 
-            lobby.put("request", "exit", gameId);
+            Controller.exitGame(false); // TODO: probably not a great way to do this
+
         } catch (Exception e) {
 
         }

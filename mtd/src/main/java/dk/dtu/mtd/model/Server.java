@@ -57,7 +57,7 @@ public class Server {
             } else if ((request[1].toString()).equals("game")) {
                 System.out.println("Game request received by: " + request[2].toString());
                 gameQueue.add((Integer) request[2]);
-            } else if ((request[1].toString()).equals("exit")){
+            } else if ((request[1].toString()).equals("closeGame")){
                 System.out.println("Exit request received for game: " + request[2].toString());
 
                 closeGame(request[2].toString());
@@ -78,7 +78,7 @@ public class Server {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        System.out.println("Sent player " + playerID1 + " and player " + playerID2 + " to Game" + newGame.id);
+        System.out.println("Sent player " + playerID1 + " and player " + playerID2 + " to Game " + newGame.id);
         IDgame++;
     }
 
