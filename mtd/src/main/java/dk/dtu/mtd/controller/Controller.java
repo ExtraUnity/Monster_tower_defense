@@ -2,6 +2,8 @@ package dk.dtu.mtd.controller;
 
 import org.jspace.ActualField;
 import org.jspace.FormalField;
+import java.io.IOException;
+import java.net.UnknownHostException;
 
 import dk.dtu.mtd.model.Client;
 import dk.dtu.mtd.view.GameGui;
@@ -18,7 +20,7 @@ public class Controller {
         guiMonitior = new GUIMonitior(client);
     }
 
-    public static void joinLobby() {
+    public static void joinLobby() throws UnknownHostException, IOException, InterruptedException {
         client.joinLobby();
     }
 

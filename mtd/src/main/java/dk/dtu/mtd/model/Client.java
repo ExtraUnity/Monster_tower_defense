@@ -1,12 +1,13 @@
 package dk.dtu.mtd.model;
 
 import java.io.IOException;
+import java.net.UnknownHostException;
 
 import org.jspace.ActualField;
 import org.jspace.FormalField;
 import org.jspace.RemoteSpace;
 
-
+import dk.dtu.mtd.controller.Controller;
 
 public class Client {
     public RemoteSpace lobby;
@@ -16,27 +17,18 @@ public class Client {
     private int gameId = -1;
     String hostIP;
 
-    public static void main(String[] args) {
-        Client client = new Client("192.168.1.125");
-        client.joinLobby();
-        client.joinGame();
-    }
-
     public Client(String hostIP) {
         this.hostIP = hostIP;
     }
 
-    public void joinLobby() {
-        try {
+    public void joinLobby() throws UnknownHostException, IOException, InterruptedException {
             // Join lobby
             lobby = new RemoteSpace("tcp://" + hostIP + ":37331/lobby?keep");
             // Get uniqe id from server
             lobby.put("request", "id", -1); // Request new id
             id = (int) lobby.get(new ActualField("id"), new FormalField(Integer.class))[1];
             System.out.println("Successful connection to lobby");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+
     }
 
     public void requestGame(){
@@ -74,7 +66,7 @@ public class Client {
     public void exitGame() {
         try {
             // Exit a game
-            System.out.println("exeting game");
+            System.out.println("exiting game");
             gameSpace.put("request", "exit", id);
             gameSpace.get(new ActualField("exit"), new ActualField(id));
             gameSpace.close();
@@ -122,14 +114,14 @@ class GameMonitor implements Runnable {
             gameSpace.get(new ActualField("gameClosed"), new ActualField(playerId));
 
             System.out.println("Other player left the game");
-            client.exitGame();
+            Controller.exitGame();
 
             lobby.put("request", "closeGame", gameId);
             lobby.get(new ActualField("closedGame"), new ActualField(gameId));
             gameId = -1;
 
-        } catch (Exception e) {
-
+        } catch (InterruptedException e) {
+            System.out.println("The game has been closed");
         }
     }
 }

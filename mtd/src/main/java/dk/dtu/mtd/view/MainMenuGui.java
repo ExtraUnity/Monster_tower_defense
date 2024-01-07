@@ -1,6 +1,7 @@
 package dk.dtu.mtd.view;
 
 import dk.dtu.mtd.controller.Controller;
+import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.layout.StackPane;
@@ -15,6 +16,7 @@ public class MainMenuGui extends StackPane {
 
         Button joinButton = new Button();
         joinButton.setText("Join Game");
+        
         joinButton.setOnAction(e -> {
             Gui.root.getChildren().remove(this);
             Gui.game = new GameGui(150); // TODO: plz fix
