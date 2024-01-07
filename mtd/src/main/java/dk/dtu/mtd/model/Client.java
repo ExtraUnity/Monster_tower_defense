@@ -15,12 +15,6 @@ public class Client {
     private int gameId = -1;
     String hostIP;
 
-    public static void main(String[] args) throws UnknownHostException, IOException, InterruptedException {
-        Client client = new Client("192.168.1.125");
-        client.joinLobby();
-        client.joinGame();
-    }
-
     public Client(String hostIP) {
         this.hostIP = hostIP;
     }

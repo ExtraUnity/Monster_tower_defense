@@ -1,7 +1,6 @@
 package dk.dtu.mtd.view;
 
 import java.io.IOException;
-import java.net.ConnectException;
 
 import dk.dtu.mtd.controller.Controller;
 import javafx.application.Application;
