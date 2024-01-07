@@ -5,7 +5,7 @@ import dk.dtu.mtd.view.Gui;
 
 public class Controller {
     public static Controller controller;
-    private static Client client = new Client("192.168.1.125");;
+    private static Client client = new Client("192.168.1.125");
 
     public static void initController() {
         controller = new Controller();
@@ -19,18 +19,18 @@ public class Controller {
         client.joinGame();
     }
 
-    public static void exitGame(boolean origin) {
+    public static void exitGame() {
         Gui.closeGame();
-
-        System.out.println("calling exitGame in Controller");
-        if (origin){
-            client.exitGame();
-        }
+        client.exitGame();
     }
 
     public static void exit() {
         // exit the application
         client.exit();
+    }
+
+    public static void increaseScore() {
+        //TODO: make a call to increase a score
     }
 
 }

@@ -14,14 +14,19 @@ public class GameGui extends StackPane {
         game = new VBox();
         game.setAlignment(Pos.CENTER);
 
+        Button counter = new Button("+");
+        counter.setOnAction( e -> {
+            Controller.increaseScore();
+        });
+
         Button exitGameButton = new Button("exit");
         exitGameButton.setOnAction(e -> {
-            Controller.exitGame(true);
+            Controller.exitGame();
         });
         game.getChildren().add(new Text("Game joined"));
+        game.getChildren().add(counter);
         game.getChildren().add(exitGameButton);
         this.getChildren().add(game);
-
     }
 
 }

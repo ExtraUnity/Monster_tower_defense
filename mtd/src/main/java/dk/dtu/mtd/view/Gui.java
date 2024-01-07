@@ -2,7 +2,6 @@ package dk.dtu.mtd.view;
 
 import dk.dtu.mtd.controller.Controller;
 import javafx.application.Application;
-import javafx.event.*;
 import javafx.scene.control.Button;
 import javafx.scene.layout.StackPane;
 import javafx.scene.Scene;
