@@ -67,8 +67,12 @@ public class Gui extends Application {
     }
 
     public static void closeGame() {
-        root.getChildren().remove(game);
-        root.getChildren().add(mainMenu);
+        System.out.println("Im going back to main menu");
+        Platform.runLater(() -> {
+            root.getChildren().remove(game);
+            root.getChildren().add(mainMenu);
+        });
+
     }
 
     void setupStageMeta(Stage stage) {

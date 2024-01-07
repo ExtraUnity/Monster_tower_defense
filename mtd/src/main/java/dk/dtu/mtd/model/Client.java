@@ -7,6 +7,8 @@ import org.jspace.ActualField;
 import org.jspace.FormalField;
 import org.jspace.RemoteSpace;
 
+import dk.dtu.mtd.controller.Controller;
+
 public class Client {
     public RemoteSpace lobby;
     public RemoteSpace gameSpace;
@@ -48,7 +50,7 @@ public class Client {
     public void exitGame() {
         try {
             // Exit a game
-            System.out.println("exeting game");
+            System.out.println("exiting game");
             gameSpace.put("request", "exit", id);
             gameSpace.get(new ActualField("exit"), new ActualField(id));
             gameSpace.close();
@@ -94,14 +96,14 @@ class GameMonitor implements Runnable {
             gameSpace.get(new ActualField("gameClosed"), new ActualField(playerId));
 
             System.out.println("Other player left the game");
-            client.exitGame();
+            Controller.exitGame();
 
             lobby.put("request", "closeGame", gameId);
             lobby.get(new ActualField("closedGame"), new ActualField(gameId));
             gameId = -1;
 
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
     }
 
