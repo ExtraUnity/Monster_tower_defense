@@ -102,8 +102,8 @@ class GameMonitor implements Runnable {
             lobby.get(new ActualField("closedGame"), new ActualField(gameId));
             gameId = -1;
 
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (InterruptedException e) {
+            System.out.println("The game has been closed");
         }
     }
 
