@@ -18,7 +18,6 @@ public class Server {
     int IDgame = 0;
     Queue<Integer> gameQueue;
 
-
     public Server() {
         server = new SpaceRepository();
         lobby = new SequentialSpace();
@@ -39,10 +38,10 @@ public class Server {
             try {
                 handleRequest(lobby.get(new ActualField("request"), new FormalField(String.class),
                         new FormalField(Integer.class)));
-                if (gameQueue.size() >= 2){
+                if (gameQueue.size() >= 2) {
                     createGame(gameQueue.poll(), gameQueue.poll());
                 }
-                
+
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -58,6 +57,10 @@ public class Server {
             } else if ((request[1].toString()).equals("game")) {
                 System.out.println("Game request received by: " + request[2].toString());
                 gameQueue.add((Integer) request[2]);
+            } else if ((request[1].toString()).equals("closeGame")){
+                System.out.println("Exit request received for game: " + request[2].toString());
+
+                closeGame(request[2].toString());
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -65,7 +68,7 @@ public class Server {
     }
 
     void createGame(int playerID1, int playerID2) {
-        Game newGame = new Game(IDgame);
+        Game newGame = new Game(IDgame, playerID1, playerID2);
         System.out.println("Creating game...");
         server.add(("game" + IDgame), newGame.space);
         new Thread(newGame).start();
@@ -75,8 +78,13 @@ public class Server {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        System.out.println("Sent player " +playerID1 + " and player " + playerID2 + " to Game" + newGame.id);
+        System.out.println("Sent player " + playerID1 + " and player " + playerID2 + " to Game " + newGame.id);
         IDgame++;
+    }
+
+    void closeGame(String gameID){
+        server.remove("game" + gameID);
+        System.out.println("Closing game " + gameID);
     }
 
     public static void main(String[] args) {

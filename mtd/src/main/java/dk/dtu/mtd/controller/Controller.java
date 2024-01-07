@@ -1,25 +1,36 @@
 package dk.dtu.mtd.controller;
 
-import org.jspace.ActualField;
-
 import dk.dtu.mtd.model.Client;
+import dk.dtu.mtd.view.Gui;
 
 public class Controller {
-    private static Controller controller;
-    private static Client client = new Client("10.209.240.41");;
+    public static Controller controller;
+    private static Client client = new Client("192.168.1.125");
 
     public static void initController() {
         controller = new Controller();
+    }
 
-    }
     public static void joinLobby() {
-        try {
-            client.joinLobby();
-            client.lobby.put("hey");
-            client.lobby.get(new ActualField("hey"));
-            System.out.println("Got hey back");
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        client.joinLobby();
     }
+
+    public static void joinGame() {
+        client.joinGame();
+    }
+
+    public static void exitGame() {
+        Gui.closeGame();
+        client.exitGame();
+    }
+
+    public static void exit() {
+        // exit the application
+        client.exit();
+    }
+
+    public static void increaseScore() {
+        //TODO: make a call to increase a score
+    }
+
 }
