@@ -1,5 +1,8 @@
 package dk.dtu.mtd.view;
 
+import java.io.IOException;
+import java.net.ConnectException;
+
 import dk.dtu.mtd.controller.Controller;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -39,13 +42,22 @@ public class Gui extends Application {
 
         Button joinLobbyButton = new Button("Join lobby");
         joinLobbyButton.setOnAction(e -> {
+            new Thread() {
+                public void run() {
 
-            Platform.runLater(() -> {
-                Controller.joinLobby();
-                root.getChildren().remove(0);
-                mainMenu = new MainMenuGui();
-                root.getChildren().add(mainMenu);
-            });
+                    try {
+                        Controller.joinLobby();
+                        Platform.runLater(() -> {
+                            root.getChildren().remove(0);
+                            mainMenu = new MainMenuGui();
+                            root.getChildren().add(mainMenu);
+                        });
+                    } catch (IOException | InterruptedException e) {
+                        System.out.println("Connection to lobby failed.");
+                    }
+
+                }
+            }.start();
 
         });
 

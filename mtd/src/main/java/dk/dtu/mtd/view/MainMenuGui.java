@@ -16,12 +16,16 @@ public class MainMenuGui extends StackPane {
 
         Button joinButton = new Button();
         joinButton.setText("Join Game");
+        
         joinButton.setOnAction(e -> {
-            final Object param = this;
+            final Object mainMenu = this;
+            //Set new thread for joining game to avoid freezing the window.
             Thread t = new Thread(new Runnable() {
-                Object p = param;
+                Object p = mainMenu;
                 public void run() {
                     Controller.joinGame();
+
+                    //Update gui on application thread as soon as this thread is available.
                     Platform.runLater(() -> {
                         Gui.root.getChildren().remove(p);
                         Gui.game = new GameGui();

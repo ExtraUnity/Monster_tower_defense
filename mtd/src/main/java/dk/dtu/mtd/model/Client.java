@@ -1,6 +1,7 @@
 package dk.dtu.mtd.model;
 
 import java.io.IOException;
+import java.net.UnknownHostException;
 
 import org.jspace.ActualField;
 import org.jspace.FormalField;
@@ -14,7 +15,7 @@ public class Client {
     private int gameId = -1;
     String hostIP;
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws UnknownHostException, IOException, InterruptedException {
         Client client = new Client("192.168.1.125");
         client.joinLobby();
         client.joinGame();
@@ -24,17 +25,13 @@ public class Client {
         this.hostIP = hostIP;
     }
 
-    public void joinLobby() {
-        try {
+    public void joinLobby() throws UnknownHostException, IOException, InterruptedException {
             // Join lobby
             lobby = new RemoteSpace("tcp://" + hostIP + ":37331/lobby?keep");
             // Get uniqe id from server
             lobby.put("request", "id", -1); // Request new id
             id = (int) lobby.get(new ActualField("id"), new FormalField(Integer.class))[1];
             System.out.println("Successful connection to lobby");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
     }
 
