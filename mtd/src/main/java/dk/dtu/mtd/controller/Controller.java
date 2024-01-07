@@ -6,6 +6,7 @@ import org.jspace.FormalField;
 import dk.dtu.mtd.model.Client;
 import dk.dtu.mtd.view.GameGui;
 import dk.dtu.mtd.view.Gui;
+import javafx.application.Platform;
 
 public class Controller {
     public static Controller controller;
@@ -40,7 +41,6 @@ public class Controller {
 
     public static void damagde() {
         client.damagde();
-        //GameGui.updateGameGui(10); // TODO: noooooo this is wrong plz fix me!!!!
     }
 }
 
@@ -64,6 +64,13 @@ class GUIMonitior implements Runnable {
 
                 if (update[1].toString().equals("damagde")){
                     System.out.println("updating GUI");
+                    final int hp = (int) update[2];
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            GameGui.updateGameGui(hp);
+                        }
+                    });
                     //GameGui.updateGameGui((int) update[2]); throws an exeption because it's not on the GUI thread
                 }
             } catch (InterruptedException e) {
