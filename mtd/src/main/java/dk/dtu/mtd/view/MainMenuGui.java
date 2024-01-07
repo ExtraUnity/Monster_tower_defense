@@ -17,7 +17,7 @@ public class MainMenuGui extends StackPane {
         joinButton.setText("Join Game");
         joinButton.setOnAction(e -> {
             Gui.root.getChildren().remove(this);
-            Gui.game = new GameGui();
+            Gui.game = new GameGui(150); // TODO: plz fix
             Gui.root.getChildren().add(Gui.game);
             Controller.joinGame();
         });
