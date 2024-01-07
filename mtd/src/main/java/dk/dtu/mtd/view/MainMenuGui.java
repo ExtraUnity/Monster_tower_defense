@@ -1,6 +1,7 @@
 package dk.dtu.mtd.view;
 
 import dk.dtu.mtd.controller.Controller;
+import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.layout.StackPane;
@@ -16,10 +17,21 @@ public class MainMenuGui extends StackPane {
         Button joinButton = new Button();
         joinButton.setText("Join Game");
         joinButton.setOnAction(e -> {
-            Gui.root.getChildren().remove(this);
-            Gui.game = new GameGui();
-            Gui.root.getChildren().add(Gui.game);
-            Controller.joinGame();
+            final Object param = this;
+            Thread t = new Thread(new Runnable() {
+                Object p = param;
+                public void run() {
+                    Controller.joinGame();
+                    Platform.runLater(() -> {
+                        Gui.root.getChildren().remove(p);
+                        Gui.game = new GameGui();
+                        Gui.root.getChildren().add(Gui.game);
+                    });
+
+                }
+            });
+            t.start();
+
         });
 
         menu.getChildren().add(joinButton);

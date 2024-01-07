@@ -6,8 +6,6 @@ import org.jspace.ActualField;
 import org.jspace.FormalField;
 import org.jspace.RemoteSpace;
 
-
-
 public class Client {
     public RemoteSpace lobby;
     public RemoteSpace gameSpace;
@@ -37,6 +35,7 @@ public class Client {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
     }
 
     public void joinGame() {

@@ -2,6 +2,7 @@ package dk.dtu.mtd.view;
 
 import dk.dtu.mtd.controller.Controller;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.scene.control.Button;
 import javafx.scene.layout.StackPane;
 import javafx.scene.Scene;
@@ -38,11 +39,14 @@ public class Gui extends Application {
 
         Button joinLobbyButton = new Button("Join lobby");
         joinLobbyButton.setOnAction(e -> {
-            Controller.joinLobby();
 
-            root.getChildren().remove(0);
-            mainMenu = new MainMenuGui();
-            root.getChildren().add(mainMenu);
+            Platform.runLater(() -> {
+                Controller.joinLobby();
+                root.getChildren().remove(0);
+                mainMenu = new MainMenuGui();
+                root.getChildren().add(mainMenu);
+            });
+
         });
 
         Scene scene = new Scene(root);
