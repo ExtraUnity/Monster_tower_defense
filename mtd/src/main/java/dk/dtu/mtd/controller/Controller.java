@@ -1,17 +1,20 @@
 package dk.dtu.mtd.controller;
 
+import java.io.IOException;
+import java.net.UnknownHostException;
+
 import dk.dtu.mtd.model.Client;
 import dk.dtu.mtd.view.Gui;
 
 public class Controller {
     public static Controller controller;
-    private static Client client = new Client("192.168.1.125");
+    private static Client client = new Client("82.211.211.218");
 
     public static void initController() {
         controller = new Controller();
     }
 
-    public static void joinLobby() {
+    public static void joinLobby() throws UnknownHostException, IOException, InterruptedException {
         client.joinLobby();
     }
 

@@ -1,7 +1,10 @@
 package dk.dtu.mtd.view;
 
+import java.io.IOException;
+
 import dk.dtu.mtd.controller.Controller;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.scene.control.Button;
 import javafx.scene.layout.StackPane;
 import javafx.scene.Scene;
@@ -38,11 +41,23 @@ public class Gui extends Application {
 
         Button joinLobbyButton = new Button("Join lobby");
         joinLobbyButton.setOnAction(e -> {
-            Controller.joinLobby();
+            new Thread() {
+                public void run() {
 
-            root.getChildren().remove(0);
-            mainMenu = new MainMenuGui();
-            root.getChildren().add(mainMenu);
+                    try {
+                        Controller.joinLobby();
+                        Platform.runLater(() -> {
+                            root.getChildren().remove(0);
+                            mainMenu = new MainMenuGui();
+                            root.getChildren().add(mainMenu);
+                        });
+                    } catch (IOException | InterruptedException e) {
+                        System.out.println("Connection to lobby failed.");
+                    }
+
+                }
+            }.start();
+
         });
 
         Scene scene = new Scene(root);
@@ -52,8 +67,12 @@ public class Gui extends Application {
     }
 
     public static void closeGame() {
-        root.getChildren().remove(game);
-        root.getChildren().add(mainMenu);
+        System.out.println("Im going back to main menu");
+        Platform.runLater(() -> {
+            root.getChildren().remove(game);
+            root.getChildren().add(mainMenu);
+        });
+
     }
 
     void setupStageMeta(Stage stage) {
