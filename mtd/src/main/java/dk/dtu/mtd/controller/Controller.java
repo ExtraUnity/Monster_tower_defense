@@ -15,15 +15,16 @@ public class Controller {
     public static Controller controller;
     private static GUIMonitior guiMonitior;
     private static Thread guiThread;
-    private static Client client = new Client("10.209.240.155");
+    private static Client client = new Client();
 
     public static void initController() {
         controller = new Controller();
         guiMonitior = new GUIMonitior(client);
     }
 
-    public static void joinLobby() throws UnknownHostException, IOException, InterruptedException {
-        client.joinLobby();
+    public static void joinLobby(String serverIp) throws UnknownHostException, IOException, InterruptedException {
+        client.joinLobby(serverIp);
+        System.out.println(serverIp);
     }
 
     public static void joinGame() {
@@ -46,6 +47,7 @@ public class Controller {
 
     public static void exit() {
         // exit the application
+        guiMonitior.playing = false;
         client.exit();
     }
 
@@ -77,6 +79,8 @@ class GUIMonitior implements Runnable {
                 // ("gui", (String) type, (int) data, playerId)
                 update = client.gameSpace.get(new ActualField("gui"), new FormalField(String.class),
                         new FormalField(Object.class), new ActualField(client.id));
+
+                System.out.println("got");
 
                 if (update[1].toString().equals("damage")) {
                     System.out.println("updating GUI");

@@ -6,6 +6,7 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
+
 public class MainMenuGui extends StackPane {
     static VBox menu;
 
@@ -15,6 +16,7 @@ public class MainMenuGui extends StackPane {
 
         Button joinButton = new Button();
         joinButton.setText("Join Game");
+
 
         joinButton.setOnAction(e -> {
             Gui.loading();

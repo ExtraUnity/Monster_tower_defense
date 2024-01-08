@@ -49,7 +49,8 @@ public class Game implements Runnable {
                 space.put("exit", player2.id);
                 space.put("gameClosed", player1.id);
             }
-        } else if (request[1].toString().equals("damage")) { // TODO: discuss naming conventions in the group
+        } else if (request[1].toString().equals("damage")) {
+            // TODO: discuss naming conventions in the group
             if ((int) request[2] == player1.id) {
                 player2.setHealth(player2.getHealth() - 10);
                 // ("damadge", newHealth, playerID)
