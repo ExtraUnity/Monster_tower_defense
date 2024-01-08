@@ -56,8 +56,9 @@ public class GameGui extends StackPane {
     }
 
     public static void updateGameGui(LinkedList<String> newChat) {
+        System.out.println("Got new chat list!");
         chat = newChat;
-
+        displayChat();
     }
 
     public static void displayChat() {
@@ -67,6 +68,7 @@ public class GameGui extends StackPane {
     }
 
     private static void submitMessage() {
+        System.out.println("Submitting message");
         String msg = chatWriter.getText().trim();
         Controller.sendMessage(msg);
     }

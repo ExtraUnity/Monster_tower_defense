@@ -92,7 +92,9 @@ public class Client {
 
     public void sendMessage(String msg) {
         try {
-            gameSpace.put("request", "chat", msg);
+            gameSpace.put("request", "chat", id);
+            gameSpace.put("data", "chat", msg);
+            System.out.println("Client sent message request");
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

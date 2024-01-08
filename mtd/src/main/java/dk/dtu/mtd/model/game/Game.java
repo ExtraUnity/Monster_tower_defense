@@ -18,6 +18,12 @@ public class Game implements Runnable {
         this.player1 = new Player(playerID1, 150);
         this.player2 = new Player(playerID2, 150);
         space = new SequentialSpace();
+        LinkedList<String> chat = new LinkedList<String>();
+        try {
+            space.put("chatList", chat);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -59,14 +65,19 @@ public class Game implements Runnable {
                 System.out.println("player1 recived damage");
             }
         } else if (request[1].toString().equals("chat")) {
+            System.out.println("Game recieved chat request");
             //Retrieve chatlist and update to include message
+            String msg = (String) space.get(new ActualField("data"), new ActualField("chat"), new FormalField(String.class))[2];
+            System.out.println("Game recieved message");
+            String player = String.valueOf((int) request[2]);
             Object[] res = space.get(new ActualField("chatList"), new FormalField(LinkedList.class));
-            LinkedList<String> chat = (LinkedList<String>) res[2];
-            chat.add(request[2].toString());
+            LinkedList<String> chat = (LinkedList<String>) res[1];
+            chat.add("Player " + player + ": " + msg);
             space.put("chatList", chat);
             //One for each player
             space.put("gui","chat", chat, player1.id);
             space.put("gui","chat", chat, player2.id);
+            System.out.println("Game put chat updates");
         }
     }
 

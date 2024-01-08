@@ -54,6 +54,7 @@ public class Controller {
     }
 
     public static void sendMessage(String msg) {
+        System.out.println("Controller handling message");
         client.sendMessage(msg);
     }
 }
@@ -75,7 +76,7 @@ class GUIMonitior implements Runnable {
             try {
                 // ("gui", (String) type, (int) data, playerId)
                 update = client.gameSpace.get(new ActualField("gui"), new FormalField(String.class),
-                        new FormalField(Integer.class), new ActualField(client.id));
+                        new FormalField(Object.class), new ActualField(client.id));
 
                 if (update[1].toString().equals("damage")) {
                     System.out.println("updating GUI");
@@ -90,6 +91,7 @@ class GUIMonitior implements Runnable {
                     // on the GUI thread
                 } else if(update[1].toString().equals("chat")) {
                     LinkedList<String> chat = (LinkedList<String>) update[2];
+                    System.out.println("Gui recieved request to update");
                     Platform.runLater(new Runnable() {
 
                         @Override
