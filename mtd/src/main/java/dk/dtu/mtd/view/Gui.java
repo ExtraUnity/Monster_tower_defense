@@ -1,6 +1,8 @@
 package dk.dtu.mtd.view;
 
 import java.io.IOException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 
 import dk.dtu.mtd.controller.Controller;
 import javafx.application.Application;
@@ -46,7 +48,14 @@ public class Gui extends Application {
 
         Text textIp = new Text("Lobby IP:");
 
-        TextField textFieldIp = new TextField("");
+        String ownIp = "";
+        try {
+            ownIp = (InetAddress.getLocalHost().getHostAddress()).trim();
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        }
+        
+        TextField textFieldIp = new TextField(ownIp);
         textFieldIp.setPrefWidth(100);
         textFieldIp.setMaxWidth(100);
 
