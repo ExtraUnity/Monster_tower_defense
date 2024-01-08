@@ -64,6 +64,7 @@ class GUIMonitior implements Runnable {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void run() {
         Object[] update;
         while (playing) {
@@ -89,7 +90,7 @@ class GUIMonitior implements Runnable {
 
                         @Override
                         public void run() {
-                            
+                            GameGui.updateGameGui(chat);
                         }
 
                     });

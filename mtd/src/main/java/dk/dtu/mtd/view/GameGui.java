@@ -1,6 +1,5 @@
 package dk.dtu.mtd.view;
 
-import java.io.InputStream;
 import java.util.LinkedList;
 
 import dk.dtu.mtd.controller.Controller;

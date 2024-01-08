@@ -2,7 +2,6 @@ package dk.dtu.mtd.model;
 
 import java.io.IOException;
 import java.net.UnknownHostException;
-import java.util.LinkedList;
 
 import org.jspace.ActualField;
 import org.jspace.FormalField;
