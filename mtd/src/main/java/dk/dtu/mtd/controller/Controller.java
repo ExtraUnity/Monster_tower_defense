@@ -14,7 +14,7 @@ public class Controller {
     public static Controller controller;
     private static GUIMonitior guiMonitior;
     private static Thread guiThread;
-    private static Client client = new Client("10.209.248.191");
+    private static Client client = new Client("10.209.240.155");
 
     public static void initController() {
         controller = new Controller();
