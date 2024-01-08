@@ -3,6 +3,7 @@ package dk.dtu.mtd.view;
 import java.util.LinkedList;
 
 import dk.dtu.mtd.controller.Controller;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
@@ -14,6 +15,7 @@ import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
@@ -48,10 +50,23 @@ public class GameGui extends StackPane {
             Controller.exitGame();
         });
 
-        game.getChildren().addAll(hp,counter,gameChat,exitGameButton);
+        game.getChildren().addAll(hp,counter,exitGameButton);
 
         layout.setCenter(game);
-        layout.setBottom(new GameShop());
+
+        ImageView chatButton = new ImageView(new Image("dk/dtu/mtd/assets/chatButton.jpg",50,50,true,false));
+        chatButton.setOnMouseReleased(e -> {
+            if(game.getChildren().contains(gameChat)) {
+                game.getChildren().remove(gameChat);
+            } else {
+                game.getChildren().add(gameChat);
+            }
+        });
+        BorderPane bottom = new BorderPane();
+        bottom.setCenter(new GameShop());
+        bottom.setRight(chatButton);
+        BorderPane.setAlignment(chatButton, Pos.BOTTOM_RIGHT);
+        layout.setBottom(bottom);
 
         this.setBackground(background());
         this.getChildren().add(layout);
