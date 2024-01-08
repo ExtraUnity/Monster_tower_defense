@@ -4,6 +4,7 @@ import org.jspace.ActualField;
 import org.jspace.FormalField;
 import java.io.IOException;
 import java.net.UnknownHostException;
+import java.util.LinkedList;
 
 import dk.dtu.mtd.model.Client;
 import dk.dtu.mtd.view.GameGui;
@@ -82,6 +83,16 @@ class GUIMonitior implements Runnable {
                     });
                     // GameGui.updateGameGui((int) update[2]); throws an exeption because it's not
                     // on the GUI thread
+                } else if(update[1].toString().equals("chat")) {
+                    LinkedList<String> chat = (LinkedList<String>) update[2];
+                    Platform.runLater(new Runnable() {
+
+                        @Override
+                        public void run() {
+                            
+                        }
+
+                    });
                 }
             } catch (InterruptedException e) {
                 System.out.println("GUImonitor failing");

@@ -67,6 +67,8 @@ public class Game implements Runnable {
             //One for each player
             space.put("chatUpdate");
             space.put("chatUpdate");
+            space.put("gui","chat", chat);
+            space.put("gui","chat", chat);
         }
     }
 

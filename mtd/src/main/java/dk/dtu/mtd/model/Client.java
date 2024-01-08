@@ -17,8 +17,6 @@ public class Client {
     public int id;
     private int gameId = -1;
     String hostIP;
-    LinkedList<String> chat;
-    ChatMonitor chatMonitor;
 
     public Client(String hostIP) {
         this.hostIP = hostIP;
@@ -51,10 +49,7 @@ public class Client {
             // Join game
             gameSpace = new RemoteSpace("tcp://" + hostIP + ":37331/game" + gameId + "?keep");
             gameMonitor = new GameMonitor(this, gameSpace, lobby, id, gameId);
-            chat = new LinkedList<String>();
-            chatMonitor = new ChatMonitor(this, gameSpace, lobby, id, gameId);
             new Thread(gameMonitor).start();
-            new Thread(chatMonitor).start();
             System.out.println("Successful connection to game");
         } catch (Exception e) {
             e.printStackTrace();
@@ -102,38 +97,6 @@ public class Client {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-    }
-
-}
-
-class ChatMonitor implements Runnable {
-    Client client;
-    RemoteSpace gameSpace;
-    RemoteSpace lobby;
-    int gameId;
-    int playerId;
-
-    ChatMonitor(Client client, RemoteSpace gameSpace, RemoteSpace lobby, int playerId, int gameId) {
-        this.client = client;
-        this.gameSpace = gameSpace;
-        this.lobby = lobby;
-        this.playerId = playerId;
-        this.gameId = gameId;
-
-    }
-
-    @Override
-    @SuppressWarnings("unchecked")
-    public void run() {
-        try {
-            gameSpace.get(new ActualField("chatUpdate"));
-            Object[] res = gameSpace.query(new ActualField("chatList"), new FormalField(LinkedList.class));
-            client.chat = (LinkedList<String>) res[2];
-
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
     }
 
 }
