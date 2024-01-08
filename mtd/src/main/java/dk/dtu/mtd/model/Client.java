@@ -2,6 +2,7 @@ package dk.dtu.mtd.model;
 
 import java.io.IOException;
 import java.net.UnknownHostException;
+import java.util.LinkedList;
 
 import org.jspace.ActualField;
 import org.jspace.FormalField;
@@ -22,16 +23,16 @@ public class Client {
     }
 
     public void joinLobby() throws UnknownHostException, IOException, InterruptedException {
-            // Join lobby
-            lobby = new RemoteSpace("tcp://" + hostIP + ":37331/lobby?keep");
-            // Get uniqe id from server
-            lobby.put("request", "id", -1); // Request new id
-            id = (int) lobby.get(new ActualField("id"), new FormalField(Integer.class))[1];
-            System.out.println("Successful connection to lobby");
+        // Join lobby
+        lobby = new RemoteSpace("tcp://" + hostIP + ":37331/lobby?keep");
+        // Get uniqe id from server
+        lobby.put("request", "id", -1); // Request new id
+        id = (int) lobby.get(new ActualField("id"), new FormalField(Integer.class))[1];
+        System.out.println("Successful connection to lobby");
 
     }
 
-    public void requestGame(){
+    public void requestGame() {
         try {
             // Look for a game
             lobby.put("request", "game", id);
@@ -55,7 +56,7 @@ public class Client {
         }
     }
 
-    public void damage(){
+    public void damage() {
         try {
             gameSpace.put("request", "damage", id);
         } catch (Exception e) {
@@ -88,6 +89,39 @@ public class Client {
 
     public int getGameID() {
         return gameId;
+    }
+
+    public void sendMessage(String msg) {
+
+    }
+
+}
+
+class ChatMonitor implements Runnable {
+    Client client;
+    RemoteSpace gameSpace;
+    RemoteSpace lobby;
+    int gameId;
+    int playerId;
+
+    ChatMonitor(Client client, RemoteSpace gameSpace, RemoteSpace lobby, int playerId, int gameId) {
+        this.client = client;
+        this.gameSpace = gameSpace;
+        this.lobby = lobby;
+        this.playerId = playerId;
+        this.gameId = gameId;
+
+    }
+
+    @Override
+    public void run() {
+        try {
+            gameSpace.get(new ActualField("chatUpdate"));
+            gameSpace.query(new ActualField("chatList"), new FormalField(LinkedList.class));
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
     }
 
 }
@@ -125,4 +159,3 @@ class GameMonitor implements Runnable {
         }
     }
 }
-
