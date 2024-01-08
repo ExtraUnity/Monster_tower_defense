@@ -55,14 +55,23 @@ public class Client {
         }
     }
 
-    public void damage() {
+    public void damagePlayer(int damage){
         try {
-            gameSpace.put("request", "damage", id);
-
+            gameSpace.put("request", "damage", id, damage); // Send damage to the game space
         } catch (Exception e) {
-            System.out.println("Could not deal damage");
+            System.out.println("Error in client damage");
         }
     }
+
+    public void rewardPlayer(int reward) {
+        try {
+            gameSpace.put("reward", "damage", id, reward);
+        } catch (Exception e) {
+            System.err.println("Error in client reward");
+        }
+    }
+
+    
 
     public void exitGame() {
         try {
@@ -90,6 +99,7 @@ public class Client {
     public int getGameID() {
         return gameId;
     }
+
 
     public void sendMessage(String msg) {
         try {
