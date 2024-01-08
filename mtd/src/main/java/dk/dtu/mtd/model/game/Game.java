@@ -1,5 +1,7 @@
 package dk.dtu.mtd.model.game;
 
+import java.util.LinkedList;
+
 import org.jspace.ActualField;
 import org.jspace.FormalField;
 import org.jspace.SequentialSpace;
@@ -31,7 +33,7 @@ public class Game implements Runnable {
             }
         }
     }
-
+    @SuppressWarnings("unchecked")
     void handleGameRequest(Object[] request) throws InterruptedException {
         if (request[1].toString().equals("exit")) {
             if ((int) request[2] == player1.id) {
@@ -56,6 +58,15 @@ public class Game implements Runnable {
 
                 System.out.println("player1 recived damage");
             }
+        } else if (request[1].toString().equals("chat")) {
+            //Retrieve chatlist and update to include message
+            Object[] res = space.get(new ActualField("chatList"), new FormalField(LinkedList.class));
+            LinkedList<String> chat = (LinkedList<String>) res[2];
+            chat.add(request[2].toString());
+            space.put("chatList", chat);
+            //One for each player
+            space.put("chatUpdate");
+            space.put("chatUpdate");
         }
     }
 

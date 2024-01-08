@@ -17,6 +17,8 @@ public class Client {
     public int id;
     private int gameId = -1;
     String hostIP;
+    LinkedList<String> chat;
+    ChatMonitor chatMonitor;
 
     public Client(String hostIP) {
         this.hostIP = hostIP;
@@ -49,7 +51,10 @@ public class Client {
             // Join game
             gameSpace = new RemoteSpace("tcp://" + hostIP + ":37331/game" + gameId + "?keep");
             gameMonitor = new GameMonitor(this, gameSpace, lobby, id, gameId);
+            chat = new LinkedList<String>();
+            chatMonitor = new ChatMonitor(this, gameSpace, lobby, id, gameId);
             new Thread(gameMonitor).start();
+            new Thread(chatMonitor).start();
             System.out.println("Successful connection to game");
         } catch (Exception e) {
             e.printStackTrace();
@@ -92,7 +97,11 @@ public class Client {
     }
 
     public void sendMessage(String msg) {
-
+        try {
+            gameSpace.put("request", "chat", msg);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
 }
@@ -114,10 +123,13 @@ class ChatMonitor implements Runnable {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void run() {
         try {
             gameSpace.get(new ActualField("chatUpdate"));
-            gameSpace.query(new ActualField("chatList"), new FormalField(LinkedList.class));
+            Object[] res = gameSpace.query(new ActualField("chatList"), new FormalField(LinkedList.class));
+            client.chat = (LinkedList<String>) res[2];
+
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
