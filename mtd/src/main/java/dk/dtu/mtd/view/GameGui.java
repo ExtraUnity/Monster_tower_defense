@@ -1,10 +1,11 @@
 package dk.dtu.mtd.view;
 
-import java.io.InputStream;
+import java.util.LinkedList;
 
 import dk.dtu.mtd.controller.Controller;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
@@ -20,11 +21,15 @@ public class GameGui extends BorderPane {
     static VBox game;
     static BorderPane shop;
     static Text hp;
+    static LinkedList<String> chat;
+    static TextField chatWriter;
 
     public GameGui(int health) {
         //shop = new BorderPane();
         game = new VBox();
         hp = new Text("" + health);
+        chat = new LinkedList<String>();
+        chatWriter = new TextField("");
 
         this.setBackground(backgound());
         game.setAlignment(Pos.CENTER);
@@ -34,13 +39,18 @@ public class GameGui extends BorderPane {
             Controller.damage();
         });
 
+        Button submitMessage = new Button("Send Message");
+        submitMessage.setOnAction( e -> {
+            submitMessage();
+        });
+
         Button exitGameButton = new Button("exit");
         exitGameButton.setOnAction(e -> {
             Controller.exitGame();
         });
 
         game.getChildren().add(new Text("Game joined"));
-        game.getChildren().addAll(counter, hp, exitGameButton);
+        game.getChildren().addAll(hp,counter,chatWriter,submitMessage,exitGameButton);
 
         this.setCenter(game);
         this.setBottom(new GameShop());
@@ -58,6 +68,24 @@ public class GameGui extends BorderPane {
                 BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,
                 new BackgroundSize(Gui.stage.getHeight(), Gui.stage.getWidth(), false, false, false, true)));
         return backgoundView;
+    }
+
+    public static void updateGameGui(LinkedList<String> newChat) {
+        System.out.println("Got new chat list!");
+        chat = newChat;
+        displayChat();
+    }
+
+    public static void displayChat() {
+        for(String s : chat) {
+            System.out.println(s);
+        }
+    }
+
+    private static void submitMessage() {
+        System.out.println("Submitting message");
+        String msg = chatWriter.getText().trim();
+        Controller.sendMessage(msg);
     }
 
 }
