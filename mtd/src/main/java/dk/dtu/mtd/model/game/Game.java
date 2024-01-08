@@ -7,14 +7,14 @@ import org.jspace.Space;
 
 public class Game implements Runnable {
     public int id;
-    public int player1;
-    public int player2;
+    public Player player1;
+    public Player player2;
     public Space space;
 
     public Game(int id, int playerID1, int playerID2) {
         this.id = id;
-        this.player1 = playerID1;
-        this.player2 = playerID2;
+        this.player1 = new Player(playerID1, 150);
+        this.player2 = new Player(playerID2, 150);
         space = new SequentialSpace();
     }
 
@@ -34,13 +34,29 @@ public class Game implements Runnable {
 
     void handleGameRequest(Object[] request) throws InterruptedException {
         if (request[1].toString().equals("exit")) {
-            if ((int) request[2] == player1) {
-                space.put("exit", player1);
-                space.put("gameClosed", player2);
+            if ((int) request[2] == player1.id) {
+                space.put("exit", player1.id);
+                space.put("gameClosed", player2.id);
             } else {
-                space.put("exit", player2);
-                space.put("gameClosed", player1);
+                space.put("exit", player2.id);
+                space.put("gameClosed", player1.id);
+            }
+        } else if (request[1].toString().equals("damage")) { // TODO: discuss naming conventions in the group
+            if ((int) request[2] == player1.id) {
+                player2.setHealth(player2.getHealth() - 10);
+                // ("damadge", newHealth, playerID)
+                space.put("gui","damage", player1.getHealth(), player1.id);
+                space.put("gui","damage", player2.getHealth(), player2.id);
+
+                System.out.println("player2 recived damage");
+            } else {
+                player1.setHealth(player1.getHealth() - 10);
+                space.put("gui","damage", player1.getHealth(), player1.id);
+                space.put("gui","damage", player2.getHealth(), player2.id);
+
+                System.out.println("player1 recived damage");
             }
         }
     }
+
 }

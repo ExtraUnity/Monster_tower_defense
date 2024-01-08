@@ -59,7 +59,7 @@ public class Server {
                 gameQueue.add((Integer) request[2]);
             } else if ((request[1].toString()).equals("closeGame")){
                 System.out.println("Exit request received for game: " + request[2].toString());
-
+                
                 closeGame(request[2].toString());
             }
         } catch (Exception e) {
