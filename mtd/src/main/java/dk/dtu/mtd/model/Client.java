@@ -58,6 +58,7 @@ public class Client {
     public void damagePlayer(int damage){
         try {
             gameSpace.put("request", "damage", id); // Send damage to the game space
+            gameSpace.put("damage", damage);
         } catch (Exception e) {
             System.out.println("Error in client damage");
         }
