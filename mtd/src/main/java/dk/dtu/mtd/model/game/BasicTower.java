@@ -17,8 +17,8 @@ public class BasicTower extends Tower {
             lastShot = fireRate;
             for(int i = 0; i < enemies.size(); i++) {
                 if(inRange(enemies.get(i))) {
-                enemies.get(i).health -= damage;
-                break;
+                    enemies.get(i).health -= damage;
+                    break;
                 }
             }
         } else {

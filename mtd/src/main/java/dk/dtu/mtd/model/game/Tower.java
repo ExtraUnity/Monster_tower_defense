@@ -25,20 +25,4 @@ public abstract class Tower {
 
     public abstract void shoot(List<Enemy> enemies);
 
-    public void shoot(List<Enemy> enemies) {
-        if (lastShot <= 0) {
-            lastShot = fireRate;
-            for(int i = 0; i < enemies.size(); i++) {
-                if(inRange(enemies.get(i))) {
-                enemies.get(i).health -= damage;
-                break;
-                }
-            }
-        } else {
-            lastShot--;
-        }
-    }
-
-
-
 }
