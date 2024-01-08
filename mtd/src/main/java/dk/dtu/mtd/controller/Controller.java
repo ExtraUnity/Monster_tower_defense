@@ -69,7 +69,6 @@ class GUIMonitior implements Runnable {
         Object[] update;
         while (playing) {
             try {
-                System.out.println("Calling GUImonitor: " + playing);
                 // ("gui", (String) type, (int) data, playerId)
                 update = client.gameSpace.get(new ActualField("gui"), new FormalField(String.class),
                         new FormalField(Integer.class), new ActualField(client.id));

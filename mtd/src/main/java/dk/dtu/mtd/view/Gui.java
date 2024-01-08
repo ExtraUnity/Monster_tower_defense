@@ -54,8 +54,7 @@ public class Gui extends Application {
         joinLobbyButton.setOnAction(e -> {
             new Thread() {
                 public void run() {
-                    String ip = textFieldIp.getText();
-
+                    String ip = textFieldIp.getText().toString();
                     try {
                         Controller.joinLobby(ip);
                         Platform.runLater(() -> {
