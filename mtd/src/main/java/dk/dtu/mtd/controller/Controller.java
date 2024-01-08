@@ -14,7 +14,7 @@ public class Controller {
     public static Controller controller;
     private static GUIMonitior guiMonitior;
     private static Thread guiThread;
-    private static Client client = new Client("10.209.248.191");
+    private static Client client = new Client("10.209.240.41");
 
     public static void initController() {
         controller = new Controller();
@@ -45,6 +45,7 @@ public class Controller {
 
     public static void exit() {
         // exit the application
+        guiMonitior.playing = false;
         client.exit();
     }
 
