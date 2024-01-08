@@ -51,6 +51,11 @@ public class Controller {
     public static void damage() {
         client.damage();
     }
+
+    public static void damageEnemyToTower(int damage) {
+        client.damageTower(damage); // Inform the client to handle the damage
+    }
+    
 }
 
 // hmm

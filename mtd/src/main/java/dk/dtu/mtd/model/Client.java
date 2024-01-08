@@ -63,6 +63,15 @@ public class Client {
         }
     }
 
+    public void damageTower(int damage){
+        try {
+            gameSpace.put("damage", "tower", id, damage); // Send damage to the game space
+        } catch (Exception e) {
+            System.out.println("Error in damaging tower");
+        }
+    }
+    
+
     public void exitGame() {
         try {
             // Exit a game

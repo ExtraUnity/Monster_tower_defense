@@ -1,10 +1,14 @@
 package dk.dtu.mtd.model.game;
 
+import dk.dtu.mtd.controller.Controller;
+
 public abstract class Enemy {
     protected int health;
     protected int speed;
     protected int damage; // Damage the enemy does on the opposing player
     protected int reward; // Amount of money gained from killing enemy 
+
+    protected int x, y;
 
     public Enemy(int health, int speed, int damage, int reward) {
         this.health = health;
@@ -23,7 +27,10 @@ public abstract class Enemy {
 
     // Method to handle the enemy's death
     protected void die() {
-        // Logic for handling what happens when an enemy dies (e.g., giving rewards)
+        transferDamageToTower();
+        transferRewardToPlayer();
+        performDeathAnimation();
+
     }
 
     // Abstract method to define the movement of the enemy
@@ -40,5 +47,42 @@ public abstract class Enemy {
     public void setHealth(int health) {
         this.health = health;
     }
+
+    /// Coordinate handling ///
+    // Method to update the enemy's position
+    public void updatePosition(int newX, int newY) {
+        this.x = newX;
+        this.y = newY;
+    }
+
+    // Getters and setters for the coordinates
+    public int getX() {
+        return x;
+    }
+
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public void setY(int y) {
+        this.y = y;
+    }
+
+    // Method to transfer damage to the tower
+    protected void transferDamageToTower() {
+        Controller.damageEnemyToTower(this.damage);
+    }
+
+    // Method to transfer reward to the player
+    protected void transferRewardToPlayer() {
+        // Logic to increase player's money by this enemy's reward
+    }
+
+    // Abstract method for death animation
+    protected abstract void performDeathAnimation();
 
 }
