@@ -22,17 +22,17 @@ public class GameGui extends StackPane {
     static VBox game;
     static BorderPane layout;
     static Text hp;
-    static LinkedList<String> chat;
-    static TextField chatWriter;
+    static GameChat gameChat;
+
+
 
     public GameGui(int health) {
         layout = new BorderPane();
         //this.setBackground(backgound());
         game = new VBox();
         hp = new Text("" + health);
-        chat = new LinkedList<String>();
-        chatWriter = new TextField("");
-        chatWriter.setMaxWidth(300);
+        gameChat = new GameChat();
+
 
         
         game.setAlignment(Pos.CENTER);
@@ -42,17 +42,13 @@ public class GameGui extends StackPane {
             Controller.damage();
         });
 
-        Button submitMessage = new Button("Send Message");
-        submitMessage.setOnAction( e -> {
-            submitMessage();
-        });
 
         Button exitGameButton = new Button("exit");
         exitGameButton.setOnAction(e -> {
             Controller.exitGame();
         });
 
-        game.getChildren().addAll(hp,counter,chatWriter,submitMessage,exitGameButton);
+        game.getChildren().addAll(hp,counter,gameChat,exitGameButton);
 
         layout.setCenter(game);
         layout.setBottom(new GameShop());
@@ -75,20 +71,8 @@ public class GameGui extends StackPane {
 
     public static void updateGameGui(LinkedList<String> newChat) {
         System.out.println("Got new chat list!");
-        chat = newChat;
-        displayChat();
-    }
-
-    public static void displayChat() {
-        for(String s : chat) {
-            System.out.println(s);
-        }
-    }
-
-    private static void submitMessage() {
-        System.out.println("Submitting message");
-        String msg = chatWriter.getText().trim();
-        Controller.sendMessage(msg);
+        gameChat.chatList = newChat;
+        gameChat.displayChat();
     }
 
 }
