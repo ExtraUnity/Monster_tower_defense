@@ -52,6 +52,10 @@ public class Controller {
     public static void damage() {
         client.damage();
     }
+
+    public static void sendMessage(String msg) {
+        client.sendMessage(msg);
+    }
 }
 
 // hmm
