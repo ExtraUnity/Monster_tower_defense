@@ -61,8 +61,10 @@ public class Client {
 
     public void exit() {
         try {
-            exitGame();
-            lobby.close();
+            if (lobby != null) {
+                exitGame();
+                lobby.close();
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
