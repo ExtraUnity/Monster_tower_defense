@@ -29,10 +29,9 @@ public class Client {
             lobby.put("request", "id", -1); // Request new id
             id = (int) lobby.get(new ActualField("id"), new FormalField(Integer.class))[1];
             System.out.println("Successful connection to lobby");
-
     }
 
-    public void requestGame(){
+    public void requestGame() {
         try {
             // Look for a game
             lobby.put("request", "game", id);
@@ -56,7 +55,7 @@ public class Client {
         }
     }
 
-    public void damage(){
+    public void damage() {
         try {
             gameSpace.put("request", "damage", id);
 
@@ -90,6 +89,16 @@ public class Client {
 
     public int getGameID() {
         return gameId;
+    }
+
+    public void sendMessage(String msg) {
+        try {
+            gameSpace.put("request", "chat", id);
+            gameSpace.put("data", "chat", msg);
+            System.out.println("Client sent message request");
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
 }
@@ -127,4 +136,3 @@ class GameMonitor implements Runnable {
         }
     }
 }
-
