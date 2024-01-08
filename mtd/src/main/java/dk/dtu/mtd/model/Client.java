@@ -63,7 +63,7 @@ public class Client {
         }
     }
 
-    public void damageTower(int damage){
+    public void damagePlayer(int damage){
         try {
             gameSpace.put("damage", "tower", id, damage); // Send damage to the game space
         } catch (Exception e) {

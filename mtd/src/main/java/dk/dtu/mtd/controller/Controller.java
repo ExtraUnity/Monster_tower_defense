@@ -52,8 +52,8 @@ public class Controller {
         client.damage();
     }
 
-    public static void damageEnemyToTower(int damage) {
-        client.damageTower(damage); // Inform the client to handle the damage
+    public static void damageEnemyToPlayer(int damage) {
+        client.damagePlayer(damage); // Inform the client to handle the damage
     }
     
 }

@@ -27,7 +27,7 @@ public abstract class Enemy {
 
     // Method to handle the enemy's death
     protected void die() {
-        transferDamageToTower();
+        transferDamageToPlayer();
         transferRewardToPlayer();
         performDeathAnimation();
 
@@ -73,8 +73,8 @@ public abstract class Enemy {
     }
 
     // Method to transfer damage to the tower
-    protected void transferDamageToTower() {
-        Controller.damageEnemyToTower(this.damage);
+    protected void transferDamageToPlayer() {
+        Controller.damageEnemyToPlayer(this.damage);
     }
 
     // Method to transfer reward to the player
