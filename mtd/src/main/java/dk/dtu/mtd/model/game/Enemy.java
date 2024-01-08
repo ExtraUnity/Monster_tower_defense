@@ -27,10 +27,8 @@ public abstract class Enemy {
 
     // Method to handle the enemy's death
     protected void die() {
-        transferDamageToPlayer();
         transferRewardToPlayer();
         performDeathAnimation();
-
     }
 
     // Abstract method to define the movement of the enemy
