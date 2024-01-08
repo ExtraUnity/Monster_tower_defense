@@ -8,6 +8,7 @@ import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.scene.Scene;
@@ -32,7 +33,7 @@ public class Gui extends Application {
     }
 
     static Stage stage;
-    static VBox root;
+    static StackPane root;
     static GameGui game;
     static MainMenuGui mainMenu;
 
@@ -40,7 +41,7 @@ public class Gui extends Application {
     public void start(Stage primaryStage) {
         setupStageMeta(primaryStage);
         Gui.stage = primaryStage;
-        root = new VBox();
+        root = new StackPane();
         root.setAlignment(Pos.CENTER);
 
         Scene scene = new Scene(root);

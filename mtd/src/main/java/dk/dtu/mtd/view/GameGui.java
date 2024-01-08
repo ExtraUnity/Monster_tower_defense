@@ -57,7 +57,8 @@ public class GameGui extends StackPane {
         layout.setCenter(game);
         layout.setBottom(new GameShop());
 
-        this.getChildren().addAll(background(), layout);
+        this.setBackground(background());
+        this.getChildren().add(layout);
     }
 
     public static void updateGameGui(int newHealth) {
@@ -66,12 +67,10 @@ public class GameGui extends StackPane {
         game.getChildren().add(0, hp);
     }
 
-    public ImageView background() {
+    public Background background() {
         Image background = new Image("dk/dtu/mtd/assets/gameBackground.png",  Gui.stage.getWidth(),  Gui.stage.getHeight(), true, false);
-        //Background backgoundView = new Background(new BackgroundImage(background, BackgroundRepeat.NO_REPEAT,
-        //        BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,
-        //        new BackgroundSize(Gui.stage.getHeight(), Gui.stage.getWidth(), false, false, false, true)));
-        return new ImageView(background);
+        Background backgoundView = new Background(new BackgroundImage(background, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(Gui.stage.getHeight(), Gui.stage.getWidth(), false, false, false, true)));
+        return backgoundView;
     }
 
     public static void updateGameGui(LinkedList<String> newChat) {
