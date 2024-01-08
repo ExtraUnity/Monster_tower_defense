@@ -8,29 +8,34 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundPosition;
+import javafx.scene.layout.BackgroundRepeat;
+import javafx.scene.layout.BackgroundSize;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
-public class GameGui extends StackPane {
+public class GameGui extends BorderPane {
     static VBox game;
+    static BorderPane shop;
     static Text hp;
     static LinkedList<String> chat;
     static TextField chatWriter;
 
     public GameGui(int health) {
+        //shop = new BorderPane();
         game = new VBox();
-        game.setAlignment(Pos.CENTER);
-
         hp = new Text("" + health);
         chat = new LinkedList<String>();
         chatWriter = new TextField("");
 
-        Image skel = new Image("dk/dtu/mtd/assets/skelly.gif", 100 , 0, true, true);
-        ImageView skelly = new ImageView(skel);
+        this.setBackground(backgound());
+        game.setAlignment(Pos.CENTER);
 
         Button counter = new Button("-10 for opponent");
-        counter.setOnAction( e -> {
+        counter.setOnAction(e -> {
             Controller.damage();
         });
 
@@ -45,14 +50,24 @@ public class GameGui extends StackPane {
         });
 
         game.getChildren().add(new Text("Game joined"));
-        game.getChildren().addAll(skelly,hp,counter,chatWriter,submitMessage,exitGameButton);
-        this.getChildren().add(game);
+        game.getChildren().addAll(hp,counter,chatWriter,submitMessage,exitGameButton);
+
+        this.setCenter(game);
+        this.setBottom(new GameShop());
     }
 
-    public static void updateGameGui(int newHealth){
-       game.getChildren().remove(hp);
-       hp = new Text("" + newHealth);
-       game.getChildren().add(2 , hp);
+    public static void updateGameGui(int newHealth) {
+        game.getChildren().remove(hp);
+        hp = new Text("" + newHealth);
+        game.getChildren().add(2, hp);
+    }
+
+    public Background backgound() {
+        Image background = new Image("dk/dtu/mtd/assets/gameBackground.png");
+        Background backgoundView = new Background(new BackgroundImage(background, BackgroundRepeat.NO_REPEAT,
+                BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,
+                new BackgroundSize(Gui.stage.getHeight(), Gui.stage.getWidth(), false, false, false, true)));
+        return backgoundView;
     }
 
     public static void updateGameGui(LinkedList<String> newChat) {
