@@ -17,21 +17,21 @@ public class Client {
     private int gameId = -1;
     String hostIP;
 
-    public Client(String hostIP) {
-        this.hostIP = hostIP;
+    public Client() {
+
     }
 
-    public void joinLobby() throws UnknownHostException, IOException, InterruptedException {
+    public void joinLobby(String serverIp) throws UnknownHostException, IOException, InterruptedException {
             // Join lobby
+            this.hostIP = serverIp;
             lobby = new RemoteSpace("tcp://" + hostIP + ":37331/lobby?keep");
             // Get uniqe id from server
             lobby.put("request", "id", -1); // Request new id
             id = (int) lobby.get(new ActualField("id"), new FormalField(Integer.class))[1];
             System.out.println("Successful connection to lobby");
-
     }
 
-    public void requestGame(){
+    public void requestGame() {
         try {
             // Look for a game
             lobby.put("request", "game", id);
@@ -54,16 +54,6 @@ public class Client {
             e.printStackTrace();
         }
     }
-
-    /*
-    public void damage(){
-        try {
-            gameSpace.put("request", "damage", id);
-        } catch (Exception e) {
-            System.out.println("Could not deal damage");
-        }
-    }
-    */
 
     public void damagePlayer(int damage){
         try {
@@ -111,6 +101,16 @@ public class Client {
     }
 
 
+    public void sendMessage(String msg) {
+        try {
+            gameSpace.put("request", "chat", id);
+            gameSpace.put("data", "chat", msg);
+            System.out.println("Client sent message request");
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
 }
 
 class GameMonitor implements Runnable {
@@ -146,4 +146,3 @@ class GameMonitor implements Runnable {
         }
     }
 }
-

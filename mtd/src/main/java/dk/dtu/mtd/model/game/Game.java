@@ -1,5 +1,7 @@
 package dk.dtu.mtd.model.game;
 
+import java.util.LinkedList;
+
 import org.jspace.ActualField;
 import org.jspace.FormalField;
 import org.jspace.SequentialSpace;
@@ -16,6 +18,12 @@ public class Game implements Runnable {
         this.player1 = new Player(playerID1, 150, 0);
         this.player2 = new Player(playerID2, 150, 0);
         space = new SequentialSpace();
+        LinkedList<String> chat = new LinkedList<String>();
+        try {
+            space.put("chatList", chat);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -31,7 +39,7 @@ public class Game implements Runnable {
             }
         }
     }
-
+    @SuppressWarnings("unchecked")
     void handleGameRequest(Object[] request) throws InterruptedException {
         if (request[1].toString().equals("exit")) {
             if ((int) request[2] == player1.id) {
@@ -43,7 +51,6 @@ public class Game implements Runnable {
             }
         } else if (request[1].toString().equals("damage")) { // TODO: discuss naming conventions in the group
             int damage = (int) request[3];
-
             if ((int) request[2] == player1.id) {
                 player2.setHealth(player2.getHealth() - damage);
                 // ("damadge", newHealth, playerID)
@@ -75,6 +82,20 @@ public class Game implements Runnable {
 
                 System.out.println("player1 recived" + reward + "rewards!");
             }
+        } else if (request[1].toString().equals("chat")) {
+            System.out.println("Game recieved chat request");
+            //Retrieve chatlist and update to include message
+            String msg = (String) space.get(new ActualField("data"), new ActualField("chat"), new FormalField(String.class))[2];
+            System.out.println("Game recieved message");
+            String player = String.valueOf((int) request[2]);
+            Object[] res = space.get(new ActualField("chatList"), new FormalField(LinkedList.class));
+            LinkedList<String> chat = (LinkedList<String>) res[1];
+            chat.add("Player " + player + ": " + msg);
+            space.put("chatList", chat);
+            //One for each player
+            space.put("gui","chat", chat, player1.id);
+            space.put("gui","chat", chat, player2.id);
+            System.out.println("Game put chat updates");
         }
     }
 

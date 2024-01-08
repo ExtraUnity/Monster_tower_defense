@@ -1,12 +1,17 @@
 package dk.dtu.mtd.view;
 
 import java.io.IOException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 
 import dk.dtu.mtd.controller.Controller;
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -30,7 +35,7 @@ public class Gui extends Application {
     }
 
     static Stage stage;
-    static StackPane root;
+    static VBox root;
     static GameGui game;
     static MainMenuGui mainMenu;
 
@@ -38,17 +43,33 @@ public class Gui extends Application {
     public void start(Stage primaryStage) {
         setupStageMeta(primaryStage);
         Gui.stage = primaryStage;
-        root = new StackPane();
+        root = new VBox();
+        root.setAlignment(Pos.CENTER);
+
+        Text textIp = new Text("Lobby IP:");
+
+        String ownIp = "";
+        try {
+            ownIp = (InetAddress.getLocalHost().getHostAddress()).trim();
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        }
+        
+        TextField textFieldIp = new TextField(ownIp);
+        textFieldIp.setPrefWidth(100);
+        textFieldIp.setMaxWidth(100);
 
         Button joinLobbyButton = new Button("Join lobby");
         joinLobbyButton.setOnAction(e -> {
             new Thread() {
                 public void run() {
-
+                    String ip = textFieldIp.getText().toString();
                     try {
-                        Controller.joinLobby();
+                        Controller.joinLobby(ip);
                         Platform.runLater(() -> {
-                            root.getChildren().remove(0);
+                            root.getChildren().remove(textIp);
+                            root.getChildren().remove(textFieldIp);
+                            root.getChildren().remove(joinLobbyButton);
                             mainMenu = new MainMenuGui();
                             root.getChildren().add(mainMenu);
                         });
@@ -62,6 +83,8 @@ public class Gui extends Application {
         });
 
         Scene scene = new Scene(root);
+        root.getChildren().add(textIp);
+        root.getChildren().add(textFieldIp);
         root.getChildren().add(joinLobbyButton);
         primaryStage.setScene(scene);
         primaryStage.show();
