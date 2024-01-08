@@ -35,7 +35,7 @@ public class Gui extends Application {
     }
 
     static Stage stage;
-    static VBox root;
+    static StackPane root;
     static GameGui game;
     static MainMenuGui mainMenu;
 
@@ -43,49 +43,12 @@ public class Gui extends Application {
     public void start(Stage primaryStage) {
         setupStageMeta(primaryStage);
         Gui.stage = primaryStage;
-        root = new VBox();
+        root = new StackPane();
         root.setAlignment(Pos.CENTER);
 
-        Text textIp = new Text("Lobby IP:");
-
-        String ownIp = "";
-        try {
-            ownIp = (InetAddress.getLocalHost().getHostAddress()).trim();
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
-        }
-        
-        TextField textFieldIp = new TextField(ownIp);
-        textFieldIp.setPrefWidth(100);
-        textFieldIp.setMaxWidth(100);
-
-        Button joinLobbyButton = new Button("Join lobby");
-        joinLobbyButton.setOnAction(e -> {
-            new Thread() {
-                public void run() {
-                    String ip = textFieldIp.getText().toString();
-                    try {
-                        Controller.joinLobby(ip);
-                        Platform.runLater(() -> {
-                            root.getChildren().remove(textIp);
-                            root.getChildren().remove(textFieldIp);
-                            root.getChildren().remove(joinLobbyButton);
-                            mainMenu = new MainMenuGui();
-                            root.getChildren().add(mainMenu);
-                        });
-                    } catch (IOException | InterruptedException e) {
-                        System.out.println("Connection to lobby failed.");
-                    }
-
-                }
-            }.start();
-
-        });
-
         Scene scene = new Scene(root);
-        root.getChildren().add(textIp);
-        root.getChildren().add(textFieldIp);
-        root.getChildren().add(joinLobbyButton);
+
+        root.getChildren().add(lobbyPrompt());
         primaryStage.setScene(scene);
         primaryStage.show();
     }
@@ -112,6 +75,39 @@ public class Gui extends Application {
             root.getChildren().add(mainMenu);
         });
 
+    }
+
+    public static VBox lobbyPrompt() {
+        VBox prompt = new VBox(5);
+        prompt.setAlignment(Pos.CENTER);
+        Text textIp = new Text("Lobby IP:");
+        TextField textFieldIp = new TextField("");
+        textFieldIp.setMaxWidth(200);
+
+        Button joinLobbyButton = new Button("Join lobby");
+        joinLobbyButton.setOnAction(e -> {
+            new Thread() {
+                public void run() {
+                    String ip = textFieldIp.getText().toString();
+                    try {
+                        Controller.joinLobby(ip);
+                        Platform.runLater(() -> {
+                            root.getChildren().remove(prompt);
+                            mainMenu = new MainMenuGui();
+                            root.getChildren().add(mainMenu);
+                        });
+                    } catch (IOException | InterruptedException e) {
+                        System.out.println("Connection to lobby failed.");
+                    }
+                }
+            }.start();
+        });
+
+        prompt.getChildren().add(textIp);
+        prompt.getChildren().add(textFieldIp);
+        prompt.getChildren().add(joinLobbyButton);
+
+        return prompt;
     }
 
     void setupStageMeta(Stage stage) {
