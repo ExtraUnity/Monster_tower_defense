@@ -8,7 +8,7 @@ import dk.dtu.mtd.view.Gui;
 
 public class Controller {
     public static Controller controller;
-    private static Client client = new Client("82.211.211.218");
+    private static Client client = new Client("10.209.248.191");
 
     public static void initController() {
         controller = new Controller();
