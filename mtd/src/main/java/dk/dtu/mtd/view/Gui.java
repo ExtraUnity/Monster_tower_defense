@@ -1,6 +1,8 @@
 package dk.dtu.mtd.view;
 
 import java.io.IOException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 
 import dk.dtu.mtd.controller.Controller;
 import javafx.application.Application;
