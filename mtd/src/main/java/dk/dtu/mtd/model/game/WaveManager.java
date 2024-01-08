@@ -1,6 +1,6 @@
 package dk.dtu.mtd.model.game;
 
-public class WaveManeger implements Runnable{
+public class WaveManager implements Runnable{
 
 
 

@@ -14,7 +14,7 @@ public class Controller {
     public static Controller controller;
     private static GUIMonitior guiMonitior;
     private static Thread guiThread;
-    private static Client client = new Client("192.168.1.125");
+    private static Client client = new Client("10.209.248.191");
 
     public static void initController() {
         controller = new Controller();
@@ -48,8 +48,8 @@ public class Controller {
         client.exit();
     }
 
-    public static void damagde() {
-        client.damagde();
+    public static void damage() {
+        client.damage();
     }
 }
 
@@ -71,7 +71,7 @@ class GUIMonitior implements Runnable {
                 update = client.gameSpace.get(new ActualField("gui"), new FormalField(String.class),
                         new FormalField(Integer.class), new ActualField(client.id));
 
-                if (update[1].toString().equals("damagde")) {
+                if (update[1].toString().equals("damage")) {
                     System.out.println("updating GUI");
                     final int hp = (int) update[2];
                     Platform.runLater(new Runnable() {

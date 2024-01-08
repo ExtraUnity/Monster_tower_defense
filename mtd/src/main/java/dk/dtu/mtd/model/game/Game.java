@@ -41,20 +41,20 @@ public class Game implements Runnable {
                 space.put("exit", player2.id);
                 space.put("gameClosed", player1.id);
             }
-        } else if (request[1].toString().equals("damagde")) { // TODO: discuss naming conventions in the group
+        } else if (request[1].toString().equals("damage")) { // TODO: discuss naming conventions in the group
             if ((int) request[2] == player1.id) {
                 player2.setHealth(player2.getHealth() - 10);
                 // ("damadge", newHealth, playerID)
-                space.put("gui","damagde", player1.getHealth(), player1.id);
-                space.put("gui","damagde", player2.getHealth(), player2.id);
+                space.put("gui","damage", player1.getHealth(), player1.id);
+                space.put("gui","damage", player2.getHealth(), player2.id);
 
-                System.out.println("player2 recived damagde");
+                System.out.println("player2 recived damage");
             } else {
                 player1.setHealth(player1.getHealth() - 10);
-                space.put("gui","damagde", player1.getHealth(), player1.id);
-                space.put("gui","damagde", player2.getHealth(), player2.id);
+                space.put("gui","damage", player1.getHealth(), player1.id);
+                space.put("gui","damage", player2.getHealth(), player2.id);
 
-                System.out.println("player1 recived damagde");
+                System.out.println("player1 recived damage");
             }
         }
     }

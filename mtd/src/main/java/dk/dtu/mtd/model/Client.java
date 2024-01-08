@@ -55,11 +55,11 @@ public class Client {
         }
     }
 
-    public void damagde(){
+    public void damage(){
         try {
-            gameSpace.put("request", "damagde", id);
+            gameSpace.put("request", "damage", id);
         } catch (Exception e) {
-            System.out.println("Could not deal damagde");
+            System.out.println("Could not deal damage");
         }
     }
 

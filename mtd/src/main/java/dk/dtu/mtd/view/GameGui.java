@@ -26,7 +26,7 @@ public class GameGui extends StackPane {
 
         Button counter = new Button("-10 for opponent");
         counter.setOnAction( e -> {
-            Controller.damagde();
+            Controller.damage();
         });
 
         Button exitGameButton = new Button("exit");
