@@ -13,8 +13,8 @@ public class Game implements Runnable {
 
     public Game(int id, int playerID1, int playerID2) {
         this.id = id;
-        this.player1 = new Player(playerID1, 150);
-        this.player2 = new Player(playerID2, 150);
+        this.player1 = new Player(playerID1, 150, 0);
+        this.player2 = new Player(playerID2, 150, 0);
         space = new SequentialSpace();
     }
 
@@ -42,19 +42,38 @@ public class Game implements Runnable {
                 space.put("gameClosed", player1.id);
             }
         } else if (request[1].toString().equals("damage")) { // TODO: discuss naming conventions in the group
+            int damage = (int) request[3];
+
             if ((int) request[2] == player1.id) {
-                player2.setHealth(player2.getHealth() - 10);
+                player2.setHealth(player2.getHealth() - damage);
                 // ("damadge", newHealth, playerID)
                 space.put("gui","damage", player1.getHealth(), player1.id);
                 space.put("gui","damage", player2.getHealth(), player2.id);
 
-                System.out.println("player2 recived damage");
+                System.out.println("player2 recived" + damage + "damage");
             } else {
-                player1.setHealth(player1.getHealth() - 10);
+                player1.setHealth(player1.getHealth() - damage);
                 space.put("gui","damage", player1.getHealth(), player1.id);
                 space.put("gui","damage", player2.getHealth(), player2.id);
 
-                System.out.println("player1 recived damage");
+                System.out.println("player1 recived" + damage + "damage");
+            }
+        } else if (request[1].toString().equals("reward")) {
+            int reward = (int) request [3];
+
+            if ((int) request[2] == player1.id) {
+                player2.setRewards(player2.getRewards() + reward);
+                // ("reward", newRewards, playerID)
+                space.put("gui","reward", player1.getRewards(), player1.id);
+                space.put("gui","reward", player2.getRewards(), player2.id);
+
+                System.out.println("player2 recived" + reward + "rewards");
+            } else {
+                player1.setRewards(player1.getRewards() + reward);
+                space.put("gui","reward", player1.getRewards(), player1.id);
+                space.put("gui","reward", player2.getRewards(), player2.id);
+
+                System.out.println("player1 recived" + reward + "rewards!");
             }
         }
     }

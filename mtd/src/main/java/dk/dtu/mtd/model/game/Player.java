@@ -3,10 +3,12 @@ package dk.dtu.mtd.model.game;
 public class Player {
     public int id;
     private int health;
+    private int rewards;
 
-    public Player(int id, int health){
+    public Player(int id, int health, int rewards){
         this.id = id;
         this.health = health;
+        this.rewards = rewards;
     }
 
     public void setHealth(int newHealth){
@@ -15,4 +17,14 @@ public class Player {
     public int getHealth(){
         return health;
     }
+
+    public void setRewards(int newReward){
+        rewards = newReward;
+    }
+
+    public int getRewards(){
+        return rewards;
+    }
+
+
 }

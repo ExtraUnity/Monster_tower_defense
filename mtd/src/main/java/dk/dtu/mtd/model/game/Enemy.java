@@ -79,7 +79,7 @@ public abstract class Enemy {
 
     // Method to transfer reward to the player
     protected void transferRewardToPlayer() {
-        // Logic to increase player's money by this enemy's reward
+        Controller.rewardEnemyToPlayer(this.reward);
     }
 
     // Abstract method for death animation
