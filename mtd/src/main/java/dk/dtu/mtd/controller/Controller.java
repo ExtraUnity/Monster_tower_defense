@@ -13,6 +13,7 @@ import javafx.application.Platform;
 public class Controller {
     public static Controller controller;
     private static GUIMonitior guiMonitior;
+    private static Thread guiThread;
     private static Client client = new Client("192.168.1.125");
 
     public static void initController() {
@@ -27,13 +28,19 @@ public class Controller {
     public static void joinGame() {
         client.requestGame();
         client.joinGame();
-        new Thread(guiMonitior).start();
+        guiThread = new Thread(guiMonitior);
+        guiMonitior.playing = true;
+        guiThread.start();
+        Platform.runLater(() -> {
+            Gui.game();
+        });
+
     }
 
     public static void exitGame() {
+        guiMonitior.playing = false;
         Gui.closeGame();
         client.exitGame();
-        guiMonitior.playing = false;
     }
 
     public static void exit() {
@@ -64,7 +71,7 @@ class GUIMonitior implements Runnable {
                 update = client.gameSpace.get(new ActualField("gui"), new FormalField(String.class),
                         new FormalField(Integer.class), new ActualField(client.id));
 
-                if (update[1].toString().equals("damagde")){
+                if (update[1].toString().equals("damagde")) {
                     System.out.println("updating GUI");
                     final int hp = (int) update[2];
                     Platform.runLater(new Runnable() {
@@ -73,7 +80,8 @@ class GUIMonitior implements Runnable {
                             GameGui.updateGameGui(hp);
                         }
                     });
-                    //GameGui.updateGameGui((int) update[2]); throws an exeption because it's not on the GUI thread
+                    // GameGui.updateGameGui((int) update[2]); throws an exeption because it's not
+                    // on the GUI thread
                 }
             } catch (InterruptedException e) {
                 System.out.println("GUImonitor failing");

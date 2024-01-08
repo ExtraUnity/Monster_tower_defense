@@ -1,14 +1,13 @@
 package dk.dtu.mtd.view;
 
 import dk.dtu.mtd.controller.Controller;
-import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
 public class MainMenuGui extends StackPane {
-    VBox menu;
+    static VBox menu;
 
     public MainMenuGui() {
         menu = new VBox();
@@ -18,24 +17,14 @@ public class MainMenuGui extends StackPane {
         joinButton.setText("Join Game");
 
         joinButton.setOnAction(e -> {
-            Gui.root.getChildren().remove(this);
-            
-            Platform.runLater(new Runnable() {
-
-                @Override
-                public void run() {
-                    Gui.game = new GameGui(150); // TODO: plz fix
-                    Gui.root.getChildren().add(Gui.game);
-                }
-            });
-            Controller.joinGame();
-
+            Gui.loading();
         });
 
         menu.getChildren().add(joinButton);
         this.getChildren().add(menu);
 
     }
+
 
 }
 // kommenteret ud fordi man kunne joine sit eget spil.

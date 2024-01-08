@@ -7,6 +7,7 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.control.Button;
 import javafx.scene.layout.StackPane;
+import javafx.scene.text.Text;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
@@ -64,6 +65,21 @@ public class Gui extends Application {
         root.getChildren().add(joinLobbyButton);
         primaryStage.setScene(scene);
         primaryStage.show();
+    }
+
+    public static void loading() {
+        root.getChildren().remove(mainMenu);
+        root.getChildren().add(new Text("Loading..."));
+        Thread t = new Thread(() -> {
+            Controller.joinGame();
+        });
+        t.start();
+    }
+
+    public static void game() {
+        root.getChildren().remove(0);
+        game = new GameGui(150);
+        root.getChildren().add(game);
     }
 
     public static void closeGame() {
