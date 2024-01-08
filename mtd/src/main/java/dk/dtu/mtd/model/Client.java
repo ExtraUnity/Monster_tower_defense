@@ -31,12 +31,20 @@ public class Client {
 
     }
 
-    public void joinGame() {
+    public void requestGame(){
         try {
             // Look for a game
             lobby.put("request", "game", id);
             gameId = (int) lobby.get(new ActualField("game"), new ActualField(id),
                     new FormalField(Integer.class))[2];
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("requesting a failed");
+        }
+    }
+
+    public void joinGame() {
+        try {
             // Join game
             gameSpace = new RemoteSpace("tcp://" + hostIP + ":37331/game" + gameId + "?keep");
             gameMonitor = new GameMonitor(this, gameSpace, lobby, id, gameId);
@@ -44,6 +52,14 @@ public class Client {
             System.out.println("Successful connection to game");
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    public void damagde(){
+        try {
+            gameSpace.put("request", "damagde", id);
+        } catch (Exception e) {
+            System.out.println("Could not deal damagde");
         }
     }
 
@@ -108,5 +124,5 @@ class GameMonitor implements Runnable {
             System.out.println("The game has been closed");
         }
     }
-
 }
+
