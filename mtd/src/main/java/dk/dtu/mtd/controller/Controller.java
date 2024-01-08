@@ -52,6 +52,11 @@ public class Controller {
         client.exit();
     }
 
+
+    public static void damage() {
+        client.damagePlayer(5);
+    }
+
     public static void damageEnemyToPlayer(int damage) {
         client.damagePlayer(damage); // Inform the client to handle the damage
     }

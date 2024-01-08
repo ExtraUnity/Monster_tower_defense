@@ -50,7 +50,7 @@ public class Game implements Runnable {
                 space.put("gameClosed", player1.id);
             }
         } else if (request[1].toString().equals("damage")) { // TODO: discuss naming conventions in the group
-            int damage = (int) request[3];
+            int damage = 10;
             if ((int) request[2] == player1.id) {
                 player2.setHealth(player2.getHealth() - damage);
                 // ("damadge", newHealth, playerID)
