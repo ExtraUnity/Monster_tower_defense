@@ -14,24 +14,27 @@ import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
-public class GameGui extends BorderPane {
+public class GameGui extends StackPane {
     static VBox game;
-    static BorderPane shop;
+    static BorderPane layout;
     static Text hp;
     static LinkedList<String> chat;
     static TextField chatWriter;
 
     public GameGui(int health) {
-        //shop = new BorderPane();
+        layout = new BorderPane();
+        //this.setBackground(backgound());
         game = new VBox();
         hp = new Text("" + health);
         chat = new LinkedList<String>();
         chatWriter = new TextField("");
+        chatWriter.setMaxWidth(300);
 
-        this.setBackground(backgound());
+        
         game.setAlignment(Pos.CENTER);
 
         Button counter = new Button("-10 for opponent");
@@ -49,25 +52,26 @@ public class GameGui extends BorderPane {
             Controller.exitGame();
         });
 
-        game.getChildren().add(new Text("Game joined"));
         game.getChildren().addAll(hp,counter,chatWriter,submitMessage,exitGameButton);
 
-        this.setCenter(game);
-        this.setBottom(new GameShop());
+        layout.setCenter(game);
+        layout.setBottom(new GameShop());
+
+        this.getChildren().addAll(background(), layout);
     }
 
     public static void updateGameGui(int newHealth) {
         game.getChildren().remove(hp);
         hp = new Text("" + newHealth);
-        game.getChildren().add(2, hp);
+        game.getChildren().add(0, hp);
     }
 
-    public Background backgound() {
-        Image background = new Image("dk/dtu/mtd/assets/gameBackground.png");
-        Background backgoundView = new Background(new BackgroundImage(background, BackgroundRepeat.NO_REPEAT,
-                BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,
-                new BackgroundSize(Gui.stage.getHeight(), Gui.stage.getWidth(), false, false, false, true)));
-        return backgoundView;
+    public ImageView background() {
+        Image background = new Image("dk/dtu/mtd/assets/gameBackground.png",  Gui.stage.getWidth(),  Gui.stage.getHeight(), true, false);
+        //Background backgoundView = new Background(new BackgroundImage(background, BackgroundRepeat.NO_REPEAT,
+        //        BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,
+        //        new BackgroundSize(Gui.stage.getHeight(), Gui.stage.getWidth(), false, false, false, true)));
+        return new ImageView(background);
     }
 
     public static void updateGameGui(LinkedList<String> newChat) {

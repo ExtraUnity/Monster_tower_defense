@@ -8,7 +8,6 @@ import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.scene.Scene;
@@ -44,39 +43,9 @@ public class Gui extends Application {
         root = new VBox();
         root.setAlignment(Pos.CENTER);
 
-        Text textIp = new Text("Lobby IP:");
-
-        TextField textFieldIp = new TextField("");
-        textFieldIp.setPrefWidth(100);
-        textFieldIp.setMaxWidth(100);
-
-        Button joinLobbyButton = new Button("Join lobby");
-        joinLobbyButton.setOnAction(e -> {
-            new Thread() {
-                public void run() {
-                    String ip = textFieldIp.getText().toString();
-                    try {
-                        Controller.joinLobby(ip);
-                        Platform.runLater(() -> {
-                            root.getChildren().remove(textIp);
-                            root.getChildren().remove(textFieldIp);
-                            root.getChildren().remove(joinLobbyButton);
-                            mainMenu = new MainMenuGui();
-                            root.getChildren().add(mainMenu);
-                        });
-                    } catch (IOException | InterruptedException e) {
-                        System.out.println("Connection to lobby failed.");
-                    }
-
-                }
-            }.start();
-
-        });
-
         Scene scene = new Scene(root);
-        root.getChildren().add(textIp);
-        root.getChildren().add(textFieldIp);
-        root.getChildren().add(joinLobbyButton);
+
+        root.getChildren().add(lobbyPrompt());
         primaryStage.setScene(scene);
         primaryStage.show();
     }
@@ -103,6 +72,39 @@ public class Gui extends Application {
             root.getChildren().add(mainMenu);
         });
 
+    }
+
+    public static VBox lobbyPrompt() {
+        VBox prompt = new VBox(5);
+        prompt.setAlignment(Pos.CENTER);
+        Text textIp = new Text("Lobby IP:");
+        TextField textFieldIp = new TextField("");
+        textFieldIp.setMaxWidth(200);
+
+        Button joinLobbyButton = new Button("Join lobby");
+        joinLobbyButton.setOnAction(e -> {
+            new Thread() {
+                public void run() {
+                    String ip = textFieldIp.getText().toString();
+                    try {
+                        Controller.joinLobby(ip);
+                        Platform.runLater(() -> {
+                            root.getChildren().remove(prompt);
+                            mainMenu = new MainMenuGui();
+                            root.getChildren().add(mainMenu);
+                        });
+                    } catch (IOException | InterruptedException e) {
+                        System.out.println("Connection to lobby failed.");
+                    }
+                }
+            }.start();
+        });
+
+        prompt.getChildren().add(textIp);
+        prompt.getChildren().add(textFieldIp);
+        prompt.getChildren().add(joinLobbyButton);
+
+        return prompt;
     }
 
     void setupStageMeta(Stage stage) {
