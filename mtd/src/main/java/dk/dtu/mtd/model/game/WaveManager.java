@@ -7,6 +7,10 @@ public class WaveManager implements Runnable{
     private long waveInterval; // Time between waves
     private long lastWaveTime; // Time of last wave
     private boolean isWaveActive;
+    //public Thread waveManagerThread;
+    private boolean running;
+
+
 
     // Constructor
     public WaveManager(int totalWaves, long waveInterval){
@@ -15,6 +19,8 @@ public class WaveManager implements Runnable{
         this.currentWaveNumber = 0;
         this.lastWaveTime = System.currentTimeMillis();
         this.isWaveActive = false;
+        //this.waveManagerThread = new Thread(new WaveManager(totalWaves, waveInterval));
+        this.running = true;
     }
 
     // Called every game tick
@@ -42,13 +48,12 @@ public class WaveManager implements Runnable{
 
     private void spawnWave(int waveNumber) {
         // Logic to spawn enemies based on the wave number
-        
-
+        System.out.println("Spawning wave " + currentWaveNumber);
 
         // Increase difficulty, change enemy types, etc.
     }
 
-    // Method to signal the end of a wave
+    // Method to signal the end of a wave. IMPLEMENT THIS IN GUI TO SIGNAL NEXT WAVE WILL START AFTER A CERTAIN TIME
     public void endWave() {
         isWaveActive = false;
     }
@@ -70,15 +75,21 @@ public class WaveManager implements Runnable{
         this.totalWaves = totalWaves;
     }
 
+    public void stop() {
+        this.running = false;
+    }
 
     @Override
     public void run() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'run'");
+        while (running) {
+            update();
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                break;
+            }   
+        }
     }
-
-
-
-
-    
+   
 }

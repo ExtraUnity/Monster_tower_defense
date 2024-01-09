@@ -7,6 +7,7 @@ import java.net.UnknownHostException;
 import java.util.LinkedList;
 
 import dk.dtu.mtd.model.Client;
+import dk.dtu.mtd.model.game.WaveManager;
 import dk.dtu.mtd.view.GameGui;
 import dk.dtu.mtd.view.Gui;
 import javafx.application.Platform;
@@ -15,6 +16,8 @@ public class Controller {
     public static Controller controller;
     private static GUIMonitior guiMonitior;
     private static Thread guiThread;
+    private static WaveManager waveManager;
+    //private static Thread waveManagerThread;
     private static Client client = new Client();
 
 
@@ -34,6 +37,11 @@ public class Controller {
         guiThread = new Thread(guiMonitior);
         guiMonitior.playing = true;
         guiThread.start();
+
+        /*waveManager = new WaveManager(10, 15);
+        waveManagerThread = new Thread(waveManager);
+        waveManagerThread.start();*/
+
         Platform.runLater(() -> {
             Gui.game();
         });
@@ -41,6 +49,11 @@ public class Controller {
     }
 
     public static void exitGame() {
+        /*if (waveManager != null) {
+            waveManager.stop();
+            waveManagerThread.interrupt();
+        }*/
+
         guiMonitior.playing = false;
         Gui.closeGame();
         client.exitGame();
@@ -115,6 +128,16 @@ class GUIMonitior implements Runnable {
                         }
 
                     });
+                } else if (update[1].toString().equals("wave")) {
+                    /*WaveManager waveManager = new WaveManager(10, 15);
+                    Thread waveManagerThread = new Thread(waveManager);
+                    waveManagerThread.start();*/
+                    // make apropriate gui calls to display wave
+
+                } else if (update[1].toString().equals("enemyUpdate")) {
+                    // recive the information that applys to an enemy to update it accordingly
+                    // eg. an enemy has died -> it should be removed from the gui / play the death animation
+
                 }
             } catch (InterruptedException e) {
                 System.out.println("GUImonitor failing");
