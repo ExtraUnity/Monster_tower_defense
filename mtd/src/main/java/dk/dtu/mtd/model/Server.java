@@ -70,7 +70,7 @@ public class Server {
     void createGame(int playerID1, int playerID2) {
         Game newGame = new Game(IDgame, playerID1, playerID2);
         System.out.println("Creating game...");
-        server.add(("game" + IDgame), newGame.space);
+        server.add(("game" + IDgame), newGame.gameSpace);
         new Thread(newGame).start();
         try {
             lobby.put("game", playerID1, newGame.id);

@@ -6,6 +6,9 @@ import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.LinkedList;
 import dk.dtu.mtd.model.Client;
+import dk.dtu.mtd.model.game.Tower;
+//import dk.dtu.mtd.model.game.WaveManager;
+
 import dk.dtu.mtd.view.GameGui;
 import dk.dtu.mtd.view.Gui;
 import javafx.application.Platform;
@@ -52,6 +55,10 @@ public class Controller {
 
     public static void damage() {
         client.damagePlayer(5);
+    }
+
+    public static void placeTower(String type, int x, int y) {
+        client.placeTower(type, x, y);
     }
 
     public static void damageEnemyToPlayer(int damage) {
@@ -111,6 +118,7 @@ class GUIMonitior implements Runnable {
                         }
 
                     });
+
                 // ("gui", "chat", (...) wave info , playerId)
                 } else if (update[1].toString().equals("wave")) {
                     // make apropriate gui calls to display wave
@@ -145,6 +153,18 @@ class GUIMonitior implements Runnable {
                         }
 
                     });
+
+                } else if (update[1].toString().equals("newTower")) {
+                    Tower tower = (Tower) update[2];
+                    System.out.println(tower.getType());
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            GameGui.newTower(tower.getType(), tower.getX(), tower.getY());
+                        }
+
+                    });
+
                 }
             } catch (InterruptedException e) {
                 System.out.println("GUImonitor failing");

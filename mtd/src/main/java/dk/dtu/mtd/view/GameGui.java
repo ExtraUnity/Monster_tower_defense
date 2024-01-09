@@ -3,12 +3,16 @@ package dk.dtu.mtd.view;
 import java.util.LinkedList;
 
 import dk.dtu.mtd.controller.Controller;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.DragEvent;
+import javafx.scene.input.Dragboard;
+import javafx.scene.input.TransferMode;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BackgroundPosition;
@@ -16,11 +20,13 @@ import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
 public class GameGui extends StackPane {
+    static Pane towerLayer;
     static VBox game;
     static BorderPane layout;
     static Text hp;
@@ -28,13 +34,13 @@ public class GameGui extends StackPane {
     public static GameWaveGui gameWaveGuiLeft;
     public static GameWaveGui gameWaveGuiRight;
 
-
     public GameGui(int health) {
         layout = new BorderPane();
         //this.setBackground(backgound());
         game = new VBox();
         hp = new Text("" + health);
         gameChat = new GameChat();
+        towerLayer = new Pane();
 
 
         
@@ -56,7 +62,13 @@ public class GameGui extends StackPane {
 
         game.getChildren().addAll(hp,counter,exitGameButton);
 
-        layout.setCenter(game);
+        game.setPrefSize(500, 500);
+        towerLayer.getChildren().add(game);
+          
+        layout.setCenter(towerLayer);
+        TowerGui testTower = new TowerGui("basicTower", 200, 200);
+        towerLayer.getChildren().add(testTower);
+
 
         ImageView chatButton = new ImageView(new Image("dk/dtu/mtd/assets/chatButton.jpg",50,50,true,false));
         chatButton.setOnMouseClicked(e -> {
@@ -76,6 +88,32 @@ public class GameGui extends StackPane {
 
         this.getChildren().addAll(gameWaveGuiLeft, gameWaveGuiRight);
         this.getChildren().add(layout);
+
+        towerLayer.setOnDragDropped(new EventHandler<DragEvent>() {
+            @Override
+            public void handle(DragEvent event) {
+                Dragboard dragboard = event.getDragboard();
+                if(dragboard.hasString()) {
+                    Controller.placeTower(dragboard.getString(),(int) event.getX(), (int) event.getY());
+                }
+                event.consume();
+            }
+                        
+        });
+
+        towerLayer.setOnDragOver(new EventHandler<DragEvent>() {
+            @Override
+            public void handle(DragEvent event) {
+                event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
+                //System.out.println("it owrk?");
+                event.consume();
+            }          
+        });
+    }
+    
+
+    public void handleDragOver(DragEvent event) {
+        event.acceptTransferModes(TransferMode.ANY);
     }
 
     public static void updateGameGui(int newHealth) {
@@ -96,4 +134,9 @@ public class GameGui extends StackPane {
         gameChat.displayChat();
     }
 
+    public static void newTower(String type, int x, int y) {
+        System.out.println("I got a new tower!");
+        TowerGui tower = new TowerGui(type, x, y);
+        towerLayer.getChildren().add(tower);
+    }
 }

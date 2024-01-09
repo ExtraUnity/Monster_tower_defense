@@ -81,7 +81,17 @@ public class Gui extends Application {
         VBox prompt = new VBox(5);
         prompt.setAlignment(Pos.CENTER);
         Text textIp = new Text("Lobby IP:");
-        TextField textFieldIp = new TextField("");
+
+        String ownIP = "";
+        try {
+            ownIP = (InetAddress.getLocalHost().getHostAddress()).trim();
+        } catch (UnknownHostException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        TextField textFieldIp;
+        textFieldIp = new TextField(ownIP);
         textFieldIp.setMaxWidth(200);
 
         Button joinLobbyButton = new Button("Join lobby");
