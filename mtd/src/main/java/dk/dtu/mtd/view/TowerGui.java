@@ -1,14 +1,10 @@
 package dk.dtu.mtd.view;
 
-import java.util.ResourceBundle.Control;
-
 import dk.dtu.mtd.controller.Controller;
-import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.stage.Stage;
 
 public class TowerGui extends ImageView {
 

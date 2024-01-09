@@ -21,7 +21,7 @@ public class GameChat extends StackPane {
         chatList = new LinkedList<String>();
         textArea = new TextArea();
         textArea.setEditable(false);
-        textArea.setMaxSize(500, 300);
+        textArea.setMaxSize(300, 500);
         textArea.setWrapText(true);
 
         chatWriter = new TextField("");

@@ -43,7 +43,7 @@ public class WaveManager implements Runnable {
     void spawnWave(int waveNumber) {
         // left side
         Thread player1Wave = new Thread(new Runnable() {
-            Wave wave = new Wave(waveGenerator(waveNumber), space, 690, Game.player1.id);
+            Wave wave = new Wave(waveGenerator(waveNumber), space, 660, Game.player1.id);
 
             @Override
             public void run() {
@@ -61,7 +61,7 @@ public class WaveManager implements Runnable {
 
         // right side
         Thread player2Wave = new Thread(new Runnable() {
-            Wave wave = new Wave(waveGenerator(waveNumber), space, 1920 - 690, Game.player2.id);
+            Wave wave = new Wave(waveGenerator(waveNumber), space, 1800 - 660, Game.player2.id);
 
             @Override
             public void run() {

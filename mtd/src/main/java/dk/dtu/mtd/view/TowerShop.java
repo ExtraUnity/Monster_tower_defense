@@ -2,7 +2,6 @@ package dk.dtu.mtd.view;
 
 import java.util.ArrayList;
 
-import dk.dtu.mtd.controller.Controller;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.image.Image;
@@ -12,7 +11,6 @@ import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.HBox;
-import javafx.scene.text.Text;
 
 public class TowerShop extends HBox {
 
