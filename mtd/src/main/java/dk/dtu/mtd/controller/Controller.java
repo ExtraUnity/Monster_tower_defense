@@ -4,15 +4,9 @@ import org.jspace.ActualField;
 import org.jspace.FormalField;
 import java.io.IOException;
 import java.net.UnknownHostException;
-import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.List;
-
 import dk.dtu.mtd.model.Client;
-import dk.dtu.mtd.model.game.Enemy;
-import dk.dtu.mtd.model.game.Skeleton;
 import dk.dtu.mtd.view.GameGui;
-import dk.dtu.mtd.view.GameWaveGui;
 import dk.dtu.mtd.view.Gui;
 import javafx.application.Platform;
 
@@ -122,11 +116,12 @@ class GUIMonitior implements Runnable {
                     // make apropriate gui calls to display wave
                     int num = (int) update[2];
                     Platform.runLater(() -> {
-                        GameGui.gameWaveGui.initEnemies(num);
+                        GameGui.gameWaveGuiLeft.initEnemies(num);
+                        GameGui.gameWaveGuiRight.initEnemies(num);
                     });
 
                 // ("gui", "chat", (...) enemy info , playerId)
-                } else if (update[1].toString().equals("enemyUpdate")) {
+                } else if (update[1].toString().equals("enemyUpdateLeft")) {
                     // recive the information that applys to an enemy to update it accordingly
                     // eg. an enemy has died -> it should be removed from the gui / play the death animation
                     LinkedList<String> coords = (LinkedList<String>) update[2];
@@ -134,13 +129,22 @@ class GUIMonitior implements Runnable {
 
                         @Override
                         public void run() {
-                            GameGui.gameWaveGui.updateEnemies(coords);
+                            GameGui.gameWaveGuiLeft.updateEnemies(coords);
                         }
 
                     });
+                } else if (update[1].toString().equals("enemyUpdateRight")) {
+                    // recive the information that applys to an enemy to update it accordingly
+                    // eg. an enemy has died -> it should be removed from the gui / play the death animation
+                    LinkedList<String> coords = (LinkedList<String>) update[2];
+                    Platform.runLater(new Runnable() {
 
-                    
+                        @Override
+                        public void run() {
+                            GameGui.gameWaveGuiRight.updateEnemies(coords);
+                        }
 
+                    });
                 }
             } catch (InterruptedException e) {
                 System.out.println("GUImonitor failing");
