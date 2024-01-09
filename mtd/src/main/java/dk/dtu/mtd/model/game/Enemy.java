@@ -33,7 +33,7 @@ public abstract class Enemy {
 
     // Is this enemy at the finish line
     public boolean reachedFinish() {
-        return this.y > 1080;
+        return this.y > 1080 && this.y < 2000 && this.health > 0;
     }
 
     // Method to define the movement of the enemy
@@ -90,8 +90,12 @@ public abstract class Enemy {
     }
 
     // Method to transfer damage to the tower
-    protected void transferDamageToPlayer() {
-        Controller.damageEnemyToPlayer(this.damage);
+    protected void transferDamageToPlayer(int playerId) {
+        if(playerId == Game.player1.id) {
+            Game.player1.takeDamage(this.damage);
+        } else {
+            Game.player2.takeDamage(this.damage);
+        }
     }
 
     // Method to transfer reward to the player

@@ -3,7 +3,7 @@ package dk.dtu.mtd.model.game;
 public class Skeleton extends Enemy{
 
     public Skeleton() {
-        super(5, 1, 1, 10);
+        super(5, 5, 1, 10);
         //TODO Auto-generated constructor stub
     }
 
