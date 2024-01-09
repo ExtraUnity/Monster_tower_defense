@@ -39,7 +39,7 @@ public class GameGui extends StackPane {
         
         game.setAlignment(Pos.CENTER);
 
-        GameWaveGui animation = new GameWaveGui(4);
+        GameWaveGui animation = new GameWaveGui();
 
         Button counter = new Button("-10 for opponent");
         counter.setOnAction(e -> {
