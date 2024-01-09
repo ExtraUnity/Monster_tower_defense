@@ -41,7 +41,7 @@ public class GameGui extends StackPane {
 
         Button counter = new Button("-10 for opponent");
         counter.setOnAction(e -> {
-            Controller.damage();
+            Controller.damageEnemyToPlayer(10);
         });
 
 

@@ -27,10 +27,8 @@ public abstract class Enemy {
 
     // Method to handle the enemy's death
     protected void die() {
-        transferDamageToPlayer();
         transferRewardToPlayer();
         performDeathAnimation();
-
     }
 
     // Is this enemy at the finish line

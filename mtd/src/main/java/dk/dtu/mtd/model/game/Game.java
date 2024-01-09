@@ -32,7 +32,7 @@ public class Game implements Runnable {
             try {
                 // Tuple contens: ("request" , 'type of request' , 'player ID')
                 handleGameRequest(space.get(new ActualField("request"),
-                        new FormalField(String.class), new FormalField(Integer.class)));
+                    new FormalField(String.class), new FormalField(Integer.class)));
 
             } catch (InterruptedException e) {
                 e.printStackTrace();
