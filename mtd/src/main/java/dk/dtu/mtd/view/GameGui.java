@@ -39,6 +39,8 @@ public class GameGui extends StackPane {
         
         game.setAlignment(Pos.CENTER);
 
+        GameWaveGui animation = new GameWaveGui(4);
+
         Button counter = new Button("-10 for opponent");
         counter.setOnAction(e -> {
             Controller.damage();
@@ -50,7 +52,7 @@ public class GameGui extends StackPane {
             Controller.exitGame();
         });
 
-        game.getChildren().addAll(hp,counter,exitGameButton);
+        game.getChildren().addAll(hp,counter,exitGameButton,animation);
 
         layout.setCenter(game);
 
