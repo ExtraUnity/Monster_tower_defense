@@ -18,5 +18,7 @@ public class TowerShop extends HBox {
 
         this.getChildren().addAll(items);
         setAlignment(Pos.CENTER_RIGHT);
+
+        
     }
 }

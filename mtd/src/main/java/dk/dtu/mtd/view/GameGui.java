@@ -16,16 +16,17 @@ import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
 public class GameGui extends StackPane {
+    static Pane towerLayer;
     static VBox game;
     static BorderPane layout;
     static Text hp;
     static GameChat gameChat;
-
 
 
     public GameGui(int health) {
@@ -34,6 +35,7 @@ public class GameGui extends StackPane {
         game = new VBox();
         hp = new Text("" + health);
         gameChat = new GameChat();
+        towerLayer = new Pane();
 
 
         
@@ -52,7 +54,13 @@ public class GameGui extends StackPane {
 
         game.getChildren().addAll(hp,counter,exitGameButton);
 
-        layout.setCenter(game);
+        game.setPrefSize(500, 500);
+        towerLayer.getChildren().add(game);
+          
+        layout.setCenter(towerLayer);
+        TowerGui testTower = new TowerGui("basicTower", 200, 200);
+        towerLayer.getChildren().add(testTower);
+
 
         ImageView chatButton = new ImageView(new Image("dk/dtu/mtd/assets/chatButton.jpg",50,50,true,false));
         chatButton.setOnMouseClicked(e -> {
@@ -90,4 +98,9 @@ public class GameGui extends StackPane {
         gameChat.displayChat();
     }
 
+    public static void newTower(String type, int x, int y) {
+        System.out.println("I got a new tower!");
+        TowerGui tower = new TowerGui(type, x, y);
+        towerLayer.getChildren().add(tower);
+    }
 }
