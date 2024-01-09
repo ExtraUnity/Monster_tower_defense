@@ -50,8 +50,9 @@ public class Game implements Runnable {
                 gameSpace.put("gameClosed", player1.id);
             }
         } else if (request[1].toString().equals("damage")) { // TODO: discuss naming conventions in the group
-            int damage = (int) gameSpace.get(new ActualField("damage"), new FormalField(Integer.class))[1];
+            int damage = (int) gameSpace.get(new ActualField("data"), new ActualField("damage"), new FormalField(Integer.class))[2];
             if ((int) request[2] == player1.id) {
+                
                 player2.setHealth(player2.getHealth() - damage);
                 // ("damadge", newHealth, playerID)
                 gameSpace.put("gui","damage", player1.getHealth(), player1.id);
