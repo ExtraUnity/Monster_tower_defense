@@ -60,7 +60,7 @@ public class Client {
             gameSpace.put("request", "damage", id); // Send request to damage
             gameSpace.put("data", "damage", damage); // Send damage amount
         } catch (Exception e) {
-            System.out.println("Error in client damage");
+            e.printStackTrace();
         }
     }
 

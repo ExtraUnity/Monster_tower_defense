@@ -5,7 +5,6 @@ import org.jspace.FormalField;
 import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.LinkedList;
-
 import dk.dtu.mtd.model.Client;
 import dk.dtu.mtd.model.game.Tower;
 //import dk.dtu.mtd.model.game.WaveManager;
@@ -19,7 +18,6 @@ public class Controller {
     private static GUIMonitior guiMonitior;
     private static Thread guiThread;
     private static Client client = new Client();
-
 
     public static void initController() {
         controller = new Controller();
@@ -55,7 +53,6 @@ public class Controller {
         client.exit();
     }
 
-
     public static void damage() {
         client.damagePlayer(5);
     }
@@ -71,7 +68,7 @@ public class Controller {
     public static void rewardEnemyToPlayer(int reward) {
         client.rewardPlayer(reward);
     }
-    
+
     public static void sendMessage(String msg) {
         System.out.println("Controller handling message");
         client.sendMessage(msg);
@@ -94,12 +91,12 @@ class GUIMonitior implements Runnable {
         Object[] update;
         while (playing) {
             try {
-                // ("gui", (String) type, (int) data, playerId)
+                // ("gui", (String) type, (Object) data, playerId)
                 update = client.gameSpace.get(new ActualField("gui"), new FormalField(String.class),
                         new FormalField(Object.class), new ActualField(client.id));
 
-                System.out.println("got");
 
+                // ("gui", "damage", (int) new hp , playerId)
                 if (update[1].toString().equals("damage")) {
                     System.out.println("updating GUI");
                     final int hp = (int) update[2];
@@ -109,9 +106,8 @@ class GUIMonitior implements Runnable {
                             GameGui.updateGameGui(hp);
                         }
                     });
-                    // GameGui.updateGameGui((int) update[2]); throws an exeption because it's not
-                    // on the GUI thread
-                } else if(update[1].toString().equals("chat")) {
+                // ("gui", "chat", (LinkedList<String>) chat log , playerId)
+                } else if (update[1].toString().equals("chat")) {
                     LinkedList<String> chat = (LinkedList<String>) update[2];
                     System.out.println("Gui recieved request to update");
                     Platform.runLater(new Runnable() {
@@ -122,6 +118,42 @@ class GUIMonitior implements Runnable {
                         }
 
                     });
+
+                // ("gui", "chat", (...) wave info , playerId)
+                } else if (update[1].toString().equals("wave")) {
+                    // make apropriate gui calls to display wave
+                    int num = (int) update[2];
+                    Platform.runLater(() -> {
+                        GameGui.gameWaveGuiLeft.initEnemies(num);
+                        GameGui.gameWaveGuiRight.initEnemies(num);
+                    });
+
+                // ("gui", "chat", (...) enemy info , playerId)
+                } else if (update[1].toString().equals("enemyUpdateLeft")) {
+                    // recive the information that applys to an enemy to update it accordingly
+                    // eg. an enemy has died -> it should be removed from the gui / play the death animation
+                    LinkedList<String> coords = (LinkedList<String>) update[2];
+                    Platform.runLater(new Runnable() {
+
+                        @Override
+                        public void run() {
+                            GameGui.gameWaveGuiLeft.updateEnemies(coords);
+                        }
+
+                    });
+                } else if (update[1].toString().equals("enemyUpdateRight")) {
+                    // recive the information that applys to an enemy to update it accordingly
+                    // eg. an enemy has died -> it should be removed from the gui / play the death animation
+                    LinkedList<String> coords = (LinkedList<String>) update[2];
+                    Platform.runLater(new Runnable() {
+
+                        @Override
+                        public void run() {
+                            GameGui.gameWaveGuiRight.updateEnemies(coords);
+                        }
+
+                    });
+
                 } else if (update[1].toString().equals("newTower")) {
                     Tower tower = (Tower) update[2];
                     System.out.println(tower.getType());
@@ -132,12 +164,6 @@ class GUIMonitior implements Runnable {
                         }
 
                     });
-                }  else if (update[1].toString().equals("wave")) {
-                    // make apropriate gui calls to display wave
-
-                } else if (update[1].toString().equals("enemyUpdate")) {
-                    // recive the information that applys to an enemy to update it accordingly
-                    // eg. an enemy has died -> it should be removed from the gui / play the death animation
 
                 }
             } catch (InterruptedException e) {

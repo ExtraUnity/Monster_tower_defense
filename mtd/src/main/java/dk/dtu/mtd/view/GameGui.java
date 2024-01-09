@@ -31,7 +31,8 @@ public class GameGui extends StackPane {
     static BorderPane layout;
     static Text hp;
     static GameChat gameChat;
-
+    public static GameWaveGui gameWaveGuiLeft;
+    public static GameWaveGui gameWaveGuiRight;
 
     public GameGui(int health) {
         layout = new BorderPane();
@@ -44,6 +45,9 @@ public class GameGui extends StackPane {
 
         
         game.setAlignment(Pos.CENTER);
+
+        gameWaveGuiLeft = new GameWaveGui();
+        gameWaveGuiRight = new GameWaveGui();
 
         Button counter = new Button("-10 for opponent");
         counter.setOnAction(e -> {
@@ -81,6 +85,8 @@ public class GameGui extends StackPane {
         layout.setBottom(bottom);
 
         this.setBackground(background());
+
+        this.getChildren().addAll(gameWaveGuiLeft, gameWaveGuiRight);
         this.getChildren().add(layout);
 
         towerLayer.setOnDragDropped(new EventHandler<DragEvent>() {

@@ -13,6 +13,7 @@ import org.jspace.Space;
 
 public class Game implements Runnable {
     public int id;
+
     public Player player1;
     public Player player2;
     public Space gameSpace;
@@ -34,8 +35,11 @@ public class Game implements Runnable {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        waveManager = new WaveManager(10, 15000);
+
+        // create new waveManager, this can be run as a thread:
+        waveManager = new WaveManager(space);
         new Thread(waveManager).start();
+
     }
 
     @Override

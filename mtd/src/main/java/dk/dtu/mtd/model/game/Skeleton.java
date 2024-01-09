@@ -2,8 +2,8 @@ package dk.dtu.mtd.model.game;
 
 public class Skeleton extends Enemy{
 
-    public Skeleton(int health, int speed, int damage, int reward) {
-        super(health, speed, damage, reward);
+    public Skeleton() {
+        super(5, 2, 1, 10);
         //TODO Auto-generated constructor stub
     }
 
@@ -17,12 +17,6 @@ public class Skeleton extends Enemy{
     protected void performDeathAnimation() {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'performDeathAnimation'");
-    }
-
-    @Override
-    public void move() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'move'");
     }
     
 }

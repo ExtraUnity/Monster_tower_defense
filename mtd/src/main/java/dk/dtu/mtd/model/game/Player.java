@@ -18,6 +18,10 @@ public class Player {
         return health;
     }
 
+    public void takeDamage(int damage) {
+        this.health -= damage;
+    }
+
     public void setRewards(int newReward){
         rewards = newReward;
     }
