@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 
 import dk.dtu.mtd.model.Client;
 import dk.dtu.mtd.model.game.Enemy;
@@ -128,22 +129,17 @@ class GUIMonitior implements Runnable {
                 } else if (update[1].toString().equals("enemyUpdate")) {
                     // recive the information that applys to an enemy to update it accordingly
                     // eg. an enemy has died -> it should be removed from the gui / play the death animation
-                    ArrayList<Enemy> enemies = (ArrayList<Enemy>) update[2];
-                    for(int i = 0; i < enemies.size(); i++) {
-                        Object enemy = enemies.get(i);
-                        int x,y;
-                        if(enemy instanceof Skeleton) {
-                            x = ((Skeleton)enemy).getX();
-                            y = ((Skeleton)enemy).getY();
-                        } else {
-                            x = 0;
-                            y = 0;
+                    LinkedList<String> coords = (LinkedList<String>) update[2];
+                    System.out.println("Gui recieved request to update");
+                    Platform.runLater(new Runnable() {
+
+                        @Override
+                        public void run() {
+                            GameGui.gameWaveGui.updateEnemies(coords);
                         }
-                        Platform.runLater(() -> {
-                            GameGui.gameWaveGui.updateEnemies(x, y);
-                        });
-                        
-                    }
+
+                    });
+
                     
 
                 }

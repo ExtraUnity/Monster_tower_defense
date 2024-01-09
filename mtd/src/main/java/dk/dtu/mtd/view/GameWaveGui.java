@@ -6,6 +6,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 public class GameWaveGui extends StackPane {
     public ArrayList<EnemyImage> enemyArray;
@@ -15,8 +17,6 @@ public class GameWaveGui extends StackPane {
         wavePane = new Pane();
         wavePane.setMinSize(500, 500);
         this.getChildren().add(wavePane);
-
-        
 
     }
 
@@ -29,12 +29,12 @@ public class GameWaveGui extends StackPane {
         }
     }
 
-
-    public void updateEnemies(int newXCoord, int newYCoord){
-   
-        for (int i = 0; i < enemyArray.size(); i++) {
-            enemyArray.get(i).xCoord = newXCoord;
-            enemyArray.get(i).yCoord = newYCoord;
+    public void updateEnemies(LinkedList<String> coordinates) {
+        for (int i = 0 ; i < enemyArray.size(); i++) {
+            String[] coord = coordinates.get(i).split(" ");
+            enemyArray.get(i).xCoord = Integer.valueOf(coord[0]);
+            enemyArray.get(i).yCoord = Integer.valueOf(coord[1]);
+            //System.out.println("Monster no. " + i + ": " + coordinates.get(i).charAt(0) + " " + coordinates.get(i).charAt(1));
         }
     }
 
@@ -45,7 +45,7 @@ class EnemyImage extends ImageView {
     public double xCoord = 0;
     public double yCoord = 0;
 
-    EnemyImage (){
+    EnemyImage() {
         Image image = new Image("dk/dtu/mtd/assets/skelly.gif", 100, 0, true, false);
         setImage(image);
 

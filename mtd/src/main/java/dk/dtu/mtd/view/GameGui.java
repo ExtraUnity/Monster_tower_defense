@@ -52,7 +52,7 @@ public class GameGui extends StackPane {
             Controller.exitGame();
         });
 
-        game.getChildren().addAll(hp,counter,exitGameButton,gameWaveGui);
+        game.getChildren().addAll(hp,counter,exitGameButton);
 
         layout.setCenter(game);
 
@@ -71,6 +71,7 @@ public class GameGui extends StackPane {
         layout.setBottom(bottom);
 
         this.setBackground(background());
+        this.getChildren().add(gameWaveGui);
         this.getChildren().add(layout);
     }
 

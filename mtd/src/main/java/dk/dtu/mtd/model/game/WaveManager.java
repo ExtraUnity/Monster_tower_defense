@@ -2,6 +2,9 @@ package dk.dtu.mtd.model.game;
 
 import java.util.ArrayList;
 import java.util.InputMismatchException;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.LinkedList;
 
 import org.jspace.ActualField;
 import org.jspace.FormalField;
@@ -100,7 +103,7 @@ class Wave {
     ArrayList<Enemy> enemies;
     Space space;
     int playerId;
-    final int START_X = 0;
+    final int START_X = 690;
     final int START_Y = 0;
 
     public Wave(ArrayList<Enemy> enemies, Space space, int playerId) {
@@ -111,7 +114,7 @@ class Wave {
 
     public void run() {
         int spawned = 0;
-        long spawnRate = 250L;
+        long spawnRate = 5000L;
         long deltaTime = 0;
         long previousTime = System.nanoTime();
 
@@ -133,7 +136,14 @@ class Wave {
                 for (int i = 0; i < spawned; i++) {
                     enemies.get(i).move();
                 }
-                space.put("gui", "enemyUpdate", enemies, playerId);
+                LinkedList<String> coordinates = new LinkedList<String>();
+                for(int i = 0; i < enemies.size(); i++){
+                    String xy = "" + enemies.get(i).getX() + " " + enemies.get(i).getY();
+                    System.out.println(xy);
+                    coordinates.add(xy);
+                }
+
+                space.put("gui", "enemyUpdate", coordinates, playerId);
                 Thread.sleep(40L);
 
             } catch (InterruptedException e) {
