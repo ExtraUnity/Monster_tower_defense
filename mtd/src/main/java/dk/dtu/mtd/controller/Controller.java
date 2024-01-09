@@ -4,10 +4,13 @@ import org.jspace.ActualField;
 import org.jspace.FormalField;
 import java.io.IOException;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.LinkedList;
 
 import dk.dtu.mtd.model.Client;
+import dk.dtu.mtd.model.game.Enemy;
 import dk.dtu.mtd.view.GameGui;
+import dk.dtu.mtd.view.GameWaveGui;
 import dk.dtu.mtd.view.Gui;
 import javafx.application.Platform;
 
@@ -121,6 +124,11 @@ class GUIMonitior implements Runnable {
                 } else if (update[1].toString().equals("enemyUpdate")) {
                     // recive the information that applys to an enemy to update it accordingly
                     // eg. an enemy has died -> it should be removed from the gui / play the death animation
+                    ArrayList<Enemy> enemies = (ArrayList<Enemy>) update[2];
+                    for(Enemy enemy : enemies) {
+                        GameWaveGui.updateEnemies(enemy.getX(), enemy.getY());
+                    }
+                    
 
                 }
             } catch (InterruptedException e) {
