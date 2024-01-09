@@ -3,6 +3,8 @@ package dk.dtu.mtd.model.game;
 import java.util.LinkedList;
 import java.util.Queue;
 
+import org.jspace.ActualField;
+import org.jspace.FormalField;
 import org.jspace.Space;
 
 public class GameState implements Runnable{
@@ -36,7 +38,12 @@ public class GameState implements Runnable{
     @Override
     public void run() {
         while (true) {
-            
+            try {
+                Object[] update = space.getp(new ActualField("updateState"), new ActualField("basicTower"), new FormalField(Integer.class), new FormalField(Integer.class), new FormalField(Integer.class));
+
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
     }
     

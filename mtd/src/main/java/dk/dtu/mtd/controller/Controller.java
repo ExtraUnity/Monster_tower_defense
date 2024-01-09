@@ -57,6 +57,10 @@ public class Controller {
         client.damagePlayer(5);
     }
 
+    public static void placeTower(String type, int x, int y) {
+        client.placeTower(type, x, y);
+    }
+
     public static void damageEnemyToPlayer(int damage) {
         client.damagePlayer(damage); // Inform the client to handle the damage
     }

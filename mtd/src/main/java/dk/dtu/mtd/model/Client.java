@@ -72,6 +72,14 @@ public class Client {
         }
     }
 
+    public void placeTower(String type, int x, int y) {
+        try {
+            gameSpace.put("updateState", type, x, y);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
     
 
     public void exitGame() {
