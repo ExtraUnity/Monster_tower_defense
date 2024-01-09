@@ -9,15 +9,15 @@ import org.jspace.Space;
 
 public class Game implements Runnable {
     public int id;
-    public Player player1;
-    public Player player2;
+    static public Player player1;
+    static public Player player2;
     public Space space;
     public WaveManager waveManager;
 
     public Game(int id, int playerID1, int playerID2) {
         this.id = id;
-        this.player1 = new Player(playerID1, 150, 0);
-        this.player2 = new Player(playerID2, 150, 0);
+        player1 = new Player(playerID1, 150, 0);
+        player2 = new Player(playerID2, 150, 0);
         space = new SequentialSpace();
         LinkedList<String> chat = new LinkedList<String>();
         try {
@@ -27,7 +27,8 @@ public class Game implements Runnable {
         }
 
         // create new waveManager, this can be run as a thread:
-        waveManager = new WaveManager();
+        waveManager = new WaveManager(space);
+        new Thread(waveManager).start();
 
     }
 

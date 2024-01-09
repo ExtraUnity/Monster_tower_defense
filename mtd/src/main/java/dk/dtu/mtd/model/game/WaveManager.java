@@ -1,6 +1,8 @@
 package dk.dtu.mtd.model.game;
 
 import java.util.ArrayList;
+import java.util.InputMismatchException;
+
 import org.jspace.ActualField;
 import org.jspace.FormalField;
 import org.jspace.SequentialSpace;
@@ -9,22 +11,21 @@ import org.jspace.Space;
 public class WaveManager implements Runnable {
     boolean playing;
     int waveRound;
-    Thread waveManeger;
+    boolean player1Done;
+    boolean player2Done;
+    Space space;
 
-    public WaveManager() {
+    public WaveManager(Space space) {
         this.playing = true;
         this.waveRound = 1;
-    }
-
-    // TODO: migh not be needed
-    void initWaveManager() {
-        this.waveManeger = new Thread(new WaveManager());
-        waveManeger.start();
+        this.space = space;
     }
 
     @Override
     public void run() {
         while (playing) {
+            player1Done = false;
+            player2Done = false;
             spawnWave(waveRound);
 
             waveRound++;
@@ -36,14 +37,55 @@ public class WaveManager implements Runnable {
         }
     }
 
-    void spawnWave(int wave) {
-        System.out.println("Spawning wave " + wave);
+    void spawnWave(int waveNumber) {
 
+        Thread player1Wave = new Thread(new Runnable() {
+            Wave wave = new Wave(waveGenerator(waveNumber), space, Game.player1.id);
+
+            @Override
+            public void run() {
+                wave.run();
+                player1Done = true;
+            }
+
+        });// new Thread(new Wave(new ArrayList<Enemy>(), space, Game.player1.id));
+        Thread player2Wave = new Thread(new Runnable() {
+            Wave wave = new Wave(waveGenerator(waveNumber), space, Game.player2.id);
+
+            @Override
+            public void run() {
+                wave.run();
+                player2Done = true;
+            }
+
+        });// new Thread(new Wave(new ArrayList<Enemy>(), space, Game.player2.id));
+        player1Wave.start();
+        player2Wave.start();
+        while (!(player1Done && player2Done)) {
+
+        }
+        
+
+        System.out.println("Spawning wave " + waveNumber);
+
+    }
+
+    ArrayList<Enemy> waveGenerator(int wave) {
+        ArrayList<Enemy> enemies = new ArrayList<Enemy>();
+        if (wave < 1) {
+            throw new InputMismatchException("Wave cannot be non-positive");
+        }
+        if (wave == 1) {
+            for (int i = 0; i < 10; i++) {
+                enemies.add(new Skeleton());
+            }
+        }
+        return enemies;
     }
 
 }
 
-class Wave implements Runnable {
+class Wave {
     ArrayList<Enemy> enemies;
     Space space;
     int playerId;
@@ -56,40 +98,40 @@ class Wave implements Runnable {
         this.playerId = playerId;
     }
 
-    @Override
     public void run() {
         int spawned = 0;
         long spawnRate = 250L;
         long deltaTime = 0;
         long previousTime = System.nanoTime();
 
-        while(true) {
-            if(isComplete()) {
+        while (true) {
+            if (isComplete()) {
                 break;
             }
-            
+
             try {
                 deltaTime = System.nanoTime() - previousTime;
-                
-                if(spawned < enemies.size() && deltaTime > spawnRate) {
-                    //spawn enemy
+
+                if (spawned < enemies.size() && deltaTime > spawnRate) {
+                    // spawn enemy
                     enemies.get(spawned).setX(START_X);
                     enemies.get(spawned).setY(START_Y);
                     previousTime = System.nanoTime();
                     spawned++;
                 }
-                for(int i = 0; i < spawned; i++) {
+                for (int i = 0; i < spawned; i++) {
                     enemies.get(i).move();
                 }
-                space.put("gui","enemyUpdate",enemies, playerId);
+                System.out.println("Sending enemyUpdate");
+                space.put("gui", "enemyUpdate", enemies, playerId);
                 Thread.sleep(40L);
-
 
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
 
         }
+
     }
 
     private boolean isComplete() {

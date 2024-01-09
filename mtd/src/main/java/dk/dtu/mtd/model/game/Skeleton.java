@@ -2,8 +2,8 @@ package dk.dtu.mtd.model.game;
 
 public class Skeleton extends Enemy{
 
-    public Skeleton(int health, int speed, int damage, int reward) {
-        super(health, speed, damage, reward);
+    public Skeleton() {
+        super(5, 1, 1, 10);
         //TODO Auto-generated constructor stub
     }
 
