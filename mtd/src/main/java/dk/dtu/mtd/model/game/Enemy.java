@@ -33,6 +33,10 @@ public abstract class Enemy {
 
     }
 
+    public boolean reachedFinish() {
+        return this.y > 1080;
+    }
+
     // Method to define the movement of the enemy
     //THIS IS CURSED DON'T HATE ME
     public void move() {
