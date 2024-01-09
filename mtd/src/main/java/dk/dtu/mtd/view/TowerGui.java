@@ -12,11 +12,11 @@ import javafx.stage.Stage;
 
 public class TowerGui extends ImageView {
 
-    int size = 70;
+    int size = 100;
 
     public TowerGui(String towerType, int x, int y) {
-        this.setTranslateX(x);
-        this.setTranslateY(y);
+        this.setTranslateX(x - size/2);
+        this.setTranslateY(y - size/2);
         this.setFitHeight(size);
         this.setFitWidth(size);
 
