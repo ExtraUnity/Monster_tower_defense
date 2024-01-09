@@ -3,12 +3,16 @@ package dk.dtu.mtd.view;
 import java.util.LinkedList;
 
 import dk.dtu.mtd.controller.Controller;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.DragEvent;
+import javafx.scene.input.Dragboard;
+import javafx.scene.input.TransferMode;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BackgroundPosition;
@@ -78,6 +82,32 @@ public class GameGui extends StackPane {
 
         this.setBackground(background());
         this.getChildren().add(layout);
+
+        towerLayer.setOnDragDropped(new EventHandler<DragEvent>() {
+            @Override
+            public void handle(DragEvent event) {
+                Dragboard dragboard = event.getDragboard();
+                if(dragboard.hasString()) {
+                    Controller.placeTower(dragboard.getString(),(int) event.getX(), (int) event.getY());
+                }
+                event.consume();
+            }
+                        
+        });
+
+        towerLayer.setOnDragOver(new EventHandler<DragEvent>() {
+            @Override
+            public void handle(DragEvent event) {
+                event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
+                //System.out.println("it owrk?");
+                event.consume();
+            }          
+        });
+    }
+    
+
+    public void handleDragOver(DragEvent event) {
+        event.acceptTransferModes(TransferMode.ANY);
     }
 
     public static void updateGameGui(int newHealth) {
