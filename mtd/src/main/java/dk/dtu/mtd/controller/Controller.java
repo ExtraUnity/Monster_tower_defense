@@ -8,6 +8,8 @@ import java.util.LinkedList;
 
 import dk.dtu.mtd.model.Client;
 import dk.dtu.mtd.model.game.Tower;
+//import dk.dtu.mtd.model.game.WaveManager;
+
 import dk.dtu.mtd.view.GameGui;
 import dk.dtu.mtd.view.Gui;
 import javafx.application.Platform;
@@ -130,7 +132,14 @@ class GUIMonitior implements Runnable {
                         }
 
                     });
-                }  
+                }  else if (update[1].toString().equals("wave")) {
+                    // make apropriate gui calls to display wave
+
+                } else if (update[1].toString().equals("enemyUpdate")) {
+                    // recive the information that applys to an enemy to update it accordingly
+                    // eg. an enemy has died -> it should be removed from the gui / play the death animation
+
+                }
             } catch (InterruptedException e) {
                 System.out.println("GUImonitor failing");
             }

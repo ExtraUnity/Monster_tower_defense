@@ -18,6 +18,8 @@ public class Game implements Runnable {
     public Space gameSpace;
     private Queue<Enemy> enemyList; 
     private List<Tower> towerList;
+    public WaveManager waveManager;
+
 
     public Game(int id, int playerID1, int playerID2) {
         this.id = id;
@@ -32,6 +34,8 @@ public class Game implements Runnable {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        waveManager = new WaveManager(10, 15000);
+        new Thread(waveManager).start();
     }
 
     @Override
