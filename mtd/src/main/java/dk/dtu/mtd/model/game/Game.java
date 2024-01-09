@@ -12,6 +12,7 @@ public class Game implements Runnable {
     public Player player1;
     public Player player2;
     public Space space;
+    public WaveManager waveManager;
 
     public Game(int id, int playerID1, int playerID2) {
         this.id = id;
@@ -24,6 +25,8 @@ public class Game implements Runnable {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        waveManager = new WaveManager(10, 15000);
+        new Thread(waveManager).start();
     }
 
     @Override
