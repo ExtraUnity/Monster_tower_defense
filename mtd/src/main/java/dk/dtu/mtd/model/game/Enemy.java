@@ -33,6 +33,7 @@ public abstract class Enemy {
 
     }
 
+    // Is this enemy at the finish line
     public boolean reachedFinish() {
         return this.y > 1080;
     }
