@@ -126,7 +126,10 @@ class GUIMonitior implements Runnable {
                     // eg. an enemy has died -> it should be removed from the gui / play the death animation
                     ArrayList<Enemy> enemies = (ArrayList<Enemy>) update[2];
                     for(Enemy enemy : enemies) {
-                        GameWaveGui.updateEnemies(enemy.getX(), enemy.getY());
+                        Platform.runLater(() -> {
+                            GameGui.gameWaveGui.updateEnemies(enemy.getX(), enemy.getY());
+                        });
+                        
                     }
                     
 
