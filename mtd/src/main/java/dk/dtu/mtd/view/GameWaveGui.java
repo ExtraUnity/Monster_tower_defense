@@ -31,22 +31,23 @@ public class GameWaveGui extends StackPane {
     public void updateEnemies(LinkedList<String> coordinates) {
         for (int i = 0 ; i < enemyArray.size(); i++) {
             String[] coord = coordinates.get(i).split(" ");
-            enemyArray.get(i).xCoord = Integer.valueOf(coord[0]);
-            enemyArray.get(i).yCoord = Integer.valueOf(coord[1]);
-            //System.out.println("Monster no. " + i + ": " + coordinates.get(i).charAt(0) + " " + coordinates.get(i).charAt(1));
+            enemyArray.get(i).xCoord = Integer.valueOf(coord[0]) - 50;
+            enemyArray.get(i).yCoord = Integer.valueOf(coord[1]) - 50;
         }
     }
 
 }
 
+// each enemy is represented by an enemy image (for now they are all skeletons)
 class EnemyImage extends ImageView {
-
-    public double xCoord = -1000;
-    public double yCoord = -1000;
+    public double xCoord = 900;
+    public double yCoord = 900;
 
     EnemyImage() {
         Image image = new Image("dk/dtu/mtd/assets/skelly.gif", 100, 0, true, false);
         setImage(image);
+        setX(xCoord);
+        setY(yCoord);
 
         ImageView param = this;
         AnimationTimer timer = new AnimationTimer() {

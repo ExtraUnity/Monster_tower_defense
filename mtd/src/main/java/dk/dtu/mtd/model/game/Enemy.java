@@ -39,7 +39,7 @@ public abstract class Enemy {
     // Method to define the movement of the enemy
     //THIS IS CURSED DON'T HATE ME
     public void move() {
-        int distToCenterX = Math.abs(this.x - 960);
+        int distToCenterX = Math.abs(this.x - 900);
         if(this.y < 590 && distToCenterX < 310) { //First stretch moving downwards
             this.y += this.speed;
         } else if(distToCenterX < 520) { //Second stretch, moving to the side
