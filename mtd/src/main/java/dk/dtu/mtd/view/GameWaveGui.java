@@ -1,8 +1,10 @@
 package dk.dtu.mtd.view;
 
 import javafx.animation.AnimationTimer;
+import javafx.event.EventHandler;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 
@@ -19,26 +21,40 @@ public class GameWaveGui extends StackPane {
 
         enemyArray = new ImageView[numberOfEnemys];
         for (int i = 0; i < numberOfEnemys; i++) {
-            ImageView newEnemy = enemy();
+            ImageView newEnemy = new EnemyImage();
             enemyArray[i] = newEnemy;
             wavePane.getChildren().add(newEnemy);
         }
 
     }
 
-    ImageView enemy() {
-        Image image = new Image("dk/dtu/mtd/assets/skelly.gif", 100, 0, true, false);
-        ImageView imageView = new ImageView(image);
+}
 
+class EnemyImage extends ImageView {
+
+    double speedX = 0;
+    double speedY = 0;
+
+    EnemyImage (){
+        Image image = new Image("dk/dtu/mtd/assets/skelly.gif", 100, 0, true, false);
+        setImage(image);
+
+        
+        setOnMousePressed(e -> {
+            speedX = 1.0;
+        });
+        setOnMouseReleased(e -> {
+            speedX = 0;
+        });
+        ImageView param = this;
         AnimationTimer timer = new AnimationTimer() {
             @Override
             public void handle(long now) {
-                imageView.setX(imageView.getX() + 2.0);
+                param.setX(param.getX() + speedX);
+                param.setY(param.getY() + speedY);
             }
 
         };
         timer.start();
-
-        return imageView;
     }
 }
