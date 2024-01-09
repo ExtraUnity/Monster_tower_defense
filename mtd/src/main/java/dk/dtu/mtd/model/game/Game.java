@@ -1,6 +1,7 @@
 package dk.dtu.mtd.model.game;
 
 import java.util.LinkedList;
+import java.util.Queue;
 
 import org.jspace.ActualField;
 import org.jspace.FormalField;
@@ -12,11 +13,15 @@ public class Game implements Runnable {
     public Player player1;
     public Player player2;
     public Space gameSpace;
+    private Queue<Enemy> enemyList; 
+    private Queue<Tower> towerList;
 
     public Game(int id, int playerID1, int playerID2) {
         this.id = id;
         this.player1 = new Player(playerID1, 150, 0);
         this.player2 = new Player(playerID2, 150, 0);
+        this.enemyList = new LinkedList<Enemy>();
+        this.towerList = new LinkedList<Tower>();
         gameSpace = new SequentialSpace();
         LinkedList<String> chat = new LinkedList<String>();
         try {
