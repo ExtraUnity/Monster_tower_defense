@@ -1,6 +1,5 @@
 package dk.dtu.mtd.view;
 
-import dk.dtu.mtd.controller.Controller;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.layout.StackPane;

@@ -21,20 +21,7 @@ public class GameWaveGui extends StackPane {
         for (int i = 0; i < numberOfEnemys; i++) {
             ImageView newEnemy = enemy();
             enemyArray[i] = newEnemy;
-            System.out.println("enemy position" + newEnemy.xProperty());
             wavePane.getChildren().add(newEnemy);
-
-            // animation(100,100, newEnemy);
-
-            newEnemy.setX(300);
-            newEnemy.setY(300);
-
-            System.out.println("enemy position" + newEnemy.xProperty());
-
-            newEnemy.relocate(100, 100);
-
-            System.out.println("enemy position" + newEnemy.xProperty());
-
         }
 
     }
