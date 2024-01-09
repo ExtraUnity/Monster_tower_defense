@@ -7,6 +7,7 @@ public class BasicTower extends Tower {
         this.x = x;
         this.y = y;
         this.id = id;
+        this.type = "basicTower";
 
         radius = 36;
         damage = 10;

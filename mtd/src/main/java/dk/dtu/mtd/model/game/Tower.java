@@ -3,6 +3,9 @@ package dk.dtu.mtd.model.game;
 import java.util.List;
 
 public abstract class Tower {
+
+    String type;
+
     int radius, x, y, damage, fireRate, playerID, id;
     int lastShot = fireRate;
 
@@ -25,5 +28,16 @@ public abstract class Tower {
         return true;
     }
 
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public String getType() {
+        return type;
+    }
     
 }

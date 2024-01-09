@@ -58,7 +58,7 @@ public class GameGui extends StackPane {
         towerLayer.getChildren().add(game);
           
         layout.setCenter(towerLayer);
-        TowerGui testTower = new TowerGui("SuperMonkey.png", 200, 200);
+        TowerGui testTower = new TowerGui("basicTower", 200, 200);
         towerLayer.getChildren().add(testTower);
 
 
@@ -98,4 +98,9 @@ public class GameGui extends StackPane {
         gameChat.displayChat();
     }
 
+    public static void newTower(String type, int x, int y) {
+        System.out.println("I got a new tower!");
+        TowerGui tower = new TowerGui(type, x, y);
+        towerLayer.getChildren().add(tower);
+    }
 }

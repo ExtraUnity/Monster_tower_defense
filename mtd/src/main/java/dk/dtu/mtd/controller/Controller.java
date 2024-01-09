@@ -7,6 +7,7 @@ import java.net.UnknownHostException;
 import java.util.LinkedList;
 
 import dk.dtu.mtd.model.Client;
+import dk.dtu.mtd.model.game.Tower;
 import dk.dtu.mtd.view.GameGui;
 import dk.dtu.mtd.view.Gui;
 import javafx.application.Platform;
@@ -119,7 +120,17 @@ class GUIMonitior implements Runnable {
                         }
 
                     });
-                }
+                } else if (update[1].toString().equals("newTower")) {
+                    Tower tower = (Tower) update[2];
+                    System.out.println(tower.getType());
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            GameGui.newTower(tower.getType(), tower.getX(), tower.getY());
+                        }
+
+                    });
+                }  
             } catch (InterruptedException e) {
                 System.out.println("GUImonitor failing");
             }

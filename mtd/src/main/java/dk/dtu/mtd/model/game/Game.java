@@ -119,6 +119,8 @@ public class Game implements Runnable {
             if (towerInfo[1].equals("basicTower")) {
                 if(legalTowerPlacement((String) towerInfo[1], (int) towerInfo[2], (int) towerInfo[3], playerId)) {
                     towerList.add(new BasicTower((int) towerInfo[2], (int) towerInfo[3], playerId));
+                    gameSpace.put("gui", "newTower", towerList.get(towerList.size() - 1), player1.id);
+                    gameSpace.put("gui", "newTower", towerList.get(towerList.size() - 1), player2.id);
                     System.out.println("Tower placed at " + towerList.get(towerList.size() - 1).x + " " + towerList.get(towerList.size() - 1).y);
                 }
             }

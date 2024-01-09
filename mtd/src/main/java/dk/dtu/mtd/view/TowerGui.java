@@ -14,21 +14,24 @@ public class TowerGui extends ImageView {
 
     int size = 70;
 
-    public TowerGui(String towerImage, int x, int y) {
+    public TowerGui(String towerType, int x, int y) {
         this.setTranslateX(x);
         this.setTranslateY(y);
         this.setFitHeight(size);
         this.setFitWidth(size);
 
-        this.setImage(new Image("dk/dtu/mtd/assets/" + towerImage));
-
+        if (towerType.equals( "basicTower")) {
+            this.setImage(new Image("dk/dtu/mtd/assets/dartMonkey.png"));
+        } else {
+            this.setImage(new Image("dk/dtu/mtd/assets/SuperMonkey.png"));
+        }
 
         this.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
 
             @Override
             public void handle(MouseEvent event) {
                 System.out.println("Tower pressed ");
-                Controller.placeTower("basicTower", 1, 1);
+                Controller.placeTower("basicTower", 300, 200);
                 event.consume();
             }
        });
