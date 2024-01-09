@@ -17,7 +17,6 @@ public class Controller {
     private static Thread guiThread;
     private static Client client = new Client();
 
-
     public static void initController() {
         controller = new Controller();
         guiMonitior = new GUIMonitior(client);
@@ -52,7 +51,6 @@ public class Controller {
         client.exit();
     }
 
-
     public static void damage() {
         client.damagePlayer(5);
     }
@@ -64,7 +62,7 @@ public class Controller {
     public static void rewardEnemyToPlayer(int reward) {
         client.rewardPlayer(reward);
     }
-    
+
     public static void sendMessage(String msg) {
         System.out.println("Controller handling message");
         client.sendMessage(msg);
@@ -87,12 +85,13 @@ class GUIMonitior implements Runnable {
         Object[] update;
         while (playing) {
             try {
-                // ("gui", (String) type, (int) data, playerId)
+                // ("gui", (String) type, (Object) data, playerId)
                 update = client.gameSpace.get(new ActualField("gui"), new FormalField(String.class),
                         new FormalField(Object.class), new ActualField(client.id));
 
                 System.out.println("got");
 
+                // ("gui", "damage", (int) new hp , playerId)
                 if (update[1].toString().equals("damage")) {
                     System.out.println("updating GUI");
                     final int hp = (int) update[2];
@@ -102,9 +101,8 @@ class GUIMonitior implements Runnable {
                             GameGui.updateGameGui(hp);
                         }
                     });
-                    // GameGui.updateGameGui((int) update[2]); throws an exeption because it's not
-                    // on the GUI thread
-                } else if(update[1].toString().equals("chat")) {
+                // ("gui", "chat", (LinkedList<String>) chat log , playerId)
+                } else if (update[1].toString().equals("chat")) {
                     LinkedList<String> chat = (LinkedList<String>) update[2];
                     System.out.println("Gui recieved request to update");
                     Platform.runLater(new Runnable() {
@@ -115,6 +113,15 @@ class GUIMonitior implements Runnable {
                         }
 
                     });
+                // ("gui", "chat", (...) wave info , playerId)
+                } else if (update[1].toString().equals("wave")) {
+                    // make apropriate gui calls to display wave
+
+                // ("gui", "chat", (...) enemy info , playerId)
+                } else if (update[1].toString().equals("enemyUpdate")) {
+                    // recive the information that applys to an enemy to update it accordingly
+                    // eg. an enemy has died -> it should be removed from the gui / play the death animation
+
                 }
             } catch (InterruptedException e) {
                 System.out.println("GUImonitor failing");

@@ -25,6 +25,10 @@ public class Game implements Runnable {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+
+        // create new waveManager, this can be run as a thread:
+        waveManager = new WaveManager();
+
     }
 
     @Override
