@@ -101,13 +101,13 @@ class Wave {
     Space space;
     final int START_X;
     final int START_Y = 0;
-    int playerID;
+    int playerId;
 
-    public Wave(ArrayList<Enemy> enemies, Space space, int startX, int playerID) {
-        this.playerID = playerID;
+    public Wave(ArrayList<Enemy> enemies, Space space, int startX, int playerId) {
         this.enemies = enemies;
         this.space = space;
         START_X = startX;
+        this.playerId = playerId;
     }
 
     public void run() {
@@ -133,6 +133,12 @@ class Wave {
                 }
                 for (int i = 0; i < spawned; i++) {
                     enemies.get(i).move();
+                    if (enemies.get(i).reachedFinish()) {
+                        enemies.get(i).setY(3000);
+                        enemies.get(i).transferDamageToPlayer(playerId);
+                        int hp = playerId == Game.player1.id ? Game.player1.getHealth() : Game.player2.getHealth();
+                        space.put("gui", "damage", hp, playerId);
+                    }
                 }
                 LinkedList<String> coordinates = new LinkedList<String>();
                 for (int i = 0; i < enemies.size(); i++) {
@@ -140,7 +146,7 @@ class Wave {
                     coordinates.add(xy);
                 }
 
-                if (Game.player1.id == playerID) {
+                if (Game.player1.id == playerId) {
                     space.put("gui", "enemyUpdateLeft", coordinates, Game.player1.id);
                     space.put("gui", "enemyUpdateRight", coordinates, Game.player2.id);
                 } else {
