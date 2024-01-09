@@ -5,7 +5,6 @@ import java.util.LinkedList;
 import dk.dtu.mtd.controller.Controller;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
-import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.DragEvent;
@@ -19,7 +18,6 @@ import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
 public class GameGui extends StackPane {
@@ -29,91 +27,50 @@ public class GameGui extends StackPane {
     public static GameWaveGui gameWaveGuiRight;
 
     static Pane towerLayer;
-    static VBox game;
-    static Text hp;
+    static GameTopGui gameTop;
     static GameChat gameChat;
 
     public GameGui(int health) {
         layout = new BorderPane();
         gameArea = new StackPane();
-        game = new VBox();
-        hp = new Text("" + health);
+        gameTop = new GameTopGui(health);
+
         gameChat = new GameChat();
-        towerLayer = new Pane();
+        towerLayer = towerLayer();
         gameWaveGuiLeft = new GameWaveGui();
         gameWaveGuiRight = new GameWaveGui();
 
+        // confine the game area to be the same on all screens:
         gameArea.setMinWidth(1800);
         gameArea.setMinHeight(1000);
         gameArea.setMaxWidth(1800);
         gameArea.setMaxHeight(1000);
+        // this defines the area towera can be placed in:
         towerLayer.setMinWidth(1800);
-        towerLayer.setMinHeight(1000);
+        towerLayer.setMinHeight(750);
         towerLayer.setMaxWidth(1800);
-        towerLayer.setMaxHeight(1000);
+        towerLayer.setMaxHeight(750);
 
         gameArea.setBackground(background());
         gameArea.getChildren().addAll(gameWaveGuiLeft, gameWaveGuiRight);
-        getChildren().add(gameArea);
 
-        game.setAlignment(Pos.CENTER);
+        // TowerGui testTower = new TowerGui("basicTower", 200, 200);
+        // towerLayer.getChildren().add(testTower);
 
-        Button counter = new Button("-10 for opponent");
-        counter.setOnAction(e -> {
-            Controller.damageEnemyToPlayer(10);
-        });
-
-        Button exitGameButton = new Button("exit");
-        exitGameButton.setOnAction(e -> {
-            Controller.exitGame();
-        });
-
-        game.getChildren().addAll(hp, counter, exitGameButton);
-
-        game.setPrefSize(500, 500);
-        towerLayer.getChildren().add(game);
-
-        layout.setCenter(towerLayer);
-        TowerGui testTower = new TowerGui("basicTower", 200, 200);
-        towerLayer.getChildren().add(testTower);
-
-        ImageView chatButton = new ImageView(new Image("dk/dtu/mtd/assets/chatButton.jpg", 50, 50, true, false));
-        chatButton.setOnMouseClicked(e -> {
-            if (game.getChildren().contains(gameChat)) {
-                game.getChildren().remove(gameChat);
-            } else {
-                game.getChildren().add(gameChat);
-            }
-        });
         BorderPane bottom = new BorderPane();
+        ImageView chatButton = chatButton();
         bottom.setCenter(new GameShop());
         bottom.setRight(chatButton);
-        BorderPane.setAlignment(chatButton, Pos.BOTTOM_RIGHT);
+        BorderPane.setAlignment(chatButton, Pos.CENTER_RIGHT);
+
+        layout.setTop(gameTop);
+        layout.setCenter(towerLayer);
         layout.setBottom(bottom);
 
-        this.setBackground(background());
-        this.getChildren().add(layout);
+        setBackground(background());
+        getChildren().add(gameArea);
+        getChildren().add(layout);
 
-        towerLayer.setOnDragDropped(new EventHandler<DragEvent>() {
-            @Override
-            public void handle(DragEvent event) {
-                Dragboard dragboard = event.getDragboard();
-                if (dragboard.hasString()) {
-                    Controller.placeTower(dragboard.getString(), (int) event.getX(), (int) event.getY());
-                }
-                event.consume();
-            }
-
-        });
-
-        towerLayer.setOnDragOver(new EventHandler<DragEvent>() {
-            @Override
-            public void handle(DragEvent event) {
-                event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
-                // System.out.println("it owrk?");
-                event.consume();
-            }
-        });
     }
 
     public void handleDragOver(DragEvent event) {
@@ -121,9 +78,9 @@ public class GameGui extends StackPane {
     }
 
     public static void updateGameGui(int newHealth) {
-        game.getChildren().remove(hp);
-        hp = new Text("" + newHealth);
-        game.getChildren().add(0, hp);
+        gameTop.layout.getChildren().remove(gameTop.hp);
+        gameTop.hp = new Text("" + newHealth);
+        gameTop.layout.getChildren().add(0, gameTop.hp);
     }
 
     public Background background() {
@@ -145,5 +102,42 @@ public class GameGui extends StackPane {
         System.out.println("I got a new tower!");
         TowerGui tower = new TowerGui(type, x, y);
         towerLayer.getChildren().add(tower);
+    }
+
+    public Pane towerLayer(){
+        Pane newTowerLayer = new Pane();
+        newTowerLayer.setOnDragDropped(new EventHandler<DragEvent>() {
+            @Override
+            public void handle(DragEvent event) {
+                Dragboard dragboard = event.getDragboard();
+                if (dragboard.hasString()) {
+                    Controller.placeTower(dragboard.getString(), (int) event.getX(), (int) event.getY());
+                }
+                event.consume();
+            }
+        });
+
+        newTowerLayer.setOnDragOver(new EventHandler<DragEvent>() {
+            @Override
+            public void handle(DragEvent event) {
+                event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
+                // System.out.println("it owrk?");
+                event.consume();
+            }
+        });
+        return newTowerLayer;
+    }
+
+    public ImageView chatButton(){
+        ImageView chatButton = new ImageView(new Image("dk/dtu/mtd/assets/chatButton.jpg", 50, 50, true, false));
+        chatButton.setOnMouseClicked(e -> {
+            if (gameTop.getChildren().contains(gameChat)) {
+                gameTop.getChildren().remove(gameChat);
+            } else {
+                gameTop.getChildren().add(gameChat);
+            }
+        });
+
+        return chatButton;
     }
 }
