@@ -37,7 +37,7 @@ public class Game implements Runnable {
             try {
                 // Tuple contens: ("request" , 'type of request' , 'player ID')
                 handleGameRequest(space.get(new ActualField("request"),
-                        new FormalField(String.class), new FormalField(Integer.class)));
+                    new FormalField(String.class), new FormalField(Integer.class)));
 
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -55,8 +55,9 @@ public class Game implements Runnable {
                 space.put("gameClosed", player1.id);
             }
         } else if (request[1].toString().equals("damage")) { // TODO: discuss naming conventions in the group
-            int damage = 10;
+            int damage = (int) space.get(new ActualField("data"), new ActualField("damage"), new FormalField(Integer.class))[2];
             if ((int) request[2] == player1.id) {
+                
                 player2.setHealth(player2.getHealth() - damage);
                 // ("damadge", newHealth, playerID)
                 space.put("gui","damage", player1.getHealth(), player1.id);

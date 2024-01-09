@@ -43,7 +43,7 @@ public class GameGui extends StackPane {
 
         Button counter = new Button("-10 for opponent");
         counter.setOnAction(e -> {
-            Controller.damage();
+            Controller.damageEnemyToPlayer(10);
         });
 
 
@@ -57,7 +57,7 @@ public class GameGui extends StackPane {
         layout.setCenter(game);
 
         ImageView chatButton = new ImageView(new Image("dk/dtu/mtd/assets/chatButton.jpg",50,50,true,false));
-        chatButton.setOnMouseReleased(e -> {
+        chatButton.setOnMouseClicked(e -> {
             if(game.getChildren().contains(gameChat)) {
                 game.getChildren().remove(gameChat);
             } else {
