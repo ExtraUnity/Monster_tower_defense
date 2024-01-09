@@ -14,8 +14,8 @@ import org.jspace.Space;
 public class Game implements Runnable {
     public int id;
 
-    public Player player1;
-    public Player player2;
+    public static Player player1;
+    public static Player player2;
     public Space gameSpace;
     private Queue<Enemy> enemyList; 
     private List<Tower> towerList;
@@ -24,8 +24,8 @@ public class Game implements Runnable {
 
     public Game(int id, int playerID1, int playerID2) {
         this.id = id;
-        this.player1 = new Player(playerID1, 150, 0);
-        this.player2 = new Player(playerID2, 150, 0);
+        player1 = new Player(playerID1, 150, 0);
+        player2 = new Player(playerID2, 150, 0);
         this.enemyList = new LinkedList<Enemy>();
         this.towerList = new ArrayList<Tower>();
         gameSpace = new SequentialSpace();
@@ -37,7 +37,7 @@ public class Game implements Runnable {
         }
 
         // create new waveManager, this can be run as a thread:
-        waveManager = new WaveManager(space);
+        waveManager = new WaveManager(gameSpace);
         new Thread(waveManager).start();
 
     }

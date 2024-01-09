@@ -4,23 +4,14 @@ import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.LinkedList;
 
-
 import org.jspace.Space;
 
-
-
-
 public class WaveManager implements Runnable {
-  
-    //TODO: remove unused fields
+
+    // TODO: remove unused fields
     private int currentWaveNumber;
     private int totalWaves; // Total number of waves
-    private long waveInterval; // Time between waves
-    private long lastWaveTime; // Time of last wave
-    private boolean isWaveActive;
-    //public Thread waveManagerThread;
-    private boolean running;
-  
+
     boolean playing;
     int waveRound;
     boolean player1Done;
@@ -32,7 +23,6 @@ public class WaveManager implements Runnable {
         this.waveRound = 1;
         this.space = space;
     }
-
 
     @Override
     public void run() {
@@ -109,32 +99,6 @@ public class WaveManager implements Runnable {
         return enemies;
     }
 
-
-    //TODO: reevaluate these in the IDE
-
-    // Starts the next wave if time is right
-    private boolean isTimeForNextWave() {
-        long currentTime = System.currentTimeMillis();
-        return (currentTime - lastWaveTime) >= waveInterval;
-    }
-
-    private void startNextWave() {
-        if (currentWaveNumber < totalWaves) {
-            currentWaveNumber++;
-            isWaveActive = true;
-            lastWaveTime = System.currentTimeMillis();
-            spawnWave(currentWaveNumber);
-        }
-    }
-
-    private void spawnWave(int waveNumber) {
-        // Logic to spawn enemies based on the wave number
-        System.out.println("Spawning wave " + currentWaveNumber);
-
-        // Increase difficulty, change enemy types, etc.
-    }
-
-
     // Getters and setters
     public int getCurrentWaveNumber() {
         return currentWaveNumber;
@@ -151,11 +115,6 @@ public class WaveManager implements Runnable {
     public void setTotalWaves(int totalWaves) {
         this.totalWaves = totalWaves;
     }
-
-    public void stop() {
-        this.running = false;
-    }
-
 
 }
 
@@ -186,7 +145,7 @@ class Wave {
 
             try {
                 deltaTime = System.nanoTime() / 1_000_000L - previousTime;
-                System.out.println(deltaTime);
+                //System.out.println(deltaTime);
                 if (spawned < enemies.size() && deltaTime > spawnRate) {
                     // spawn enemy
                     enemies.get(spawned).setX(START_X);

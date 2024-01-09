@@ -7,7 +7,6 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.List;
 
 public class GameWaveGui extends StackPane {
     public ArrayList<EnemyImage> enemyArray;
