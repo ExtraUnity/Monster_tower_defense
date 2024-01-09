@@ -20,7 +20,7 @@ public class GameShop extends StackPane{
         enemyShop.setAlignment(Pos.CENTER_LEFT);
 
         towerShop.getChildren().add(new ImageView(new Image("dk/dtu/mtd/assets/skelly.gif", 100,0,true,true)));
-        enemyShop.getChildren().add(new ImageView(new Image("dk/dtu/mtd/assets/skelly.gif", 100,0,true,true)));
+        enemyShop.getChildren().add(new ImageView(new Image("dk/dtu/mtd/assets/SuperMonkey.png", 100,0,true,true)));
         shop.getChildren().addAll(towerShop,enemyShop);
         shop.setAlignment(Pos.CENTER);
         Image shopImage = new Image("dk/dtu/mtd/assets/shop.png");
