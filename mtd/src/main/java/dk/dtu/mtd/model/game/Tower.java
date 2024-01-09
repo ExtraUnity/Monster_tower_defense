@@ -3,7 +3,7 @@ package dk.dtu.mtd.model.game;
 import java.util.List;
 
 public abstract class Tower {
-    int radius, x, y, damage, fireRate, playerID;
+    int radius, x, y, damage, fireRate, playerID, id;
     int lastShot = fireRate;
 
     int towerLevel = 0;
@@ -20,6 +20,10 @@ public abstract class Tower {
     }
 
     public abstract void shoot(List<Enemy> enemies);
+
+    public boolean legal() {
+        return true;
+    }
 
     
 }

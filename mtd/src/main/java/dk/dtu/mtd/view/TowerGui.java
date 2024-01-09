@@ -1,5 +1,8 @@
 package dk.dtu.mtd.view;
 
+import java.util.ResourceBundle.Control;
+
+import dk.dtu.mtd.controller.Controller;
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.scene.image.Image;
@@ -25,7 +28,7 @@ public class TowerGui extends ImageView {
             @Override
             public void handle(MouseEvent event) {
                 System.out.println("Tower pressed ");
-                
+                Controller.placeTower("basicTower", 1, 1);
                 event.consume();
             }
        });

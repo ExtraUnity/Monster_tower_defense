@@ -1,6 +1,9 @@
 package dk.dtu.mtd.model.game;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 
 import org.jspace.ActualField;
@@ -14,14 +17,14 @@ public class Game implements Runnable {
     public Player player2;
     public Space gameSpace;
     private Queue<Enemy> enemyList; 
-    private Queue<Tower> towerList;
+    private List<Tower> towerList;
 
     public Game(int id, int playerID1, int playerID2) {
         this.id = id;
         this.player1 = new Player(playerID1, 150, 0);
         this.player2 = new Player(playerID2, 150, 0);
         this.enemyList = new LinkedList<Enemy>();
-        this.towerList = new LinkedList<Tower>();
+        this.towerList = new ArrayList<Tower>();
         gameSpace = new SequentialSpace();
         LinkedList<String> chat = new LinkedList<String>();
         try {
@@ -38,7 +41,6 @@ public class Game implements Runnable {
                 // Tuple contens: ("request" , 'type of request' , 'player ID')
                 handleGameRequest(gameSpace.get(new ActualField("request"),
                     new FormalField(String.class), new FormalField(Integer.class)));
-
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -88,6 +90,8 @@ public class Game implements Runnable {
 
                 System.out.println("player1 recived" + reward + "rewards!");
             }
+        } else if (request[1].toString().equals("placeTower")) {
+            placeTower((int) request[2]);
         } else if (request[1].toString().equals("chat")) {
             System.out.println("Game recieved chat request");
             //Retrieve chatlist and update to include message
@@ -105,4 +109,21 @@ public class Game implements Runnable {
         }
     }
 
+    public Boolean legalTowerPlacement(String towerType, int x, int y, int id) {
+        return true;
+    }
+
+    public void placeTower(int playerId) {
+        try {
+            Object[] towerInfo = gameSpace.get(new ActualField("towerInfo"),new FormalField(String.class), new FormalField(Integer.class), new FormalField(Integer.class));
+            if (towerInfo[1].equals("basicTower")) {
+                if(legalTowerPlacement((String) towerInfo[1], (int) towerInfo[2], (int) towerInfo[3], playerId)) {
+                    towerList.add(new BasicTower((int) towerInfo[2], (int) towerInfo[3], playerId));
+                    System.out.println("Tower placed at " + towerList.get(towerList.size() - 1).x + " " + towerList.get(towerList.size() - 1).y);
+                }
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
 }
