@@ -18,11 +18,5 @@ public class Skeleton extends Enemy{
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'performDeathAnimation'");
     }
-
-    @Override
-    public void move() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'move'");
-    }
     
 }

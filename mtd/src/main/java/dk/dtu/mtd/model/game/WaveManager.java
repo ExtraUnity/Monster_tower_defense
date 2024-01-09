@@ -44,6 +44,11 @@ public class WaveManager implements Runnable {
 
             @Override
             public void run() {
+                try {
+                    space.put("gui","wave",10,Game.player1.id);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
                 wave.run();
                 player1Done = true;
             }
@@ -54,6 +59,11 @@ public class WaveManager implements Runnable {
 
             @Override
             public void run() {
+                try {
+                    space.put("gui","wave",10,Game.player2.id);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
                 wave.run();
                 player2Done = true;
             }
@@ -79,6 +89,7 @@ public class WaveManager implements Runnable {
             for (int i = 0; i < 10; i++) {
                 enemies.add(new Skeleton());
             }
+            
         }
         return enemies;
     }
@@ -122,7 +133,6 @@ class Wave {
                 for (int i = 0; i < spawned; i++) {
                     enemies.get(i).move();
                 }
-                System.out.println("Sending enemyUpdate");
                 space.put("gui", "enemyUpdate", enemies, playerId);
                 Thread.sleep(40L);
 

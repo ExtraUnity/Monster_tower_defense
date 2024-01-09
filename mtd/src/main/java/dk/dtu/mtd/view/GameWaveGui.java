@@ -8,7 +8,7 @@ import javafx.scene.layout.StackPane;
 import java.util.ArrayList;
 
 public class GameWaveGui extends StackPane {
-    ArrayList<EnemyImage> enemyArray;
+    public ArrayList<EnemyImage> enemyArray;
     Pane wavePane;
 
     public GameWaveGui() {
@@ -16,17 +16,22 @@ public class GameWaveGui extends StackPane {
         wavePane.setMinSize(500, 500);
         this.getChildren().add(wavePane);
 
+        
+
+    }
+
+    public void initEnemies(int num) {
         enemyArray = new ArrayList<>();
-        for (int i = 0; i < enemyArray.size(); i++) {
+        for (int i = 0; i < num; i++) {
             EnemyImage newEnemy = new EnemyImage();
             enemyArray.add(newEnemy);
             wavePane.getChildren().add(newEnemy);
         }
-
     }
 
 
     public void updateEnemies(int newXCoord, int newYCoord){
+   
         for (int i = 0; i < enemyArray.size(); i++) {
             enemyArray.get(i).xCoord = newXCoord;
             enemyArray.get(i).yCoord = newYCoord;
