@@ -130,7 +130,6 @@ class GUIMonitior implements Runnable {
                     // recive the information that applys to an enemy to update it accordingly
                     // eg. an enemy has died -> it should be removed from the gui / play the death animation
                     LinkedList<String> coords = (LinkedList<String>) update[2];
-                    System.out.println("Gui recieved request to update");
                     Platform.runLater(new Runnable() {
 
                         @Override
