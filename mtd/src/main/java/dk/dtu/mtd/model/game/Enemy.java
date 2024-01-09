@@ -33,8 +33,22 @@ public abstract class Enemy {
 
     }
 
-    // Abstract method to define the movement of the enemy
-    public abstract void move();
+    // Method to define the movement of the enemy
+    //THIS IS CURSED DON'T HATE ME
+    public void move() {
+        int distToCenterX = Math.abs(this.x - 960);
+        if(this.y < 590 && distToCenterX < 310) { //First stretch moving downwards
+            this.y += this.speed;
+        } else if(distToCenterX < 520) { //Second stretch, moving to the side
+            this.x += this.x > 960 ? this.speed : -this.speed;
+        } else if(distToCenterX < 560 && this.y > 390) {
+            this.y -= this.speed;
+        } else if(distToCenterX < 740) {
+            this.x += this.x > 960 ? this.speed : -this.speed;
+        } else {
+            this.y += this.speed;
+        }
+    }
 
     // Abstract method to define the attack behavior of the enemy
     public abstract void attack();
