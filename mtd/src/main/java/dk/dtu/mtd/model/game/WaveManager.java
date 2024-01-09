@@ -11,6 +11,8 @@ import org.jspace.FormalField;
 import org.jspace.SequentialSpace;
 import org.jspace.Space;
 
+import dk.dtu.mtd.view.GameGui;
+
 public class WaveManager implements Runnable {
     boolean playing;
     int waveRound;
@@ -43,12 +45,12 @@ public class WaveManager implements Runnable {
     void spawnWave(int waveNumber) {
 
         Thread player1Wave = new Thread(new Runnable() {
-            Wave wave = new Wave(waveGenerator(waveNumber), space, Game.player1.id);
+            Wave wave = new Wave(waveGenerator(waveNumber), space, 690);
 
             @Override
             public void run() {
                 try {
-                    space.put("gui","wave",10,Game.player1.id);
+                    space.put("gui","wave",20,Game.player1.id);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -58,12 +60,12 @@ public class WaveManager implements Runnable {
 
         });// new Thread(new Wave(new ArrayList<Enemy>(), space, Game.player1.id));
         Thread player2Wave = new Thread(new Runnable() {
-            Wave wave = new Wave(waveGenerator(waveNumber), space, Game.player2.id);
+            Wave wave = new Wave(waveGenerator(waveNumber), space,1920-690);
 
             @Override
             public void run() {
                 try {
-                    space.put("gui","wave",10,Game.player2.id);
+                    space.put("gui","wave",20,Game.player2.id);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -102,14 +104,13 @@ public class WaveManager implements Runnable {
 class Wave {
     ArrayList<Enemy> enemies;
     Space space;
-    int playerId;
-    final int START_X = 690;
+    final int START_X;
     final int START_Y = 0;
 
-    public Wave(ArrayList<Enemy> enemies, Space space, int playerId) {
+    public Wave(ArrayList<Enemy> enemies, Space space, int startX) {
         this.enemies = enemies;
         this.space = space;
-        this.playerId = playerId;
+        START_X = startX;
     }
 
     public void run() {
@@ -142,7 +143,8 @@ class Wave {
                     coordinates.add(xy);
                 }
 
-                space.put("gui", "enemyUpdate", coordinates, playerId);
+                space.put("gui", "enemyUpdate", coordinates, Game.player1.id);
+                space.put("gui", "enemyUpdate", coordinates, Game.player2.id);
                 Thread.sleep(40L);
 
             } catch (InterruptedException e) {
