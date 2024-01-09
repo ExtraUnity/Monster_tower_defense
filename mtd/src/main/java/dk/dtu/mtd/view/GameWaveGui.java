@@ -42,8 +42,8 @@ public class GameWaveGui extends StackPane {
 
 class EnemyImage extends ImageView {
 
-    public double xCoord = 0;
-    public double yCoord = 0;
+    public double xCoord = -1000;
+    public double yCoord = -1000;
 
     EnemyImage() {
         Image image = new Image("dk/dtu/mtd/assets/skelly.gif", 100, 0, true, false);

@@ -116,7 +116,7 @@ class Wave {
         int spawned = 0;
         long spawnRate = 5000L;
         long deltaTime = 0;
-        long previousTime = System.nanoTime();
+        long previousTime = System.nanoTime()/1_000_000L;
 
         while (true) {
             if (isComplete()) {
@@ -124,13 +124,13 @@ class Wave {
             }
 
             try {
-                deltaTime = System.nanoTime() - previousTime;
-
+                deltaTime = System.nanoTime()/1_000_000L - previousTime;
+                System.out.println(deltaTime);
                 if (spawned < enemies.size() && deltaTime > spawnRate) {
                     // spawn enemy
                     enemies.get(spawned).setX(START_X);
                     enemies.get(spawned).setY(START_Y);
-                    previousTime = System.nanoTime();
+                    previousTime = System.nanoTime()/1_000_000L;
                     spawned++;
                 }
                 for (int i = 0; i < spawned; i++) {
@@ -139,7 +139,6 @@ class Wave {
                 LinkedList<String> coordinates = new LinkedList<String>();
                 for(int i = 0; i < enemies.size(); i++){
                     String xy = "" + enemies.get(i).getX() + " " + enemies.get(i).getY();
-                    System.out.println(xy);
                     coordinates.add(xy);
                 }
 
