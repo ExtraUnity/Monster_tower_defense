@@ -16,10 +16,11 @@ public class GameShop extends StackPane{
         shop = new HBox();
         towerShop = new TowerShop();
         enemyShop = new EnemyShop();
+        setMaxHeight(100);
 
         shop.getChildren().addAll(towerShop,enemyShop);
         shop.setAlignment(Pos.CENTER);
-        Image shopImage = new Image("dk/dtu/mtd/assets/shop.png");
+        Image shopImage = new Image("dk/dtu/mtd/assets/shop.png", 0, 100, true, false);
         ImageView shopView = new ImageView(shopImage);
         this.getChildren().addAll(shopView,shop);
         

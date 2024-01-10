@@ -74,16 +74,18 @@ public class Game implements Runnable {
 
                 player2.setHealth(player2.getHealth() - damage);
                 // ("damadge", newHealth, playerID)
-                gameSpace.put("gui", "damage", player1.getHealth(), player1.id);
-                gameSpace.put("gui", "damage", player2.getHealth(), player2.id);
+                String newHealth = "" + player1.getHealth() + " " + player2.getHealth();
+                gameSpace.put("gui", "damage", newHealth, player1.id);
+                gameSpace.put("gui", "damage", newHealth, player2.id);
 
-                System.out.println("player2 recived" + damage + "damage");
+                System.out.println("player2 recived " + damage + " damage");
             } else {
                 player1.setHealth(player1.getHealth() - damage);
-                gameSpace.put("gui", "damage", player1.getHealth(), player1.id);
-                gameSpace.put("gui", "damage", player2.getHealth(), player2.id);
+                String newHealth = "" + player1.getHealth() + " " + player2.getHealth();
+                gameSpace.put("gui", "damage", newHealth, player1.id);
+                gameSpace.put("gui", "damage", newHealth, player2.id);
 
-                System.out.println("player1 recived" + damage + "damage");
+                System.out.println("player1 recived " + damage + " damage");
             }
         } else if (request[1].toString().equals("reward")) {
             int reward = (int) request[3];

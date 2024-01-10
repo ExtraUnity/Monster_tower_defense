@@ -15,11 +15,11 @@ import javafx.scene.layout.HBox;
 public class TowerShop extends HBox {
 
     public TowerShop() {
+        setMaxHeight(100);
         setAlignment(Pos.CENTER_RIGHT);
-
+        
         final ImageView basicTower = new ImageView(new Image("dk/dtu/mtd/assets/dartMonkey.png", 100, 0, true, true));
         this.getChildren().add(basicTower);
-
         basicTower.addEventHandler(MouseEvent.DRAG_DETECTED, new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
@@ -28,13 +28,12 @@ public class TowerShop extends HBox {
                 ClipboardContent content = new ClipboardContent();
                 content.putString("basicTower");
                 db.setContent(content);
-                
+
                 event.consume();
             }
-       });
-       final ImageView superTower = new ImageView(new Image("dk/dtu/mtd/assets/SuperMonkey.png", 100, 0, true, true));
+        });
+        final ImageView superTower = new ImageView(new Image("dk/dtu/mtd/assets/SuperMonkey.png", 100, 0, true, true));
         this.getChildren().add(superTower);
-
         superTower.addEventHandler(MouseEvent.DRAG_DETECTED, new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
@@ -43,9 +42,9 @@ public class TowerShop extends HBox {
                 ClipboardContent content = new ClipboardContent();
                 content.putString("superTower");
                 db.setContent(content);
-                
+
                 event.consume();
             }
-       });
+        });
     }
 }

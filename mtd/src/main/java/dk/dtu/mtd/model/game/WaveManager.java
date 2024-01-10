@@ -154,18 +154,21 @@ class Wave {
                     lastSpawnTick = Game.gameTicker.gameTick;
                     spawned++;
                 }
+
                 for (int i = 0; i < spawned; i++) {
                     enemies.get(i).move();
                     if (enemies.get(i).reachedFinish()) {
                         enemies.get(i).setY(3000);
                         enemies.get(i).transferDamageToPlayer(playerId);
-                        int hp = playerId == Game.player1.id ? Game.player1.getHealth() : Game.player2.getHealth();
-                        space.put("gui", "damage", hp, playerId);
+
+                        String newHp = "" + Game.player1.getHealth() + " " + Game.player2.getHealth();
+                        space.put("gui", "damage", newHp, Game.player1.id);
+                        space.put("gui", "damage", newHp, Game.player2.id);
                     }
                 }
                 LinkedList<String> coordinates = new LinkedList<String>();
                 for (int i = 0; i < enemies.size(); i++) {
-                    String xy = "" + enemies.get(i).getX() + " " + enemies.get(i).getY();
+                    String xy = enemies.get(i).isDead() ? "4000 4000" : "" + enemies.get(i).getX() + " " + enemies.get(i).getY();
                     coordinates.add(xy);
                 }
 
