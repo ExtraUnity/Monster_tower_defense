@@ -16,9 +16,10 @@ public class TowerShop extends HBox {
 
     public TowerShop() {
         setMaxHeight(100);
-        ArrayList<ImageView> items = new ArrayList<ImageView>();
-
+        setAlignment(Pos.CENTER_RIGHT);
+        
         final ImageView basicTower = new ImageView(new Image("dk/dtu/mtd/assets/dartMonkey.png", 100, 0, true, true));
+        this.getChildren().add(basicTower);
         basicTower.addEventHandler(MouseEvent.DRAG_DETECTED, new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
@@ -32,7 +33,7 @@ public class TowerShop extends HBox {
             }
         });
         final ImageView superTower = new ImageView(new Image("dk/dtu/mtd/assets/SuperMonkey.png", 100, 0, true, true));
-
+        this.getChildren().add(superTower);
         superTower.addEventHandler(MouseEvent.DRAG_DETECTED, new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
@@ -45,10 +46,5 @@ public class TowerShop extends HBox {
                 event.consume();
             }
         });
-        items.add(basicTower);
-        items.add(superTower);
-
-        this.getChildren().addAll(items);
-        setAlignment(Pos.CENTER_RIGHT);
     }
 }
