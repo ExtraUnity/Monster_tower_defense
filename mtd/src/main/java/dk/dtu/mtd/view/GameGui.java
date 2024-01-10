@@ -33,6 +33,9 @@ public class GameGui extends StackPane {
     static GameChat gameChat;
     ImageView hoverImage;
 
+    public double gameAreaHeight;
+    public double gameAreaWidth;
+
     public GameGui(String health1, String health2) {
         layout = new VBox();
         gameArea = new StackPane();
@@ -41,14 +44,16 @@ public class GameGui extends StackPane {
         gameChat = new GameChat();
         towerLayer = towerLayer();
         hoverImage = new ImageView(new Image("dk/dtu/mtd/assets/skelly.gif"));
-        gameWaveGuiLeft = new GameWaveGui();
-        gameWaveGuiRight = new GameWaveGui();
+
 
         // confine the game area to be the same on all screens:
-        double gameAreaHeight = Screen.getPrimary().getBounds().getHeight() - 200;
-        double gameAreaWidth = (gameAreaHeight / 3) * 6;
+        gameAreaHeight = Screen.getPrimary().getBounds().getHeight() - 200;
+        gameAreaWidth = (gameAreaHeight / 3) * 6;
         gameArea.setMaxWidth(gameAreaWidth);
         gameArea.setMaxHeight(gameAreaHeight);
+
+        gameWaveGuiLeft = new GameWaveGui(gameAreaWidth, gameAreaHeight);
+        gameWaveGuiRight = new GameWaveGui(gameAreaWidth, gameAreaHeight);
 
         gameArea.getChildren().addAll(gameAreaBackground(gameAreaWidth, gameAreaHeight), gameWaveGuiLeft, gameWaveGuiRight, towerLayer);
 

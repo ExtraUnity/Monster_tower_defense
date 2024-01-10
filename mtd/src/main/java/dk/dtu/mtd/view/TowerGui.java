@@ -1,6 +1,5 @@
 package dk.dtu.mtd.view;
 
-import dk.dtu.mtd.controller.Controller;
 import javafx.event.EventHandler;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;

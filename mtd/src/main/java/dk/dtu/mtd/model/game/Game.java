@@ -1,11 +1,6 @@
 package dk.dtu.mtd.model.game;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.List;
-
-import java.math.*;
-
 import org.jspace.ActualField;
 import org.jspace.FormalField;
 import org.jspace.SequentialSpace;
