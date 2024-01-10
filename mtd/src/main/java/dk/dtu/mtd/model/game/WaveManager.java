@@ -139,13 +139,10 @@ class Wave {
         long previousTime = System.nanoTime() / 1_000_000L;
 
         while (true) {
-            if (isComplete()) {
-                break;
-            }
 
             try {
                 deltaTime = System.nanoTime() / 1_000_000L - previousTime;
-                //System.out.println(deltaTime);
+                // System.out.println(deltaTime);
                 if (spawned < enemies.size() && deltaTime > spawnRate) {
                     // spawn enemy
                     enemies.get(spawned).setX(START_X);
@@ -182,13 +179,17 @@ class Wave {
                 e.printStackTrace();
             }
 
+            if (isComplete()) {
+                break;
+            }
+
         }
 
     }
 
     private boolean isComplete() {
         for (Enemy enemy : enemies) {
-            if (enemy.getY() < 1080) {
+            if (!enemy.reachedFinish()) {
                 return false;
             }
         }
