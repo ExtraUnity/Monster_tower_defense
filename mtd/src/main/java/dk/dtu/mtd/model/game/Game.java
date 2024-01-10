@@ -16,7 +16,7 @@ public class Game implements Runnable {
     public static Player player2;
     public Space gameSpace;
     private List<Tower> towerList;
-    public WaveManager waveManager;
+    public static WaveManager waveManager;
 
     public Game(int id, int playerID1, int playerID2) {
         this.id = id;

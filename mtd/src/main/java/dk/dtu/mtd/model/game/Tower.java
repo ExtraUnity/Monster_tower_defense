@@ -7,7 +7,7 @@ public abstract class Tower {
     String type;
 
     int radius, x, y, damage, fireRate, playerID, id;
-    int lastShot = fireRate;
+    int lastShot;
 
     int towerLevel = 0;
 

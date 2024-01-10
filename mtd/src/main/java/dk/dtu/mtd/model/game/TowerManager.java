@@ -12,7 +12,9 @@ public class TowerManager implements Runnable {
     @Override
     public void run() {
         while(true) {
-            
+            for(Tower tower : towers) {
+                tower.shoot(Game.waveManager.waveLeft.enemies);
+            }
         }
     }
 

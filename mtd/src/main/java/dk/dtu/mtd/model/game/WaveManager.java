@@ -12,7 +12,8 @@ public class WaveManager implements Runnable {
     // TODO: remove unused fields
     private int currentWaveNumber;
     private int totalWaves; // Total number of waves
-
+    public Wave waveLeft;
+    public Wave waveRight;
     boolean playing;
     int waveRound;
     volatile AtomicBoolean player1Done = new AtomicBoolean(false);
@@ -42,10 +43,10 @@ public class WaveManager implements Runnable {
     }
 
     void spawnWave(int waveNumber) {
+        waveLeft = new Wave(waveGenerator(waveNumber), space, 660, Game.player1.id);
+        waveRight = new Wave(waveGenerator(waveNumber), space, 1800 - 660, Game.player2.id);
         // left side
         Thread player1Wave = new Thread(new Runnable() {
-            Wave wave = new Wave(waveGenerator(waveNumber), space, 660, Game.player1.id);
-
             @Override
             public void run() {
                 try {
@@ -54,7 +55,7 @@ public class WaveManager implements Runnable {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                wave.run();
+                waveLeft.run();
                 player1Done.set(true);
             }
 
@@ -62,7 +63,7 @@ public class WaveManager implements Runnable {
 
         // right side
         Thread player2Wave = new Thread(new Runnable() {
-            Wave wave = new Wave(waveGenerator(waveNumber), space, 1800 - 660, Game.player2.id);
+
 
             @Override
             public void run() {
@@ -71,7 +72,7 @@ public class WaveManager implements Runnable {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                wave.run();
+                waveRight.run();
                 player2Done.set(true);
             }
 
