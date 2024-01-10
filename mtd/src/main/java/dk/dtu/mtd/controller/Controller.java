@@ -98,12 +98,14 @@ class GUIMonitior implements Runnable {
 
                 // ("gui", "damage", (int) new hp , playerId)
                 if (update[1].toString().equals("damage")) {
-                    System.out.println("updating GUI");
-                    final int hp = (int) update[2];
+                    //System.out.println("updating GUI");
+                    String[] hp = ((String) update[2]).split(" ");
+                    final String hp1 = hp[0];
+                    final String hp2 = hp[1];
                     Platform.runLater(new Runnable() {
                         @Override
                         public void run() {
-                            GameGui.updateGameGui(hp);
+                            GameGui.updateGameGui(hp1, hp2);
                         }
                     });
                 // ("gui", "chat", (LinkedList<String>) chat log , playerId)
@@ -123,6 +125,8 @@ class GUIMonitior implements Runnable {
                 } else if (update[1].toString().equals("wave")) {
                     // make apropriate gui calls to display wave
                     int num = (int) update[2];
+
+                    System.out.println("init waves in gui.");
                     Platform.runLater(() -> {
                         GameGui.gameWaveGuiLeft.initEnemies(num);
                         GameGui.gameWaveGuiRight.initEnemies(num);
