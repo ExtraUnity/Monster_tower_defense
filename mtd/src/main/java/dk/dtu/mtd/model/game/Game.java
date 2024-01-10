@@ -11,18 +11,17 @@ import org.jspace.Space;
 
 public class Game implements Runnable {
     public int id;
-
+    public static GameTicker gameTicker;
     public static Player player1;
     public static Player player2;
-    public Space gameSpace;
-    private List<Tower> towerList;
-    public WaveManager waveManager;
+    public static Space gameSpace;
+    public static WaveManager waveManager;
+    public static TowerManager towerManager;
 
     public Game(int id, int playerID1, int playerID2) {
         this.id = id;
         player1 = new Player(playerID1, 150, 0);
         player2 = new Player(playerID2, 150, 0);
-        this.towerList = new ArrayList<Tower>();
         gameSpace = new SequentialSpace();
         LinkedList<String> chat = new LinkedList<String>();
         try {
@@ -34,11 +33,17 @@ public class Game implements Runnable {
         // create new waveManager, this can be run as a thread:
         waveManager = new WaveManager(gameSpace);
         new Thread(waveManager).start();
+        
+        gameTicker = new GameTicker();
+        new Thread(gameTicker).start();
 
+        towerManager = new TowerManager();
+        new Thread(towerManager).start();
     }
 
     @Override
     public void run() {
+
         while (true) {
             try {
                 // Tuple contens: ("request" , 'type of request' , 'player ID')
@@ -60,7 +65,7 @@ public class Game implements Runnable {
                 gameSpace.put("exit", player2.id);
                 gameSpace.put("gameClosed", player1.id);
             }
-        } else if (request[1].toString().equals("damage")) { 
+        } else if (request[1].toString().equals("damage")) {
             int damage = (int) gameSpace.get(new ActualField("data"), new ActualField("damage"),
                     new FormalField(Integer.class))[2];
             if ((int) request[2] == player1.id) {
@@ -96,7 +101,7 @@ public class Game implements Runnable {
                 System.out.println("player1 recived" + reward + "rewards!");
             }
         } else if (request[1].toString().equals("placeTower")) {
-            placeTower((int) request[2]);
+            towerManager.placeTower((int) request[2]);
         } else if (request[1].toString().equals("chat")) {
             System.out.println("Game recieved chat request");
             // Retrieve chatlist and update to include message
@@ -115,25 +120,7 @@ public class Game implements Runnable {
         }
     }
 
-    public Boolean legalTowerPlacement(String towerType, int x, int y, int id) {
-        return true;
-    }
 
-    public void placeTower(int playerId) {
-        try {
-            Object[] towerInfo = gameSpace.get(new ActualField("towerInfo"), new FormalField(String.class),
-                    new FormalField(Integer.class), new FormalField(Integer.class));
-            if (towerInfo[1].equals("basicTower")) {
-                if (legalTowerPlacement((String) towerInfo[1], (int) towerInfo[2], (int) towerInfo[3], playerId)) {
-                    towerList.add(new BasicTower((int) towerInfo[2], (int) towerInfo[3], playerId));
-                    gameSpace.put("gui", "newTower", towerList.get(towerList.size() - 1), player1.id);
-                    gameSpace.put("gui", "newTower", towerList.get(towerList.size() - 1), player2.id);
-                    System.out.println("Tower placed at " + towerList.get(towerList.size() - 1).x + " "
-                            + towerList.get(towerList.size() - 1).y);
-                }
-            }
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
+
+    
 }
