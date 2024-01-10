@@ -48,6 +48,8 @@ class EnemyImage extends ImageView {
         setImage(image);
         setX(xCoord);
         setY(yCoord);
+        setFitHeight(100);
+        setFitWidth(100);
 
         ImageView param = this;
         AnimationTimer timer = new AnimationTimer() {

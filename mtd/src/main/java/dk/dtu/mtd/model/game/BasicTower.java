@@ -8,23 +8,26 @@ public class BasicTower extends Tower {
         this.y = y;
         this.id = id;
         this.type = "basicTower";
-
-        radius = 36;
+        this.lastShot = Game.gameTicker.gameTick;
+        radius = 300;
         damage = 10;
+        size = 100;
         fireRate = 100;
-    }    
+    }
 
     public void shoot(List<Enemy> enemies) {
-        if (lastShot <= 0) {
-            lastShot = fireRate;
-            for(int i = 0; i < enemies.size(); i++) {
-                if(inRange(enemies.get(i))) {
+        int deltaTick = Game.gameTicker.gameTick - lastShot;
+
+        if (deltaTick > fireRate) {
+            for (int i = 0; i < enemies.size(); i++) {
+                if (inRange(enemies.get(i))) {
+                    System.out.println("Enemy hit!!!!!");
                     enemies.get(i).health -= damage;
+                    lastShot = Game.gameTicker.gameTick;
+                    deltaTick = 0;
                     break;
                 }
             }
-        } else {
-            lastShot--;
         }
     }
 }
