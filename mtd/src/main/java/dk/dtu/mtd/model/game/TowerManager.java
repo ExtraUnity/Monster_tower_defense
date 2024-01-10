@@ -8,14 +8,16 @@ import org.jspace.FormalField;
 
 public class TowerManager implements Runnable {
     public volatile List<Tower> towerList;
+    public volatile boolean playing;
 
     public TowerManager() {
         this.towerList = new ArrayList<Tower>();
+        this.playing = true;
     }
 
     @Override
     public void run() {
-        while (true) {
+        while (playing) {
             // System.out.println(towerList.size());
             for (int i = 0; i < towerList.size(); i++) {
                 System.out.println(towerList.get(i).playerId + " " + Game.player1.id + " " + Game.player2.id);

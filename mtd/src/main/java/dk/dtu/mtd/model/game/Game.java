@@ -55,6 +55,9 @@ public class Game implements Runnable {
     @SuppressWarnings("unchecked")
     void handleGameRequest(Object[] request) throws InterruptedException {
         if (request[1].toString().equals("exit")) {
+            waveManager.playing = false;
+            towerManager.playing = false;
+            
             if ((int) request[2] == player1.id) {
                 gameSpace.put("exit", player1.id);
                 gameSpace.put("gameClosed", player2.id);

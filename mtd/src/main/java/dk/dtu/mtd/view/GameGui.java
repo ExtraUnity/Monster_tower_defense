@@ -37,25 +37,25 @@ public class GameGui extends StackPane {
     public double gameAreaWidth;
 
     public GameGui(String health1, String health2) {
+        gameAreaHeight = Screen.getPrimary().getBounds().getHeight() - 200;
+        gameAreaWidth = (gameAreaHeight / 3) * 6;
         layout = new VBox();
         gameArea = new StackPane();
         gameTop = new GameTopGui(health1, health2, 0);
 
         gameChat = new GameChat();
-        towerLayer = towerLayer();
+        towerLayer = towerLayer(gameAreaWidth, gameAreaHeight);
         hoverImage = new ImageView(new Image("dk/dtu/mtd/assets/skelly.gif"));
 
-
         // confine the game area to be the same on all screens:
-        gameAreaHeight = Screen.getPrimary().getBounds().getHeight() - 200;
-        gameAreaWidth = (gameAreaHeight / 3) * 6;
         gameArea.setMaxWidth(gameAreaWidth);
         gameArea.setMaxHeight(gameAreaHeight);
 
         gameWaveGuiLeft = new GameWaveGui(gameAreaWidth, gameAreaHeight);
         gameWaveGuiRight = new GameWaveGui(gameAreaWidth, gameAreaHeight);
 
-        gameArea.getChildren().addAll(gameAreaBackground(gameAreaWidth, gameAreaHeight), gameWaveGuiLeft, gameWaveGuiRight, towerLayer);
+        gameArea.getChildren().addAll(gameAreaBackground(gameAreaWidth, gameAreaHeight), gameWaveGuiLeft,
+                gameWaveGuiRight, towerLayer);
 
         BorderPane bottom = new BorderPane();
         bottom.setMaxHeight(100);
@@ -117,13 +117,16 @@ public class GameGui extends StackPane {
         towerLayer.getChildren().add(tower);
     }
 
-    public Pane towerLayer() {
+    public Pane towerLayer(double width, double height) {
+        setMaxSize(width, height);
         Pane newTowerLayer = new Pane();
         newTowerLayer.setOnDragDropped(new EventHandler<DragEvent>() {
             @Override
             public void handle(DragEvent event) {
                 Dragboard dragboard = event.getDragboard();
                 if (dragboard.hasString()) {
+
+                    System.out.println("" + event.getX() + " " + event.getY());
                     Controller.placeTower(dragboard.getString(), (int) event.getX(), (int) event.getY());
                 }
                 hoverImage.setOpacity(0);
