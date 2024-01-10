@@ -22,7 +22,7 @@ public class BasicTower extends Tower {
             for (int i = 0; i < enemies.size(); i++) {
                 if (inRange(enemies.get(i))) {
                     System.out.println("Enemy hit!!!!!");
-                    enemies.get(i).health -= damage;
+                    enemies.get(i).takeDamage(damage);
                     lastShot = Game.gameTicker.gameTick;
                     deltaTick = 0;
                     break;

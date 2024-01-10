@@ -154,6 +154,14 @@ class Wave {
                     lastSpawnTick = Game.gameTicker.gameTick;
                     spawned++;
                 }
+                ArrayList<Enemy> deadEnemies = new ArrayList<Enemy>();
+                for(int i = 0; i < spawned; i++) {
+                    if(enemies.get(i).isDead()) {
+                        deadEnemies.add(enemies.get(i));
+                    }
+                }
+                enemies.removeAll(deadEnemies);
+                spawned -= deadEnemies.size();
                 for (int i = 0; i < spawned; i++) {
                     enemies.get(i).move();
                     if (enemies.get(i).reachedFinish()) {

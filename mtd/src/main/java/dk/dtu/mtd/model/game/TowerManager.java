@@ -15,17 +15,21 @@ public class TowerManager implements Runnable {
 
     @Override
     public void run() {
-        while(true) {
-            //System.out.println(towerList.size());
-            for(int i = 0; i < towerList.size(); i++) {
-                towerList.get(i).shoot(Game.waveManager.waveLeft.enemies);
+        while (true) {
+            // System.out.println(towerList.size());
+            for (int i = 0; i < towerList.size(); i++) {
+                if (towerList.get(i).playerID == Game.player1.id) {
+                    towerList.get(i).shoot(Game.waveManager.waveLeft.enemies);
+                } else {
+                    towerList.get(i).shoot(Game.waveManager.waveRight.enemies);
+                }
             }
         }
     }
 
     public Boolean legalTowerPlacement(String towerType, int x, int y, int id) {
         for (Tower tower : towerList) {
-            if(70 * 70 > Math.pow((tower.getX() - x), 2) + Math.pow((tower.getY() - y), 2)) {
+            if (70 * 70 > Math.pow((tower.getX() - x), 2) + Math.pow((tower.getY() - y), 2)) {
                 return false;
             }
         }
@@ -62,6 +66,5 @@ public class TowerManager implements Runnable {
             e.printStackTrace();
         }
     }
-
 
 }

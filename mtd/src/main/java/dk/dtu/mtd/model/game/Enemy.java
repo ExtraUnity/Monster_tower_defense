@@ -20,12 +20,16 @@ public abstract class Enemy {
     // Method to take damage, reducing health
     public void takeDamage(int amount) {
         health -= amount;
-        if (health <= 0) {
+        if (isDead()) {
             die();
         }
     }
 
-    // Method to handle the enemy's death
+    public boolean isDead() {
+        return health <= 0;
+    }
+
+
     protected void die() {
         transferRewardToPlayer();
         performDeathAnimation();
