@@ -40,16 +40,51 @@ public class WaveManager implements Runnable {
         }
     }
 
+    String messageGenerator(Wave wave) {
+        StringBuilder message = new StringBuilder();
+        String lastType = null;
+        int count = 0;
+    
+        for (Enemy enemy : wave.enemies) {
+            String currentType = enemy.getClass().getSimpleName(); // Get the class name as enemy type
+    
+            if (lastType != null && !lastType.equals(currentType)) {
+                // Append the count and type of the previous enemy batch
+                if (message.length() > 0) {
+                    message.append(" ");
+                }
+                message.append(lastType).append(" ").append(count);
+                count = 0; // Reset count for the new enemy type
+            }
+    
+            lastType = currentType;
+            count++;
+        }
+    
+        // Append the last batch of enemies
+        if (lastType != null) {
+            if (message.length() > 0) {
+                message.append(" ");
+            }
+            message.append(lastType).append(" ").append(count);
+        }
+    
+        System.out.println(message.toString()); // This line is for debugging
+        return message.toString();
+    }
+
+
     void spawnWave(int waveNumber) {
         // left side
         Thread player1Wave = new Thread(new Runnable() {
             Wave wave = new Wave(waveGenerator(waveNumber), space, 660, Game.player1.id);
+            String enemyTypes = messageGenerator(wave);
 
             @Override
             public void run() {
                 try {
                     // 10 enemies on each side
-                    space.put("gui", "wave", 10, Game.player1.id);
+                    space.put("gui", "wave", enemyTypes, Game.player1.id);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -62,11 +97,12 @@ public class WaveManager implements Runnable {
         // right side
         Thread player2Wave = new Thread(new Runnable() {
             Wave wave = new Wave(waveGenerator(waveNumber), space, 1800 - 660, Game.player2.id);
+            String enemyTypes = messageGenerator(wave);
 
             @Override
             public void run() {
                 try {
-                    space.put("gui", "wave", 10, Game.player2.id);
+                    space.put("gui", "wave", enemyTypes, Game.player2.id);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -92,6 +128,19 @@ public class WaveManager implements Runnable {
         }
         if (wave == 1) {
             for (int i = 0; i < 10; i++) {
+                enemies.add(new Skeleton());
+            }
+
+        } else if (wave == 2) {
+            int numberOfNormalEnemies = 6;
+
+            for (int i = 0; i < numberOfNormalEnemies; i++) {
+                enemies.add(new Skeleton());
+            }
+            
+            enemies.add(new FatSkeleton()); //New enemy type
+            
+            for (int i = 0; i < numberOfNormalEnemies; i++) {
                 enemies.add(new Skeleton());
             }
 

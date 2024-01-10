@@ -19,13 +19,29 @@ public class GameWaveGui extends StackPane {
 
     }
 
-    public void initEnemies(int num) {
-        enemyArray = new ArrayList<>();
-        for (int i = 0; i < num; i++) {
-            EnemyImage newEnemy = new EnemyImage();
+    public void initEnemies(String enemyTypes) {
+        // Splttting the input:
+        String[] pairs = enemyTypes.split("(?<=\\G\\S+ \\S+) ");
+        for (String pair : pairs) {
+            String[] keyValue = pair.split(" ");
+
+            int numberOfEnemies = Integer.valueOf(keyValue[1]);
+            String type = keyValue[0];
+
+            enemyArray = new ArrayList<>();
+            for (int i = 0; i < numberOfEnemies; i++) {
+                EnemyImage newEnemy = new EnemyImage(type);
+                enemyArray.add(newEnemy);
+                wavePane.getChildren().add(newEnemy);
+            }
+        }        
+
+        /*enemyArray = new ArrayList<>();
+        for (int i = 0; i < keyValue[1]; i++) {
+            EnemyImage newEnemy = new EnemyImage(type);
             enemyArray.add(newEnemy);
             wavePane.getChildren().add(newEnemy);
-        }
+        }*/
     }
 
     public void updateEnemies(LinkedList<String> coordinates) {
@@ -42,9 +58,22 @@ public class GameWaveGui extends StackPane {
 class EnemyImage extends ImageView {
     public double xCoord = 900;
     public double yCoord = 900;
+    Image image;
 
-    EnemyImage() {
-        Image image = new Image("dk/dtu/mtd/assets/skelly.gif", 100, 0, true, false);
+    EnemyImage(String type) { //Pass in the image path, width and height
+
+        if (type.equals("Skeleton")) {
+            this.image = new Image("dk/dtu/mtd/assets/skelly.gif", 100, 0, true, false);
+        } else if (type.equals("fatSkeleton")) {
+            this.image = new Image("dk/dtu/mtd/assets/skelly.gif", 100, 0, true, false);
+        } else if (type.equals("tankEnemy")) {
+            this.image = new Image("dk/dtu/mtd/assets/skelly.gif", 100, 0, true, false);
+        } else if (type.equals("bossEnemy")) {
+            this.image = new Image("dk/dtu/mtd/assets/skelly.gif", 100, 0, true, false);
+        }
+
+        //Image image = new Image("dk/dtu/mtd/assets/skelly.gif", 100, 0, true, false);
+        
         setImage(image);
         setX(xCoord);
         setY(yCoord);
