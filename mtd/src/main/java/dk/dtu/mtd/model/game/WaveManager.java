@@ -154,14 +154,7 @@ class Wave {
                     lastSpawnTick = Game.gameTicker.gameTick;
                     spawned++;
                 }
-                ArrayList<Enemy> deadEnemies = new ArrayList<Enemy>();
-                for(int i = 0; i < spawned; i++) {
-                    if(enemies.get(i).isDead()) {
-                        deadEnemies.add(enemies.get(i));
-                    }
-                }
-                enemies.removeAll(deadEnemies);
-                spawned -= deadEnemies.size();
+
                 for (int i = 0; i < spawned; i++) {
                     enemies.get(i).move();
                     if (enemies.get(i).reachedFinish()) {
@@ -173,7 +166,7 @@ class Wave {
                 }
                 LinkedList<String> coordinates = new LinkedList<String>();
                 for (int i = 0; i < enemies.size(); i++) {
-                    String xy = "" + enemies.get(i).getX() + " " + enemies.get(i).getY();
+                    String xy = enemies.get(i).isDead() ? "4000 4000" : "" + enemies.get(i).getX() + " " + enemies.get(i).getY();
                     coordinates.add(xy);
                 }
 

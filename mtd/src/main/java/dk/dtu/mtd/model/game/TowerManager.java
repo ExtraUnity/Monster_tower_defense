@@ -18,9 +18,11 @@ public class TowerManager implements Runnable {
         while (true) {
             // System.out.println(towerList.size());
             for (int i = 0; i < towerList.size(); i++) {
-                if (towerList.get(i).playerID == Game.player1.id) {
+                System.out.println(towerList.get(i).playerId + " " + Game.player1.id + " " + Game.player2.id);
+                if (towerList.get(i).playerId == Game.player1.id) {
                     towerList.get(i).shoot(Game.waveManager.waveLeft.enemies);
                 } else {
+                    System.out.println("Shooting right side");
                     towerList.get(i).shoot(Game.waveManager.waveRight.enemies);
                 }
             }
@@ -51,7 +53,7 @@ public class TowerManager implements Runnable {
                     Game.gameSpace.put("gui", "newTower", towerList.get(towerList.size() - 1), Game.player1.id);
                     Game.gameSpace.put("gui", "newTower", towerList.get(towerList.size() - 1), Game.player2.id);
                     System.out.println("Tower placed at " + towerList.get(towerList.size() - 1).x + " "
-                            + towerList.get(towerList.size() - 1).y);
+                            + towerList.get(towerList.size() - 1).y + " for player " + playerId);
                 }
             } else if (towerInfo[1].equals("superTower")) {
                 if (legalTowerPlacement((String) towerInfo[1], (int) towerInfo[2], (int) towerInfo[3], playerId)) {
