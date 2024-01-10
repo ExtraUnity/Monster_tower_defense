@@ -3,10 +3,10 @@ package dk.dtu.mtd.model.game;
 import java.util.List;
 
 public class BasicTower extends Tower {
-    public BasicTower(int x, int y, int id) {
+    public BasicTower(int x, int y, int playerId) {
         this.x = x;
         this.y = y;
-        this.id = id;
+        this.playerId = playerId;
         this.type = "basicTower";
         this.lastShot = Game.gameTicker.gameTick;
         radius = 300;
@@ -20,9 +20,9 @@ public class BasicTower extends Tower {
 
         if (deltaTick > fireRate) {
             for (int i = 0; i < enemies.size(); i++) {
-                if (inRange(enemies.get(i))) {
+                if (inRange(enemies.get(i)) && !enemies.get(i).isDead()) {
                     System.out.println("Enemy hit!!!!!");
-                    enemies.get(i).health -= damage;
+                    enemies.get(i).takeDamage(damage);
                     lastShot = Game.gameTicker.gameTick;
                     deltaTick = 0;
                     break;

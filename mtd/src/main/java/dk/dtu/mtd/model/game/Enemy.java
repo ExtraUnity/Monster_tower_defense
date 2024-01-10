@@ -20,12 +20,16 @@ public abstract class Enemy {
     // Method to take damage, reducing health
     public void takeDamage(int amount) {
         health -= amount;
-        if (health <= 0) {
+        if (isDead()) {
             die();
         }
     }
 
-    // Method to handle the enemy's death
+    public boolean isDead() {
+        return health <= 0;
+    }
+
+
     protected void die() {
         transferRewardToPlayer();
         performDeathAnimation();
@@ -33,7 +37,7 @@ public abstract class Enemy {
 
     // Is this enemy at the finish line
     public boolean reachedFinish() {
-        return this.y > 1080 && this.y < 2000 && this.health > 0;
+        return this.y > 1080 && this.y < 2000 && !isDead();
     }
 
     // Method to define the movement of the enemy
