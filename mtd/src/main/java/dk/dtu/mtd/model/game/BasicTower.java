@@ -9,8 +9,9 @@ public class BasicTower extends Tower {
         this.id = id;
         this.type = "basicTower";
         this.lastShot = Game.gameTicker.gameTick;
-        radius = 100;
+        radius = 300;
         damage = 10;
+        size = 100;
         fireRate = 100;
     }
 

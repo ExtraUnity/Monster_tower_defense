@@ -26,6 +26,10 @@ public class Player {
         rewards = newReward;
     }
 
+    public void spendRewards(int cost) {
+        rewards =- cost;
+    }
+
     public int getRewards(){
         return rewards;
     }

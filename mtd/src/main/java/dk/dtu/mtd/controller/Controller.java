@@ -160,7 +160,7 @@ class GUIMonitior implements Runnable {
                     Platform.runLater(new Runnable() {
                         @Override
                         public void run() {
-                            GameGui.newTower(tower.getType(), tower.getX(), tower.getY());
+                            GameGui.newTower(tower.getType(),tower.getSize(), tower.getX(), tower.getY());
                         }
 
                     });
