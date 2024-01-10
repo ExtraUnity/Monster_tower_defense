@@ -29,15 +29,15 @@ public class TowerManager implements Runnable {
         }
     }
 
-    public Boolean legalTowerPlacement(String towerType, int x, int y, int id) {
+    public Boolean legalTowerPlacement(Tower newTower, int playerId) {
         for (Tower tower : towerList) {
-            if (70 * 70 > Math.pow((tower.getX() - x), 2) + Math.pow((tower.getY() - y), 2)) {
+            if(Math.pow(tower.size,2) + Math.pow(newTower.size,2) >= Math.pow((tower.getX() - newTower.x), 2) + Math.pow((tower.getY() - newTower.y), 2)) {
                 return false;
             }
         }
-        if (Game.player1.id == id && x > 960) {
+        if (Game.player1.id == playerId && newTower.x > 960) {
             return false;
-        } else if (Game.player2.id == id && x < 960) {
+        } else if (Game.player2.id == playerId && newTower.x < 960) {
             return false;
         }
         return true;
@@ -45,24 +45,23 @@ public class TowerManager implements Runnable {
 
     public void placeTower(int playerId) {
         try {
+            Tower tower;
             Object[] towerInfo = Game.gameSpace.get(new ActualField("towerInfo"), new FormalField(String.class),
                     new FormalField(Integer.class), new FormalField(Integer.class));
-            if (towerInfo[1].equals("basicTower")) {
-                if (legalTowerPlacement((String) towerInfo[1], (int) towerInfo[2], (int) towerInfo[3], playerId)) {
-                    towerList.add(new BasicTower((int) towerInfo[2], (int) towerInfo[3], playerId));
-                    Game.gameSpace.put("gui", "newTower", towerList.get(towerList.size() - 1), Game.player1.id);
-                    Game.gameSpace.put("gui", "newTower", towerList.get(towerList.size() - 1), Game.player2.id);
-                    System.out.println("Tower placed at " + towerList.get(towerList.size() - 1).x + " "
-                            + towerList.get(towerList.size() - 1).y + " for player " + playerId);
-                }
+            if(towerInfo[1].equals("basicTower")) {
+                tower = new BasicTower((int) towerInfo[2], (int) towerInfo[3], playerId);
             } else if (towerInfo[1].equals("superTower")) {
-                if (legalTowerPlacement((String) towerInfo[1], (int) towerInfo[2], (int) towerInfo[3], playerId)) {
-                    towerList.add(new BasicTower((int) towerInfo[2], (int) towerInfo[3], playerId));
-                    Game.gameSpace.put("gui", "newTower", towerList.get(towerList.size() - 1), Game.player1.id);
-                    Game.gameSpace.put("gui", "newTower", towerList.get(towerList.size() - 1), Game.player2.id);
-                    System.out.println("Tower placed at " + towerList.get(towerList.size() - 1).x + " "
+                tower = new BasicTower((int) towerInfo[2], (int) towerInfo[3], playerId);
+            } else {
+                tower = new BasicTower(0, 0, playerId);
+            }
+
+            if (legalTowerPlacement(tower, playerId)) {
+                towerList.add(tower);
+                Game.gameSpace.put("gui", "newTower", tower, Game.player1.id);
+                Game.gameSpace.put("gui", "newTower", tower, Game.player2.id);
+                System.out.println("Tower placed at " + towerList.get(towerList.size() - 1).x + " "
                             + towerList.get(towerList.size() - 1).y);
-                }
             }
         } catch (InterruptedException e) {
             e.printStackTrace();
