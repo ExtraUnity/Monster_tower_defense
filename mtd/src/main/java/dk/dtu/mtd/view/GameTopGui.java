@@ -1,13 +1,13 @@
 package dk.dtu.mtd.view;
 
 import dk.dtu.mtd.controller.Controller;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 
-public class GameTopGui extends BorderPane {
+public class GameTopGui extends HBox {
     HBox layout;
     Text healthPlayer1;
     Text healthPlayer2;
@@ -17,8 +17,11 @@ public class GameTopGui extends BorderPane {
         layout = new HBox(10);
         layout.setAlignment(Pos.CENTER);
 
-        setMinHeight(100);
+        setPadding(new Insets(5));
+        setSpacing(50);
+        layout.setMaxHeight(100);
         setMaxHeight(100);
+        setAlignment(Pos.TOP_CENTER);
 
         healthPlayer1 = new Text("" + health1);
         healthPlayer2 = new Text("" + health2);
@@ -36,10 +39,6 @@ public class GameTopGui extends BorderPane {
         });
 
         layout.getChildren().addAll(healthPlayer1, waveNumber, healthPlayer2);
-        setCenter(layout);
-        setLeft(exitGameButton);
-
-        // temporary
-        setRight(counter);
+        getChildren().addAll(counter, layout, exitGameButton);
     }
 }

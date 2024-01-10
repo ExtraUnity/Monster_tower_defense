@@ -43,32 +43,27 @@ public class GameGui extends StackPane {
         gameWaveGuiRight = new GameWaveGui();
 
         // confine the game area to be the same on all screens:
-        double gameAreaHeight = Screen.getPrimary().getBounds().getHeight() - 300;
+        double gameAreaHeight = Screen.getPrimary().getBounds().getHeight() - 200;
         double gameAreaWidth = (gameAreaHeight / 3) * 6;
         gameArea.setMaxWidth(gameAreaWidth);
         gameArea.setMaxHeight(gameAreaHeight);
 
-        // this defines the area towera can be placed in:
-        // towerLayer.setMaxWidth(gameAreaWidth);
-        // towerLayer.setMaxHeight(gameAreaHeight);
-
-        gameArea.getChildren().addAll(gameAreaBackground(), gameWaveGuiLeft, gameWaveGuiRight, towerLayer);
-
-        // TowerGui testTower = new TowerGui("basicTower", 200, 200);
-        // towerLayer.getChildren().add(testTower);
+        gameArea.getChildren().addAll(gameAreaBackground(gameAreaWidth, gameAreaHeight), gameWaveGuiLeft, gameWaveGuiRight, towerLayer);
 
         BorderPane bottom = new BorderPane();
-        bottom.setMaxHeight(200);
+        bottom.setMaxHeight(100);
         ImageView chatButton = chatButton();
         bottom.setCenter(new GameShop());
         bottom.setRight(chatButton);
         BorderPane.setAlignment(chatButton, Pos.CENTER_RIGHT);
 
         // remember to re-add bottom
-        layout.getChildren().addAll(gameTop, gameArea);
+        layout.setAlignment(Pos.CENTER);
+        layout.getChildren().addAll(gameTop, gameArea, bottom);
 
-        setBackground(background());
+        // setBackground(background());
         getChildren().add(layout);
+        setAlignment(Pos.CENTER);
 
     }
 
@@ -87,8 +82,8 @@ public class GameGui extends StackPane {
         gameTop.layout.getChildren().add(2, gameTop.healthPlayer2);
     }
 
-    public ImageView gameAreaBackground() {
-        return new ImageView(new Image("dk/dtu/mtd/assets/gameBackground.png", 1800, 900, true, false));
+    public ImageView gameAreaBackground(double width, double height) {
+        return new ImageView(new Image("dk/dtu/mtd/assets/gameBackground.png", width, height, true, false));
     }
 
     public Background background() {
