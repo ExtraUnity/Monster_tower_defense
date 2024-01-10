@@ -11,7 +11,7 @@ import org.jspace.Space;
 
 public class Game implements Runnable {
     public int id;
-
+    public static GameTicker gameTicker;
     public static Player player1;
     public static Player player2;
     public Space gameSpace;
@@ -34,11 +34,14 @@ public class Game implements Runnable {
         // create new waveManager, this can be run as a thread:
         waveManager = new WaveManager(gameSpace);
         new Thread(waveManager).start();
-
+        
+        gameTicker = new GameTicker();
+        new Thread(gameTicker).start();
     }
 
     @Override
     public void run() {
+
         while (true) {
             try {
                 // Tuple contens: ("request" , 'type of request' , 'player ID')
@@ -60,7 +63,7 @@ public class Game implements Runnable {
                 gameSpace.put("exit", player2.id);
                 gameSpace.put("gameClosed", player1.id);
             }
-        } else if (request[1].toString().equals("damage")) { 
+        } else if (request[1].toString().equals("damage")) {
             int damage = (int) gameSpace.get(new ActualField("data"), new ActualField("damage"),
                     new FormalField(Integer.class))[2];
             if ((int) request[2] == player1.id) {

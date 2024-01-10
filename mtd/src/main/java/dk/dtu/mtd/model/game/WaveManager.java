@@ -3,6 +3,7 @@ package dk.dtu.mtd.model.game;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.LinkedList;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.jspace.Space;
 
@@ -14,8 +15,8 @@ public class WaveManager implements Runnable {
 
     boolean playing;
     int waveRound;
-    boolean player1Done;
-    boolean player2Done;
+    volatile AtomicBoolean player1Done = new AtomicBoolean(false);
+    volatile AtomicBoolean player2Done = new AtomicBoolean(false);
     Space space;
 
     public WaveManager(Space space) {
@@ -27,8 +28,8 @@ public class WaveManager implements Runnable {
     @Override
     public void run() {
         while (playing) {
-            player1Done = false;
-            player2Done = false;
+            player1Done.set(false);
+            player2Done.set(false);
             spawnWave(waveRound);
 
             waveRound++;
@@ -54,7 +55,7 @@ public class WaveManager implements Runnable {
                     e.printStackTrace();
                 }
                 wave.run();
-                player1Done = true;
+                player1Done.set(true);
             }
 
         });// new Thread(new Wave(new ArrayList<Enemy>(), space, Game.player1.id));
@@ -71,14 +72,18 @@ public class WaveManager implements Runnable {
                     e.printStackTrace();
                 }
                 wave.run();
-                player2Done = true;
+                player2Done.set(true);
             }
 
         });// new Thread(new Wave(new ArrayList<Enemy>(), space, Game.player2.id));
         player1Wave.start();
         player2Wave.start();
-        while (!(player1Done && player2Done)) {
-
+        while (!(player1Done.get() && player2Done.get())) {
+            try {
+                Thread.sleep(1L);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
 
         System.out.println("Spawning wave " + waveNumber);
@@ -134,20 +139,18 @@ class Wave {
 
     public void run() {
         int spawned = 0;
-        long spawnRate = 3000L;
-        long deltaTime = 0;
-        long previousTime = System.nanoTime() / 1_000_000L;
-
+        int spawnRate = 150; //In ticks
+        int lastSpawnTick = Game.gameTicker.gameTick;
+        int deltaTick = 0;
         while (true) {
-
+            deltaTick = Game.gameTicker.gameTick - lastSpawnTick;
             try {
-                deltaTime = System.nanoTime() / 1_000_000L - previousTime;
                 // System.out.println(deltaTime);
-                if (spawned < enemies.size() && deltaTime > spawnRate) {
+                if (spawned < enemies.size() && deltaTick >= spawnRate) {
                     // spawn enemy
                     enemies.get(spawned).setX(START_X);
                     enemies.get(spawned).setY(START_Y);
-                    previousTime = System.nanoTime() / 1_000_000L;
+                    lastSpawnTick = Game.gameTicker.gameTick;
                     spawned++;
                 }
                 for (int i = 0; i < spawned; i++) {
