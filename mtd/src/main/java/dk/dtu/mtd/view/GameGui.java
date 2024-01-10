@@ -33,8 +33,8 @@ public class GameGui extends StackPane {
     static GameChat gameChat;
     ImageView hoverImage;
 
-    public double gameAreaHeight;
-    public double gameAreaWidth;
+    public static double gameAreaHeight;
+    public static double gameAreaWidth;
 
     public GameGui(String health1, String health2) {
         gameAreaHeight = Screen.getPrimary().getBounds().getHeight() - 200;
@@ -113,7 +113,7 @@ public class GameGui extends StackPane {
 
     public static void newTower(String type, int size, int radius, int x, int y) {
         System.out.println("I got a new tower!");
-        TowerGui tower = new TowerGui(type, size, radius, x, y);
+        TowerGui tower = new TowerGui(type, size, radius, (int) ((gameAreaWidth * x)/1920),  (int) ((gameAreaHeight * y)/1080));
         towerLayer.getChildren().add(tower.getCircle());
         towerLayer.getChildren().add(tower);
     }
@@ -127,8 +127,8 @@ public class GameGui extends StackPane {
                 Dragboard dragboard = event.getDragboard();
                 if (dragboard.hasString()) {
 
-                    System.out.println("" + event.getX() + " " + event.getY());
-                    Controller.placeTower(dragboard.getString(), (int) event.getX(), (int) event.getY());
+                    System.out.println("The coordinates of new tower" + event.getY()+ " "   + event.getX());
+                    Controller.placeTower(dragboard.getString(), (int) ((1920*event.getX())/width), (int) ((1080*event.getY())/height));
                 }
                 hoverImage.setOpacity(0);
                 event.consume();
