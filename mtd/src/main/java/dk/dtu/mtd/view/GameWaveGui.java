@@ -22,7 +22,8 @@ public class GameWaveGui extends StackPane {
     public void initEnemies(String enemyTypes) {
         // Splttting the input:
         String[] pairs = enemyTypes.split("(?<=\\G\\S+ \\S+) ");
-        for (String pair : pairs) {
+        //System.out.println("PRINTED ALL PAIRS " + enemyTypes);
+        for (String pair : pairs) { // For each pair
             String[] keyValue = pair.split(" ");
 
             int numberOfEnemies = Integer.valueOf(keyValue[1]);
@@ -33,7 +34,9 @@ public class GameWaveGui extends StackPane {
                 EnemyImage newEnemy = new EnemyImage(type);
                 enemyArray.add(newEnemy);
                 wavePane.getChildren().add(newEnemy);
+                //System.out.println("Adding enemy " + type + " to wavePane" );
             }
+            //System.out.println("PRINTED FROM INITENEMIES" + pair);
         }        
 
         /*enemyArray = new ArrayList<>();
@@ -64,8 +67,10 @@ class EnemyImage extends ImageView {
 
         if (type.equals("Skeleton")) {
             this.image = new Image("dk/dtu/mtd/assets/skelly.gif", 100, 0, true, false);
-        } else if (type.equals("fatSkeleton")) {
-            this.image = new Image("dk/dtu/mtd/assets/skelly.gif", 100, 0, true, false);
+            //System.out.println("Skeleton created from GameGUI");
+        } else if (type.equals("FatSkeleton")) {
+            this.image = new Image("dk/dtu/mtd/assets/SuperMonkey.png", 100, 0, true, false);
+            //System.out.println("FatSkeleton created from GameGUI");
         } else if (type.equals("tankEnemy")) {
             this.image = new Image("dk/dtu/mtd/assets/skelly.gif", 100, 0, true, false);
         } else if (type.equals("bossEnemy")) {
