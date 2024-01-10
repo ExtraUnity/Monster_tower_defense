@@ -57,8 +57,8 @@ public class GameGui extends StackPane {
             BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
         hoverImage = new ImageView(new Image("dk/dtu/mtd/assets/skelly.gif"));
         hoverCircle = new Circle(0, 0, 300);
-        gameWaveGuiLeft = new GameWaveGui();
-        gameWaveGuiRight = new GameWaveGui();
+        gameWaveGuiLeft = new GameWaveGui(gameAreaWidth, gameAreaHeight);
+        gameWaveGuiRight = new GameWaveGui(gameAreaWidth, gameAreaHeight);
 
         // confine the game area to be the same on all screens:
         gameArea.setMaxWidth(gameAreaWidth);
