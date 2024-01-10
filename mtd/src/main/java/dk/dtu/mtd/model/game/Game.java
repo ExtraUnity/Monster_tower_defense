@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import java.math.*;
+
 import org.jspace.ActualField;
 import org.jspace.FormalField;
 import org.jspace.SequentialSpace;
@@ -116,6 +118,16 @@ public class Game implements Runnable {
     }
 
     public Boolean legalTowerPlacement(String towerType, int x, int y, int id) {
+        for (Tower tower : towerList) {
+            if(70 * 70 > Math.pow((tower.getX() - x), 2) + Math.pow((tower.getY() - y), 2)) {
+                return false;
+            }
+        }
+        if (player1.id == id && x > 960) {
+            return false;
+        } else if (player2.id == id && x < 960) {
+            return false;
+        }
         return true;
     }
 
@@ -124,6 +136,14 @@ public class Game implements Runnable {
             Object[] towerInfo = gameSpace.get(new ActualField("towerInfo"), new FormalField(String.class),
                     new FormalField(Integer.class), new FormalField(Integer.class));
             if (towerInfo[1].equals("basicTower")) {
+                if (legalTowerPlacement((String) towerInfo[1], (int) towerInfo[2], (int) towerInfo[3], playerId)) {
+                    towerList.add(new BasicTower((int) towerInfo[2], (int) towerInfo[3], playerId));
+                    gameSpace.put("gui", "newTower", towerList.get(towerList.size() - 1), player1.id);
+                    gameSpace.put("gui", "newTower", towerList.get(towerList.size() - 1), player2.id);
+                    System.out.println("Tower placed at " + towerList.get(towerList.size() - 1).x + " "
+                            + towerList.get(towerList.size() - 1).y);
+                }
+            } else if (towerInfo[1].equals("superTower")) {
                 if (legalTowerPlacement((String) towerInfo[1], (int) towerInfo[2], (int) towerInfo[3], playerId)) {
                     towerList.add(new BasicTower((int) towerInfo[2], (int) towerInfo[3], playerId));
                     gameSpace.put("gui", "newTower", towerList.get(towerList.size() - 1), player1.id);
