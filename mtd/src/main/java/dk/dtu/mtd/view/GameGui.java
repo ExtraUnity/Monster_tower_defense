@@ -25,6 +25,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javafx.stage.Screen;
 
@@ -37,7 +38,8 @@ public class GameGui extends StackPane {
     static Pane towerLayer;
     static GameTopGui gameTop;
     static GameChat gameChat;
-    ImageView hoverImage;
+    private ImageView hoverImage;
+    private Circle hoverCircle;
 
     public static double gameAreaHeight;
     public static double gameAreaWidth;
@@ -54,6 +56,9 @@ public class GameGui extends StackPane {
         towerLayer.setBorder(new Border(new BorderStroke(Color.BLACK, 
             BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
         hoverImage = new ImageView(new Image("dk/dtu/mtd/assets/skelly.gif"));
+        hoverCircle = new Circle(0, 0, 300);
+        gameWaveGuiLeft = new GameWaveGui();
+        gameWaveGuiRight = new GameWaveGui();
 
         // confine the game area to be the same on all screens:
         gameArea.setMaxWidth(gameAreaWidth);
@@ -76,9 +81,15 @@ public class GameGui extends StackPane {
         layout.getChildren().addAll(gameTop, gameArea, bottom);
 
         towerLayer.getChildren().add(hoverImage);
-        hoverImage.setOpacity(0);
+        towerLayer.getChildren().add(hoverCircle);
+
+        hoverImage.setOpacity(0.5);
         hoverImage.setFitHeight(100);
         hoverImage.setFitWidth(100);
+        hoverImage.setVisible(false);
+
+        hoverCircle.setOpacity(0.2);
+        hoverCircle.setVisible(false);
 
         getChildren().add(layout);
         setAlignment(Pos.CENTER);
@@ -138,7 +149,8 @@ public class GameGui extends StackPane {
                     System.out.println("The coordinates of new tower" + event.getY()+ " "   + event.getX());
                     Controller.placeTower(dragboard.getString(), (int) ((1920*event.getX())/width), (int) ((1080*event.getY())/height));
                 }
-                hoverImage.setOpacity(0);
+                hoverImage.setVisible(false);
+                hoverCircle.setVisible(false);
                 event.consume();
             }
         });
@@ -151,9 +163,12 @@ public class GameGui extends StackPane {
                 if (dragboard.hasString() && dragboard.getString() == "basicTower") {
                     hoverImage.setImage(new Image("dk/dtu/mtd/assets/dartMonkey.png"));
                 }
-                hoverImage.setOpacity(0.5);
+                hoverImage.setVisible(true);
                 hoverImage.setX(event.getX() - hoverImage.getFitWidth() / 2);
                 hoverImage.setY(event.getY() - hoverImage.getFitWidth() / 2);
+                hoverCircle.setVisible(true);
+                hoverCircle.setCenterX(event.getX());
+                hoverCircle.setCenterY(event.getY());
                 event.consume();
             }
         });
