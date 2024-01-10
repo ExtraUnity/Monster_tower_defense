@@ -7,6 +7,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.jspace.Space;
 
+import dk.dtu.mtd.shared.EnemyType;
+
 public class WaveManager implements Runnable {
 
     // TODO: remove unused fields
@@ -42,6 +44,41 @@ public class WaveManager implements Runnable {
         }
     }
 
+    void sendEnemies(EnemyType type, int playerId) {
+        System.out.println("I should now send enemies to player " + playerId);
+        ArrayList<Enemy> enemies = new ArrayList<Enemy>();
+        switch (type) {
+            case SKELETON:
+                for (int i = 0; i < 6; i++) {
+                    enemies.add(new Skeleton());
+                }
+                break;
+
+            default:
+                break;
+        }
+        Wave attackWave;
+        if (playerId == Game.player1.id) {
+            attackWave = new Wave(enemies, space, 660, Game.player1.id);
+        } else {
+            attackWave = new Wave(enemies, space, 1800 - 660, Game.player2.id);
+        }
+
+        new Thread(new Runnable() {
+
+            @Override
+            public void run() {
+                try {
+                    space.put("gui", "sendEnemies", enemies.size(), attackWave.playerId);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                waveLeft.run();
+            }
+
+        }).start();
+    }
+
     void spawnWave(int waveNumber) {
         waveLeft = new Wave(waveGenerator(waveNumber), space, 660, Game.player1.id);
         waveRight = new Wave(waveGenerator(waveNumber), space, 1800 - 660, Game.player2.id);
@@ -63,7 +100,6 @@ public class WaveManager implements Runnable {
 
         // right side
         Thread player2Wave = new Thread(new Runnable() {
-
 
             @Override
             public void run() {
@@ -140,7 +176,7 @@ class Wave {
 
     public void run() {
         int spawned = 0;
-        int spawnRate = 150; //In ticks
+        int spawnRate = 150; // In ticks
         int lastSpawnTick = Game.gameTicker.gameTick;
         int deltaTick = 0;
         while (true) {
@@ -168,7 +204,8 @@ class Wave {
                 }
                 LinkedList<String> coordinates = new LinkedList<String>();
                 for (int i = 0; i < enemies.size(); i++) {
-                    String xy = enemies.get(i).isDead() ? "4000 4000" : "" + enemies.get(i).getX() + " " + enemies.get(i).getY();
+                    String xy = enemies.get(i).isDead() ? "4000 4000"
+                            : "" + enemies.get(i).getX() + " " + enemies.get(i).getY();
                     coordinates.add(xy);
                 }
 

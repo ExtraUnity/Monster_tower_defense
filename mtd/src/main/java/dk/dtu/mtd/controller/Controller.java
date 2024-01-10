@@ -6,9 +6,10 @@ import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.LinkedList;
 import dk.dtu.mtd.model.Client;
+import dk.dtu.mtd.model.game.Game;
 import dk.dtu.mtd.model.game.Tower;
 //import dk.dtu.mtd.model.game.WaveManager;
-
+import dk.dtu.mtd.shared.EnemyType;
 import dk.dtu.mtd.view.GameGui;
 import dk.dtu.mtd.view.Gui;
 import javafx.application.Platform;
@@ -78,6 +79,10 @@ public class Controller {
         //client.upgradeTower();
     }
 
+    public static void sendEnemies(EnemyType type) {
+        client.sendEnemies(type);
+    }
+
 }
 
 // hmm
@@ -137,6 +142,18 @@ class GUIMonitior implements Runnable {
                     });
 
                 // ("gui", "chat", (...) enemy info , playerId)
+                } else if (update[1].toString().equals("sendEnemies")) {
+                    int num = (int) update[2];
+                    int playerId = (int)update[3];
+                    Platform.runLater(() -> {
+                        if(playerId == Game.player1.id) {
+                            GameGui.gameWaveGuiLeft.addEnemies(num);
+                        } else {
+                            GameGui.gameWaveGuiRight.addEnemies(num);
+                        }
+                        
+                        
+                    });
                 } else if (update[1].toString().equals("enemyUpdateLeft")) {
                     // recive the information that applys to an enemy to update it accordingly
                     // eg. an enemy has died -> it should be removed from the gui / play the death animation

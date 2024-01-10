@@ -28,6 +28,14 @@ public class GameWaveGui extends StackPane {
         }
     }
 
+    public void addEnemies(int num) {
+        for(int i = 0; i < num; i++) {
+            EnemyImage newEnemy = new EnemyImage();
+            enemyArray.add(newEnemy);
+            wavePane.getChildren().add(newEnemy);
+        }
+    }
+
     public void updateEnemies(LinkedList<String> coordinates) {
         for (int i = 0 ; i < enemyArray.size(); i++) {
             String[] coord = coordinates.get(i).split(" ");
