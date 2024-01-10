@@ -15,10 +15,14 @@ import javafx.scene.layout.HBox;
 public class TowerShop extends HBox {
 
     public TowerShop() {
+        setMaxHeight(100);
+        ArrayList<ImageView> items = new ArrayList<ImageView>();
+        items.add(new ImageView(new Image("dk/dtu/mtd/assets/SuperMonkey.png", 70, 0, true, true)));
+        items.add(new ImageView(new Image("dk/dtu/mtd/assets/dartMonkey.png", 70, 0, true, true)));
+
+        this.getChildren().addAll(items);
         setAlignment(Pos.CENTER_RIGHT);
 
-        final ImageView basicTower = new ImageView(new Image("dk/dtu/mtd/assets/dartMonkey.png", 100, 0, true, true));
-        this.getChildren().add(basicTower);
 
         basicTower.addEventHandler(MouseEvent.DRAG_DETECTED, new EventHandler<MouseEvent>() {
             @Override
