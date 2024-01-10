@@ -15,10 +15,16 @@ import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
+import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.BorderStroke;
+import javafx.scene.layout.BorderStrokeStyle;
+import javafx.scene.layout.BorderWidths;
+import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Screen;
 
@@ -45,6 +51,8 @@ public class GameGui extends StackPane {
 
         gameChat = new GameChat();
         towerLayer = towerLayer(gameAreaWidth, gameAreaHeight);
+        towerLayer.setBorder(new Border(new BorderStroke(Color.BLACK, 
+            BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
         hoverImage = new ImageView(new Image("dk/dtu/mtd/assets/skelly.gif"));
 
         // confine the game area to be the same on all screens:
@@ -93,7 +101,7 @@ public class GameGui extends StackPane {
     }
 
     public ImageView gameAreaBackground(double width, double height) {
-        return new ImageView(new Image("dk/dtu/mtd/assets/gameBackground.png", width, height, true, false));
+        return new ImageView(new Image("dk/dtu/mtd/assets/gameBackground.png", width, height, false, false));
     }
 
     public Background background() {
