@@ -3,6 +3,7 @@ package dk.dtu.mtd.model.game;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.LinkedList;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.jspace.Space;
 
@@ -11,11 +12,12 @@ public class WaveManager implements Runnable {
     // TODO: remove unused fields
     private int currentWaveNumber;
     private int totalWaves; // Total number of waves
-
+    public Wave waveLeft;
+    public Wave waveRight;
     boolean playing;
     int waveRound;
-    boolean player1Done;
-    boolean player2Done;
+    volatile AtomicBoolean player1Done = new AtomicBoolean(false);
+    volatile AtomicBoolean player2Done = new AtomicBoolean(false);
     Space space;
 
     public WaveManager(Space space) {
@@ -27,8 +29,8 @@ public class WaveManager implements Runnable {
     @Override
     public void run() {
         while (playing) {
-            player1Done = false;
-            player2Done = false;
+            player1Done.set(false);
+            player2Done.set(false);
             spawnWave(waveRound);
 
             waveRound++;
@@ -75,11 +77,13 @@ public class WaveManager implements Runnable {
 
 
     void spawnWave(int waveNumber) {
+        waveLeft = new Wave(waveGenerator(waveNumber), space, 660, Game.player1.id);
+        waveRight = new Wave(waveGenerator(waveNumber), space, 1800 - 660, Game.player2.id);
+
+        String enemyTypes = messageGenerator(waveLeft);
+
         // left side
         Thread player1Wave = new Thread(new Runnable() {
-            Wave wave = new Wave(waveGenerator(waveNumber), space, 660, Game.player1.id);
-            String enemyTypes = messageGenerator(wave);
-
             @Override
             public void run() {
                 try {
@@ -88,16 +92,14 @@ public class WaveManager implements Runnable {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                wave.run();
-                player1Done = true;
+                waveLeft.run();
+                player1Done.set(true);
             }
 
         });// new Thread(new Wave(new ArrayList<Enemy>(), space, Game.player1.id));
 
         // right side
         Thread player2Wave = new Thread(new Runnable() {
-            Wave wave = new Wave(waveGenerator(waveNumber), space, 1800 - 660, Game.player2.id);
-            String enemyTypes = messageGenerator(wave);
 
             @Override
             public void run() {
@@ -106,15 +108,19 @@ public class WaveManager implements Runnable {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                wave.run();
-                player2Done = true;
+                waveRight.run();
+                player2Done.set(true);
             }
 
         });// new Thread(new Wave(new ArrayList<Enemy>(), space, Game.player2.id));
         player1Wave.start();
         player2Wave.start();
-        while (!(player1Done && player2Done)) {
-
+        while (!(player1Done.get() && player2Done.get())) {
+            try {
+                Thread.sleep(1L);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
 
         System.out.println("Spawning wave " + waveNumber);
@@ -183,34 +189,35 @@ class Wave {
 
     public void run() {
         int spawned = 0;
-        long spawnRate = 3000L;
-        long deltaTime = 0;
-        long previousTime = System.nanoTime() / 1_000_000L;
-
+        int spawnRate = 150; //In ticks
+        int lastSpawnTick = Game.gameTicker.gameTick;
+        int deltaTick = 0;
         while (true) {
-
+            deltaTick = Game.gameTicker.gameTick - lastSpawnTick;
             try {
-                deltaTime = System.nanoTime() / 1_000_000L - previousTime;
                 // System.out.println(deltaTime);
-                if (spawned < enemies.size() && deltaTime > spawnRate) {
+                if (spawned < enemies.size() && deltaTick >= spawnRate) {
                     // spawn enemy
                     enemies.get(spawned).setX(START_X);
                     enemies.get(spawned).setY(START_Y);
-                    previousTime = System.nanoTime() / 1_000_000L;
+                    lastSpawnTick = Game.gameTicker.gameTick;
                     spawned++;
                 }
+
                 for (int i = 0; i < spawned; i++) {
                     enemies.get(i).move();
                     if (enemies.get(i).reachedFinish()) {
                         enemies.get(i).setY(3000);
                         enemies.get(i).transferDamageToPlayer(playerId);
-                        int hp = playerId == Game.player1.id ? Game.player1.getHealth() : Game.player2.getHealth();
-                        space.put("gui", "damage", hp, playerId);
+
+                        String newHp = "" + Game.player1.getHealth() + " " + Game.player2.getHealth();
+                        space.put("gui", "damage", newHp, Game.player1.id);
+                        space.put("gui", "damage", newHp, Game.player2.id);
                     }
                 }
                 LinkedList<String> coordinates = new LinkedList<String>();
                 for (int i = 0; i < enemies.size(); i++) {
-                    String xy = "" + enemies.get(i).getX() + " " + enemies.get(i).getY();
+                    String xy = enemies.get(i).isDead() ? "4000 4000" : "" + enemies.get(i).getX() + " " + enemies.get(i).getY();
                     coordinates.add(xy);
                 }
 

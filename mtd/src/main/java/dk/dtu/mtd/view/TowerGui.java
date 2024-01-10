@@ -5,33 +5,50 @@ import javafx.event.EventHandler;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.shape.Circle;
 
 public class TowerGui extends ImageView {
 
-    int size = 100;
+    Circle circle;
 
-    public TowerGui(String towerType, int x, int y) {
-        this.setTranslateX(x - size/2);
-        this.setTranslateY(y - size/2);
+    public TowerGui(String towerType, int size, int radius, int x, int y) {
+        this.setX(x - size/2);
+        this.setY(y - size/2);
         this.setFitHeight(size);
         this.setFitWidth(size);
 
-        if (towerType.equals( "basicTower")) {
+        circle = new Circle(x, y, radius);
+        circle.setOpacity(0.2);
+        circle.setVisible(false);
+
+        if (towerType.equals("basicTower")) {
             this.setImage(new Image("dk/dtu/mtd/assets/dartMonkey.png"));
-        } else {
+        } else if (towerType.equals("superTower")) {
             this.setImage(new Image("dk/dtu/mtd/assets/SuperMonkey.png"));
+        } else {
+            this.setImage(new Image("dk/dtu/mtd/assets/skelly.gif"));
         }
 
-        this.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+        this.addEventHandler(MouseEvent.MOUSE_ENTERED, new EventHandler<MouseEvent>() {
 
             @Override
             public void handle(MouseEvent event) {
-                System.out.println("Tower pressed ");
-                Controller.placeTower("basicTower", 300, 200);
+                circle.setVisible(true);
                 event.consume();
             }
        });
 
+       this.addEventHandler(MouseEvent.MOUSE_EXITED, new EventHandler<MouseEvent>() {
+
+            @Override
+            public void handle(MouseEvent event) {
+                circle.setVisible(false);
+                event.consume();
+            }
+       });
     }
 
+    public Circle getCircle() {
+        return circle;
+    }
 }

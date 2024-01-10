@@ -15,29 +15,36 @@ import javafx.scene.layout.HBox;
 public class TowerShop extends HBox {
 
     public TowerShop() {
-        ArrayList<ImageView> items = new ArrayList<ImageView>();
-        items.add(new ImageView(new Image("dk/dtu/mtd/assets/dartMonkey.png", 100, 0, true, true)));
-        items.add(new ImageView(new Image("dk/dtu/mtd/assets/dartMonkey.png", 100, 0, true, true)));
-        items.add(new ImageView(new Image("dk/dtu/mtd/assets/dartMonkey.png", 100, 0, true, true)));
-        items.add(new ImageView(new Image("dk/dtu/mtd/assets/dartMonkey.png", 100, 0, true, true)));
-
-        this.getChildren().addAll(items);
+        setMaxHeight(100);
         setAlignment(Pos.CENTER_RIGHT);
-
-        final ImageView source = new ImageView(new Image("dk/dtu/mtd/assets/SuperMonkey.png", 100, 0, true, true));
-        this.getChildren().add(source);
-
-        source.addEventHandler(MouseEvent.DRAG_DETECTED, new EventHandler<MouseEvent>() {
+        
+        final ImageView basicTower = new ImageView(new Image("dk/dtu/mtd/assets/dartMonkey.png", 100, 0, true, true));
+        this.getChildren().add(basicTower);
+        basicTower.addEventHandler(MouseEvent.DRAG_DETECTED, new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                Dragboard db = source.startDragAndDrop(TransferMode.ANY);
+                Dragboard db = basicTower.startDragAndDrop(TransferMode.ANY);
 
                 ClipboardContent content = new ClipboardContent();
                 content.putString("basicTower");
                 db.setContent(content);
-                
+
                 event.consume();
             }
-       });
+        });
+        final ImageView superTower = new ImageView(new Image("dk/dtu/mtd/assets/SuperMonkey.png", 100, 0, true, true));
+        this.getChildren().add(superTower);
+        superTower.addEventHandler(MouseEvent.DRAG_DETECTED, new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                Dragboard db = superTower.startDragAndDrop(TransferMode.ANY);
+
+                ClipboardContent content = new ClipboardContent();
+                content.putString("superTower");
+                db.setContent(content);
+
+                event.consume();
+            }
+        });
     }
 }

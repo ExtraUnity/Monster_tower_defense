@@ -74,6 +74,10 @@ public class Controller {
         client.sendMessage(msg);
     }
 
+    public static void upgradeTower() {
+        //client.upgradeTower();
+    }
+
 }
 
 // hmm
@@ -98,12 +102,14 @@ class GUIMonitior implements Runnable {
 
                 // ("gui", "damage", (int) new hp , playerId)
                 if (update[1].toString().equals("damage")) {
-                    System.out.println("updating GUI");
-                    final int hp = (int) update[2];
+                    //System.out.println("updating GUI");
+                    String[] hp = ((String) update[2]).split(" ");
+                    final String hp1 = hp[0];
+                    final String hp2 = hp[1];
                     Platform.runLater(new Runnable() {
                         @Override
                         public void run() {
-                            GameGui.updateGameGui(hp);
+                            GameGui.updateGameGui(hp1, hp2);
                         }
                     });
                 // ("gui", "chat", (LinkedList<String>) chat log , playerId)
@@ -161,7 +167,7 @@ class GUIMonitior implements Runnable {
                     Platform.runLater(new Runnable() {
                         @Override
                         public void run() {
-                            GameGui.newTower(tower.getType(), tower.getX(), tower.getY());
+                            GameGui.newTower(tower.getType(),tower.getSize(), tower.getRadius(), tower.getX(), tower.getY());
                         }
 
                     });

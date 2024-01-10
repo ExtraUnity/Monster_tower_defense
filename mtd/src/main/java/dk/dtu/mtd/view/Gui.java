@@ -55,7 +55,7 @@ public class Gui extends Application {
 
     public static void loading() {
         root.getChildren().remove(mainMenu);
-        root.getChildren().add(new Text("Loading..."));
+        root.getChildren().add(new Text("Waiting for other player..."));
         Thread t = new Thread(() -> {
             Controller.joinGame();
         });
@@ -64,7 +64,7 @@ public class Gui extends Application {
 
     public static void game() {
         root.getChildren().remove(0);
-        game = new GameGui(150);
+        game = new GameGui("150", "150");
         root.getChildren().add(game);
     }
 
@@ -126,8 +126,8 @@ public class Gui extends Application {
         });
         stage.setTitle("Monster Tower Defense");
         stage.setMaximized(true);
-        stage.setMinWidth(400);
-        stage.setMinHeight(400);
+        stage.setMinWidth(1800);
+        stage.setMinHeight(900);
     }
 
 }
