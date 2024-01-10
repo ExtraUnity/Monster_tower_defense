@@ -187,4 +187,9 @@ public class GameGui extends StackPane {
 
         return chatButton;
     }
+
+    public static void returnToLobbyPrompt() {
+        Gui.root.getChildren().remove(0);
+        Gui.root.getChildren().add(Gui.lobbyPrompt());
+    }
 }

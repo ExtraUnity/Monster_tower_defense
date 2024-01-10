@@ -11,7 +11,7 @@ public class Game implements Runnable {
     public static GameTicker gameTicker;
     public static Player player1;
     public static Player player2;
-    public static Space gameSpace;
+    public Space gameSpace;
     public static WaveManager waveManager;
     public static TowerManager towerManager;
 
@@ -34,7 +34,7 @@ public class Game implements Runnable {
         gameTicker = new GameTicker();
         new Thread(gameTicker).start();
 
-        towerManager = new TowerManager();
+        towerManager = new TowerManager(gameSpace);
         new Thread(towerManager).start();
     }
 

@@ -5,14 +5,18 @@ import java.util.List;
 
 import org.jspace.ActualField;
 import org.jspace.FormalField;
+import org.jspace.Space;
 
 public class TowerManager implements Runnable {
     public volatile List<Tower> towerList;
     public volatile boolean playing;
 
-    public TowerManager() {
+    Space gameSpace;
+
+    public TowerManager(Space gameSpace) {
         this.towerList = new ArrayList<Tower>();
         this.playing = true;
+        this.gameSpace = gameSpace;
     }
 
     @Override
@@ -48,7 +52,7 @@ public class TowerManager implements Runnable {
     public void placeTower(int playerId) {
         try {
             Tower tower;
-            Object[] towerInfo = Game.gameSpace.get(new ActualField("towerInfo"), new FormalField(String.class),
+            Object[] towerInfo = gameSpace.get(new ActualField("towerInfo"), new FormalField(String.class),
                     new FormalField(Integer.class), new FormalField(Integer.class));
             if(towerInfo[1].equals("basicTower")) {
                 tower = new BasicTower((int) towerInfo[2], (int) towerInfo[3], playerId);
@@ -60,8 +64,8 @@ public class TowerManager implements Runnable {
 
             if (legalTowerPlacement(tower, playerId)) {
                 towerList.add(tower);
-                Game.gameSpace.put("gui", "newTower", tower, Game.player1.id);
-                Game.gameSpace.put("gui", "newTower", tower, Game.player2.id);
+                gameSpace.put("gui", "newTower", tower, Game.player1.id);
+                gameSpace.put("gui", "newTower", tower, Game.player2.id);
                 System.out.println("Tower placed at " + towerList.get(towerList.size() - 1).x + " "
                             + towerList.get(towerList.size() - 1).y);
             }

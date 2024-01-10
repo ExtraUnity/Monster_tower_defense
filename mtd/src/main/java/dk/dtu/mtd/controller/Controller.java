@@ -75,13 +75,14 @@ public class Controller {
     }
 
     public static void upgradeTower() {
-        //client.upgradeTower();
+        // client.upgradeTower();
     }
 
 }
 
 // hmm
 class GUIMonitior implements Runnable {
+    int counter = 0;
     Boolean playing = true;
     Client client;
 
@@ -99,10 +100,9 @@ class GUIMonitior implements Runnable {
                 update = client.gameSpace.get(new ActualField("gui"), new FormalField(String.class),
                         new FormalField(Object.class), new ActualField(client.id));
 
-
                 // ("gui", "damage", (int) new hp , playerId)
                 if (update[1].toString().equals("damage")) {
-                    //System.out.println("updating GUI");
+                    // System.out.println("updating GUI");
                     String[] hp = ((String) update[2]).split(" ");
                     final String hp1 = hp[0];
                     final String hp2 = hp[1];
@@ -112,7 +112,7 @@ class GUIMonitior implements Runnable {
                             GameGui.updateGameGui(hp1, hp2);
                         }
                     });
-                // ("gui", "chat", (LinkedList<String>) chat log , playerId)
+                    // ("gui", "chat", (LinkedList<String>) chat log , playerId)
                 } else if (update[1].toString().equals("chat")) {
                     LinkedList<String> chat = (LinkedList<String>) update[2];
                     System.out.println("Gui recieved request to update");
@@ -125,7 +125,7 @@ class GUIMonitior implements Runnable {
 
                     });
 
-                // ("gui", "chat", (...) wave info , playerId)
+                    // ("gui", "chat", (...) wave info , playerId)
                 } else if (update[1].toString().equals("wave")) {
                     // make apropriate gui calls to display wave
                     int num = (int) update[2];
@@ -136,10 +136,11 @@ class GUIMonitior implements Runnable {
                         GameGui.gameWaveGuiRight.initEnemies(num);
                     });
 
-                // ("gui", "chat", (...) enemy info , playerId)
+                    // ("gui", "chat", (...) enemy info , playerId)
                 } else if (update[1].toString().equals("enemyUpdateLeft")) {
                     // recive the information that applys to an enemy to update it accordingly
-                    // eg. an enemy has died -> it should be removed from the gui / play the death animation
+                    // eg. an enemy has died -> it should be removed from the gui / play the death
+                    // animation
                     LinkedList<String> coords = (LinkedList<String>) update[2];
                     Platform.runLater(new Runnable() {
 
@@ -151,7 +152,8 @@ class GUIMonitior implements Runnable {
                     });
                 } else if (update[1].toString().equals("enemyUpdateRight")) {
                     // recive the information that applys to an enemy to update it accordingly
-                    // eg. an enemy has died -> it should be removed from the gui / play the death animation
+                    // eg. an enemy has died -> it should be removed from the gui / play the death
+                    // animation
                     LinkedList<String> coords = (LinkedList<String>) update[2];
                     Platform.runLater(new Runnable() {
 
@@ -168,14 +170,27 @@ class GUIMonitior implements Runnable {
                     Platform.runLater(new Runnable() {
                         @Override
                         public void run() {
-                            GameGui.newTower(tower.getType(),tower.getSize(), tower.getRadius(), tower.getX(), tower.getY());
+                            GameGui.newTower(tower.getType(), tower.getSize(), tower.getRadius(), tower.getX(),
+                                    tower.getY());
                         }
 
                     });
 
                 }
             } catch (InterruptedException e) {
-                System.out.println("GUImonitor failing");
+                counter++;
+
+                if (counter == 100) {
+                    System.out.println("GuiMonitor failing, assuming disconnected");
+                    System.out.println("Returning to main menu");
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run(){
+                            GameGui.returnToLobbyPrompt();
+                        }
+                    });
+                    playing = false;
+                }
             }
         }
     }
