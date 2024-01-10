@@ -44,7 +44,7 @@ public class GameGui extends StackPane {
 
     public GameGui(String health1, String health2) {
         gameAreaHeight = Screen.getPrimary().getBounds().getHeight() - 200;
-        gameAreaWidth = (gameAreaHeight / 3) * 6;
+        gameAreaWidth = (gameAreaHeight / 3) * 5;
         layout = new VBox();
         gameArea = new StackPane();
         gameTop = new GameTopGui(health1, health2, 0);
