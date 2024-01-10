@@ -43,5 +43,9 @@ public abstract class Tower {
     public int getSize() {
         return size;
     }
+
+    public int getRadius() {
+        return radius;
+    }
     
 }
