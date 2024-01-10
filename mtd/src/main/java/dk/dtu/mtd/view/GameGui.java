@@ -29,6 +29,7 @@ public class GameGui extends StackPane {
     static Pane towerLayer;
     static GameTopGui gameTop;
     static GameChat gameChat;
+    ImageView hoverImage;
 
     public GameGui(int health) {
         layout = new BorderPane();
@@ -37,6 +38,7 @@ public class GameGui extends StackPane {
 
         gameChat = new GameChat();
         towerLayer = towerLayer();
+        hoverImage = new ImageView(new Image("dk/dtu/mtd/assets/skelly.gif"));
         gameWaveGuiLeft = new GameWaveGui();
         gameWaveGuiRight = new GameWaveGui();
 
@@ -62,6 +64,11 @@ public class GameGui extends StackPane {
         bottom.setCenter(new GameShop());
         bottom.setRight(chatButton);
         BorderPane.setAlignment(chatButton, Pos.CENTER_RIGHT);
+
+        towerLayer.getChildren().add(hoverImage);
+        hoverImage.setOpacity(0);
+        hoverImage.setFitHeight(100);
+        hoverImage.setFitWidth(100);
 
         layout.setTop(gameTop);
         layout.setCenter(towerLayer);
@@ -113,6 +120,7 @@ public class GameGui extends StackPane {
                 if (dragboard.hasString()) {
                     Controller.placeTower(dragboard.getString(), (int) event.getX(), (int) event.getY());
                 }
+                hoverImage.setOpacity(0);
                 event.consume();
             }
         });
@@ -121,7 +129,13 @@ public class GameGui extends StackPane {
             @Override
             public void handle(DragEvent event) {
                 event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
-                // System.out.println("it owrk?");
+                Dragboard dragboard = event.getDragboard();
+                if (dragboard.hasString() && dragboard.getString() == "basicTower") {
+                    hoverImage.setImage(new Image("dk/dtu/mtd/assets/dartMonkey.png"));
+                }
+                hoverImage.setOpacity(0.5);
+                hoverImage.setX(event.getX() - hoverImage.getFitWidth() / 2);
+                hoverImage.setY(event.getY() - hoverImage.getFitWidth() / 2);
                 event.consume();
             }
         });
