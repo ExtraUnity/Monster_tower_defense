@@ -14,15 +14,14 @@ public class Game implements Runnable {
     public static GameTicker gameTicker;
     public static Player player1;
     public static Player player2;
-    public Space gameSpace;
-    private List<Tower> towerList;
+    public static Space gameSpace;
     public static WaveManager waveManager;
+    public static TowerManager towerManager;
 
     public Game(int id, int playerID1, int playerID2) {
         this.id = id;
         player1 = new Player(playerID1, 150, 0);
         player2 = new Player(playerID2, 150, 0);
-        this.towerList = new ArrayList<Tower>();
         gameSpace = new SequentialSpace();
         LinkedList<String> chat = new LinkedList<String>();
         try {
@@ -37,6 +36,9 @@ public class Game implements Runnable {
         
         gameTicker = new GameTicker();
         new Thread(gameTicker).start();
+
+        towerManager = new TowerManager();
+        new Thread(towerManager).start();
     }
 
     @Override
@@ -99,7 +101,7 @@ public class Game implements Runnable {
                 System.out.println("player1 recived" + reward + "rewards!");
             }
         } else if (request[1].toString().equals("placeTower")) {
-            placeTower((int) request[2]);
+            towerManager.placeTower((int) request[2]);
         } else if (request[1].toString().equals("chat")) {
             System.out.println("Game recieved chat request");
             // Retrieve chatlist and update to include message
@@ -118,25 +120,7 @@ public class Game implements Runnable {
         }
     }
 
-    public Boolean legalTowerPlacement(String towerType, int x, int y, int id) {
-        return true;
-    }
 
-    public void placeTower(int playerId) {
-        try {
-            Object[] towerInfo = gameSpace.get(new ActualField("towerInfo"), new FormalField(String.class),
-                    new FormalField(Integer.class), new FormalField(Integer.class));
-            if (towerInfo[1].equals("basicTower")) {
-                if (legalTowerPlacement((String) towerInfo[1], (int) towerInfo[2], (int) towerInfo[3], playerId)) {
-                    towerList.add(new BasicTower((int) towerInfo[2], (int) towerInfo[3], playerId));
-                    gameSpace.put("gui", "newTower", towerList.get(towerList.size() - 1), player1.id);
-                    gameSpace.put("gui", "newTower", towerList.get(towerList.size() - 1), player2.id);
-                    System.out.println("Tower placed at " + towerList.get(towerList.size() - 1).x + " "
-                            + towerList.get(towerList.size() - 1).y);
-                }
-            }
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
+
+    
 }
