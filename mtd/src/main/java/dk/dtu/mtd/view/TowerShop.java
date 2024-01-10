@@ -1,7 +1,5 @@
 package dk.dtu.mtd.view;
 
-import java.util.ArrayList;
-
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.image.Image;

@@ -15,10 +15,16 @@ import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
+import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.BorderStroke;
+import javafx.scene.layout.BorderStrokeStyle;
+import javafx.scene.layout.BorderWidths;
+import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javafx.stage.Screen;
@@ -35,25 +41,34 @@ public class GameGui extends StackPane {
     private ImageView hoverImage;
     private Circle hoverCircle;
 
+    public static double gameAreaHeight;
+    public static double gameAreaWidth;
+
     public GameGui(String health1, String health2) {
+        gameAreaHeight = Screen.getPrimary().getBounds().getHeight() - 200;
+        gameAreaWidth = (gameAreaHeight / 3) * 5;
         layout = new VBox();
         gameArea = new StackPane();
         gameTop = new GameTopGui(health1, health2, 0);
 
         gameChat = new GameChat();
-        towerLayer = towerLayer();
+        towerLayer = towerLayer(gameAreaWidth, gameAreaHeight);
+        towerLayer.setBorder(new Border(new BorderStroke(Color.BLACK, 
+            BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
         hoverImage = new ImageView(new Image("dk/dtu/mtd/assets/skelly.gif"));
         hoverCircle = new Circle(0, 0, 300);
         gameWaveGuiLeft = new GameWaveGui();
         gameWaveGuiRight = new GameWaveGui();
 
         // confine the game area to be the same on all screens:
-        double gameAreaHeight = Screen.getPrimary().getBounds().getHeight() - 200;
-        double gameAreaWidth = (gameAreaHeight / 3) * 6;
         gameArea.setMaxWidth(gameAreaWidth);
         gameArea.setMaxHeight(gameAreaHeight);
 
-        gameArea.getChildren().addAll(gameAreaBackground(gameAreaWidth, gameAreaHeight), gameWaveGuiLeft, gameWaveGuiRight, towerLayer);
+        gameWaveGuiLeft = new GameWaveGui(gameAreaWidth, gameAreaHeight);
+        gameWaveGuiRight = new GameWaveGui(gameAreaWidth, gameAreaHeight);
+
+        gameArea.getChildren().addAll(gameAreaBackground(gameAreaWidth, gameAreaHeight), gameWaveGuiLeft,
+                gameWaveGuiRight, towerLayer);
 
         BorderPane bottom = new BorderPane();
         bottom.setMaxHeight(100);
@@ -97,7 +112,7 @@ public class GameGui extends StackPane {
     }
 
     public ImageView gameAreaBackground(double width, double height) {
-        return new ImageView(new Image("dk/dtu/mtd/assets/gameBackground.png", width, height, true, false));
+        return new ImageView(new Image("dk/dtu/mtd/assets/gameBackground.png", width, height, false, false));
     }
 
     public Background background() {
@@ -117,19 +132,22 @@ public class GameGui extends StackPane {
 
     public static void newTower(String type, int size, int radius, int x, int y) {
         System.out.println("I got a new tower!");
-        TowerGui tower = new TowerGui(type, size, radius, x, y);
+        TowerGui tower = new TowerGui(type, size, radius, (int) ((gameAreaWidth * x)/1920),  (int) ((gameAreaHeight * y)/1080));
         towerLayer.getChildren().add(tower.getCircle());
         towerLayer.getChildren().add(tower);
     }
 
-    public Pane towerLayer() {
+    public Pane towerLayer(double width, double height) {
+        setMaxSize(width, height);
         Pane newTowerLayer = new Pane();
         newTowerLayer.setOnDragDropped(new EventHandler<DragEvent>() {
             @Override
             public void handle(DragEvent event) {
                 Dragboard dragboard = event.getDragboard();
                 if (dragboard.hasString()) {
-                    Controller.placeTower(dragboard.getString(), (int) event.getX(), (int) event.getY());
+
+                    System.out.println("The coordinates of new tower" + event.getY()+ " "   + event.getX());
+                    Controller.placeTower(dragboard.getString(), (int) ((1920*event.getX())/width), (int) ((1080*event.getY())/height));
                 }
                 hoverImage.setVisible(false);
                 hoverCircle.setVisible(false);
