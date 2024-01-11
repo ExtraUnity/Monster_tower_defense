@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.LinkedList;
 import dk.dtu.mtd.model.Client;
+import dk.dtu.mtd.model.game.BasicTower;
 import dk.dtu.mtd.model.game.Game;
 import dk.dtu.mtd.model.game.Tower;
 //import dk.dtu.mtd.model.game.WaveManager;
@@ -33,7 +34,7 @@ public class Controller {
     }
 
     public static void joinGame() {
-        //TODO: somewhere along here the previous game crashes.
+        // TODO: somewhere along here the previous game crashes.
         client.requestGame();
         client.joinGame();
         guiThread = new Thread(guiMonitior);
@@ -73,7 +74,6 @@ public class Controller {
         System.out.println("Controller handling message");
         client.sendMessage(msg);
     }
-
 
     public static void sendEnemies(EnemyType type) {
         client.sendEnemies(type);
@@ -205,12 +205,15 @@ class GUIMonitior implements Runnable {
                     });
 
                 } else if (update[1].toString().equals("newTower")) {
-                    Tower tower = (Tower) update[2];
-                    System.out.println(tower.getType());
+                    // String type, int size, int radius, int towerId, int playerId, int x, int y
+                    String[] towerInfo = ((String) update[2]).split(" ");
+
                     Platform.runLater(new Runnable() {
                         @Override
                         public void run() {
-                          GameGui.newTower(tower.getType(), tower.getSize(), tower.getRadius(), tower.getTowerId(), tower.getPlayerId(), tower.getX(), tower.getY());
+                            GameGui.newTower(towerInfo[0], Integer.valueOf(towerInfo[1]), Integer.valueOf(towerInfo[2]),
+                                    Integer.valueOf(towerInfo[3]), Integer.valueOf(towerInfo[4]),
+                                    Integer.valueOf(towerInfo[5]), Integer.valueOf(towerInfo[6]));
                         }
 
                     });
@@ -224,7 +227,7 @@ class GUIMonitior implements Runnable {
                     System.out.println("Returning to main menu");
                     Platform.runLater(new Runnable() {
                         @Override
-                        public void run(){
+                        public void run() {
                             GameGui.returnToLobbyPrompt();
                         }
                     });

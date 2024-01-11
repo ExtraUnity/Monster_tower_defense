@@ -11,13 +11,11 @@ public class TowerManager implements Runnable {
     public volatile List<Tower> towerList;
     public volatile boolean playing;
 
-    Space gameSpace;
     Game game;
 
-    public TowerManager(Space gameSpace, Game game) {
+    public TowerManager(Game game) {
         this.towerList = new ArrayList<Tower>();
         this.playing = true;
-        this.gameSpace = gameSpace;
         this.game = game;
     }
 
@@ -28,7 +26,7 @@ public class TowerManager implements Runnable {
             for (int i = 0; i < towerList.size(); i++) {
                 // System.out.println(towerList.get(i).playerId + " " + Game.player1.id + " " +
                 // Game.player2.id);
-                if (towerList.get(i).playerId == Game.player1.id) {
+                if (towerList.get(i).playerId == game.player1.id) {
                     towerList.get(i).shoot(game.waveManager.leftEnemies);
                 } else {
                     // System.out.println("Shooting right side");
@@ -47,15 +45,15 @@ public class TowerManager implements Runnable {
                 return false;
             }
         }
-        if (Game.player1.id == playerId && newTower.x > 960) {
+        if (game.player1.id == playerId && newTower.x > 960) {
             return false;
-        } else if (Game.player2.id == playerId && newTower.x < 960) {
+        } else if (game.player2.id == playerId && newTower.x < 960) {
             return false;
         }
 
-        if (Game.player1.id == playerId && Game.player1.getRewards() <= newTower.getTowerCost()) {
+        if (game.player1.id == playerId && game.player1.getRewards() <= newTower.getTowerCost()) {
             return false;
-        } else if (Game.player2.id == playerId && Game.player2.getRewards() <= newTower.getTowerCost()) {
+        } else if (game.player2.id == playerId && game.player2.getRewards() <= newTower.getTowerCost()) {
             return false;
         }
         return true;
@@ -64,24 +62,30 @@ public class TowerManager implements Runnable {
     public void placeTower(int playerId) {
         try {
             Tower tower;
-            Object[] towerInfo = gameSpace.get(new ActualField("towerInfo"), new FormalField(String.class),
+            Object[] towerInfo = game.gameSpace.get(new ActualField("towerInfo"), new FormalField(String.class),
                     new FormalField(Integer.class), new FormalField(Integer.class));
-            if(towerInfo[1].equals("basicTower")) {
-                tower = new BasicTower((int) towerInfo[2], (int) towerInfo[3], towerList.size(), playerId);
+            if (towerInfo[1].equals("basicTower")) {
+                tower = new BasicTower((int) towerInfo[2], (int) towerInfo[3], towerList.size(), playerId,
+                        game.gameTicker);
             } else if (towerInfo[1].equals("superTower")) {
-                tower = new BasicTower((int) towerInfo[2], (int) towerInfo[3], towerList.size(), playerId);
+                tower = new BasicTower((int) towerInfo[2], (int) towerInfo[3], towerList.size(), playerId,
+                        game.gameTicker);
             } else {
-                tower = new BasicTower(0, 0,towerList.size(), playerId);
+                tower = new BasicTower(0, 0, towerList.size(), playerId, game.gameTicker);
             }
 
             if (legalTowerPlacement(tower, playerId)) {
                 towerList.add(tower);
-                game.gameSpace.put("gui", "newTower", tower, Game.player1.id);
-                game.gameSpace.put("gui", "newTower", tower, Game.player2.id);
-                if(Game.player1.id == playerId) {
-                    Game.player1.spendRewards(tower.getTowerCost());
+                // String type, int size, int radius, int towerId, int playerId, int x, int y
+                String guiTowerInfoString = tower.getType() + " " + tower.getSize() + " "
+                        + tower.getRadius() + " " + tower.getTowerId() + " "
+                        + tower.getPlayerId() + " " + tower.getX() + " " + tower.getY();
+                game.gameSpace.put("gui", "newTower", guiTowerInfoString, game.player1.id);
+                game.gameSpace.put("gui", "newTower", guiTowerInfoString, game.player2.id);
+                if (game.player1.id == playerId) {
+                    game.player1.spendRewards(tower.getTowerCost());
                 } else {
-                    Game.player2.spendRewards(tower.getTowerCost());
+                    game.player2.spendRewards(tower.getTowerCost());
                 }
                 System.out.println("Tower placed at " + towerList.get(towerList.size() - 1).x + " "
                         + towerList.get(towerList.size() - 1).y);
@@ -96,12 +100,12 @@ public class TowerManager implements Runnable {
             int towerId = (int) game.gameSpace.get(new ActualField("towerId"), new FormalField(Integer.class))[1];
             System.out.println("tried to upgrade tower");
             for (Tower tower : towerList) {
-                if(tower.getTowerId() == towerId) {
-                    if(playerId == Game.player1.id && tower.getUpgradeCost() <= Game.player1.getRewards()) {
-                        Game.player1.spendRewards(tower.getUpgradeCost());
+                if (tower.getTowerId() == towerId) {
+                    if (playerId == game.player1.id && tower.getUpgradeCost() <= game.player1.getRewards()) {
+                        game.player1.spendRewards(tower.getUpgradeCost());
                         tower.upgradeTower();
-                    } else if (playerId == Game.player2.id && tower.getUpgradeCost() <= Game.player2.getRewards()) {
-                        Game.player2.spendRewards(tower.getUpgradeCost());
+                    } else if (playerId == game.player2.id && tower.getUpgradeCost() <= game.player2.getRewards()) {
+                        game.player2.spendRewards(tower.getUpgradeCost());
                         tower.upgradeTower();
                     }
                     break;

@@ -70,12 +70,14 @@ public class Client {
             gameSpace.put("request", "placeTower", id);
             gameSpace.put("towerInfo", type, x, y);
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            System.out.println("This is a problem");
         }
+        //System.out.println("hello good sir!");
     }
 
     public void sendEnemies(EnemyType type) {
         try {
+            System.out.println("hello to you good sir!");
             gameSpace.put("request", "sendEnemies", id);
             gameSpace.put("data", "sendEnemies", type);
         } catch (InterruptedException e) {

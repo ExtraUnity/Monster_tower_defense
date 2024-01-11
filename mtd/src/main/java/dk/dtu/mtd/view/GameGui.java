@@ -66,14 +66,12 @@ public class GameGui extends StackPane {
         });
         hoverCircle = new Circle(0, 0, 300);
 
-
-
         // confine the game area to be the same on all screens:
         gameArea.setMaxWidth(gameAreaWidth);
         gameArea.setMaxHeight(gameAreaHeight);
-      
-        gameWaveGuiLeft = new GameWaveGui(0 ,gameAreaWidth, gameAreaHeight);
-        gameWaveGuiRight = new GameWaveGui(1 ,gameAreaWidth, gameAreaHeight);
+
+        gameWaveGuiLeft = new GameWaveGui(0, gameAreaWidth, gameAreaHeight);
+        gameWaveGuiRight = new GameWaveGui(1, gameAreaWidth, gameAreaHeight);
 
         gameArea.getChildren().addAll(gameAreaBackground(gameAreaWidth, gameAreaHeight), gameWaveGuiLeft,
                 gameWaveGuiRight, towerLayer);
@@ -143,7 +141,7 @@ public class GameGui extends StackPane {
         Background backgoundView = new Background(new BackgroundImage(background, BackgroundRepeat.NO_REPEAT,
                 BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,
                 new BackgroundSize(Gui.stage.getHeight(), Gui.stage.getWidth(), false, false, false, true)));
-    
+
         return backgoundView;
     }
 
@@ -152,6 +150,7 @@ public class GameGui extends StackPane {
         gameChat.chatList = newChat;
         gameChat.displayChat();
     }
+
 
     public static void newTower(String type, int size, int radius, int towerId, int playerId, int x, int y) {
         System.out.println("I got a new tower!");
@@ -165,7 +164,7 @@ public class GameGui extends StackPane {
             return;
         }
         TowerGui tower = (TowerGui) towerLayer.lookup("#" + towerId);
-        if(lastSelected == towerId) {
+        if (lastSelected == towerId) {
             upgradeButton.setVisible(false);
             tower.setCircleVisible(false);
             lastSelected = -1;
@@ -189,7 +188,12 @@ public class GameGui extends StackPane {
             public void handle(DragEvent event) {
                 Dragboard dragboard = event.getDragboard();
                 if (dragboard.hasString()) {
-                    Controller.placeTower(dragboard.getString(), (int) ((1920*event.getX())/width), (int) ((1080*event.getY())/height));
+                    try {
+                        Controller.placeTower(dragboard.getString(), (int) ((1920 * event.getX()) / width),
+                                (int) ((1080 * event.getY()) / height));
+                    } catch (Exception e) {
+                        System.out.println("Tower placement has failed");
+                    }
                 }
                 hoverImage.setVisible(false);
                 hoverCircle.setVisible(false);
@@ -226,7 +230,8 @@ public class GameGui extends StackPane {
         newTowerLayer.setOnDragExited(new EventHandler<DragEvent>() {
             @Override
             public void handle(DragEvent event) {
-                hoverImage.setVisible(false);;
+                hoverImage.setVisible(false);
+                ;
                 hoverCircle.setVisible(false);
             }
         });

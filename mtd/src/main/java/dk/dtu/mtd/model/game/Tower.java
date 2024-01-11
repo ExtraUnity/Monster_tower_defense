@@ -8,6 +8,7 @@ public abstract class Tower {
 
     int radius, x, y, size, damage, upgradeCost, towerCost, fireRate, playerId, towerId;
     int lastShot;
+    GameTicker gameTicker;
 
     int towerLevel = 0;
 
