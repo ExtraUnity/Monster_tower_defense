@@ -3,8 +3,11 @@ package dk.dtu.mtd.view;
 import java.util.LinkedList;
 
 import dk.dtu.mtd.controller.Controller;
+import dk.dtu.mtd.model.game.Tower;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.DragEvent;
@@ -19,19 +22,23 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.robot.Robot;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javafx.stage.Screen;
 
 public class GameGui extends StackPane {
     static VBox layout;
-    StackPane gameArea;
+    static public StackPane gameArea;
     public static GameWaveGui gameWaveGuiLeft;
     public static GameWaveGui gameWaveGuiRight;
 
     static Pane towerLayer;
     static GameTopGui gameTop;
     static GameChat gameChat;
+    static int lastSelected;
+    static Button upgradeButton;
     private ImageView hoverImage;
     private Circle hoverCircle;
 
@@ -48,16 +55,28 @@ public class GameGui extends StackPane {
         gameChat = new GameChat();
         towerLayer = towerLayer(gameAreaWidth, gameAreaHeight);
         hoverImage = new ImageView(new Image("dk/dtu/mtd/assets/skelly.gif"));
+
         hoverCircle = new Circle(0, 0, ((300*gameAreaWidth)/1920));
         gameWaveGuiLeft = new GameWaveGui(gameAreaWidth, gameAreaHeight);
         gameWaveGuiRight = new GameWaveGui(gameAreaWidth, gameAreaHeight);
 
+        upgradeButton = new Button();
+
+        lastSelected = -1;
+
+        upgradeButton.setVisible(false);
+        towerLayer.getChildren().add(upgradeButton);
+        upgradeButton.setOnAction(e -> {
+            Controller.upgradeTower(lastSelected);
+            System.out.println(lastSelected);
+        });
+
         // confine the game area to be the same on all screens:
         gameArea.setMaxWidth(gameAreaWidth);
         gameArea.setMaxHeight(gameAreaHeight);
-
-        gameWaveGuiLeft = new GameWaveGui(gameAreaWidth, gameAreaHeight);
-        gameWaveGuiRight = new GameWaveGui(gameAreaWidth, gameAreaHeight);
+      
+        gameWaveGuiLeft = new GameWaveGui(0 ,gameAreaWidth, gameAreaHeight);
+        gameWaveGuiRight = new GameWaveGui(1 ,gameAreaWidth, gameAreaHeight);
 
         gameArea.getChildren().addAll(gameAreaBackground(gameAreaWidth, gameAreaHeight), gameWaveGuiLeft,
                 gameWaveGuiRight, towerLayer);
@@ -89,6 +108,16 @@ public class GameGui extends StackPane {
         minWidth(2000);
         minHeight(2000);
 
+    }
+
+    public static void addNewWaveGui(GameWaveGui newWaveGui) {
+        gameArea.getChildren().remove(towerLayer);
+        gameArea.getChildren().add(newWaveGui);
+        gameArea.getChildren().add(towerLayer);
+    }
+
+    public void removeWaveGui(GameWaveGui waveGui) {
+        gameArea.getChildren().remove(waveGui);
     }
 
     public void handleDragOver(DragEvent event) {
@@ -127,23 +156,45 @@ public class GameGui extends StackPane {
         gameChat.displayChat();
     }
 
-    public static void newTower(String type, int size, int radius, int x, int y) {
+    public static void newTower(Tower objektTower) {
         System.out.println("I got a new tower!");
-        TowerGui tower = new TowerGui(type, size, (int) ((gameAreaWidth * radius)/1920), (int) ((gameAreaWidth * x)/1920),  (int) ((gameAreaHeight * y)/1080));
-        towerLayer.getChildren().add(tower.getCircle());
+        TowerGui tower = new TowerGui(objektTower, (int) ((gameAreaWidth * objektTower.getX())/1920),  (int) ((gameAreaHeight * objektTower.getY())/1080));
+        towerLayer.getChildren().add(0,tower.getCircle());
         towerLayer.getChildren().add(tower);
+    }
+
+    public static void towerClicked(int towerId, int playerId) {
+        if (playerId != Controller.getPlayerId()) {
+            return;
+        }
+        TowerGui tower = (TowerGui) towerLayer.lookup("#" + towerId);
+        if(lastSelected == towerId) {
+            upgradeButton.setVisible(false);
+            tower.setCircleVisible(false);
+            lastSelected = -1;
+        } else if (lastSelected == -1) {
+            lastSelected = towerId;
+            upgradeButton.setVisible(true);
+            tower.setCircleVisible(true);
+        } else {
+            TowerGui lastTower = (TowerGui) towerLayer.lookup("#" + lastSelected);
+            lastTower.setCircleVisible(false);
+            lastSelected = towerId;
+            tower.setCircleVisible(true);
+        }
     }
 
     public Pane towerLayer(double width, double height) {
         setMaxSize(width, height);
+
         Pane newTowerLayer = new Pane();
+        Robot robot = new Robot();
         newTowerLayer.setOnDragDropped(new EventHandler<DragEvent>() {
             @Override
             public void handle(DragEvent event) {
                 Dragboard dragboard = event.getDragboard();
-                if (dragboard.hasString()) {
-
-                    System.out.println("The coordinates of new tower" + event.getY()+ " "   + event.getX());
+                Color color = robot.getPixelColor(robot.getMouseX(), robot.getMouseY());
+                if (dragboard.hasString() && color.getGreen() > 0.27 && color.getGreen() < 0.37) {
                     Controller.placeTower(dragboard.getString(), (int) ((1920*event.getX())/width), (int) ((1080*event.getY())/height));
                 }
                 hoverImage.setVisible(false);
@@ -167,6 +218,14 @@ public class GameGui extends StackPane {
                 hoverCircle.setCenterX(event.getX());
                 hoverCircle.setCenterY(event.getY());
                 event.consume();
+            }
+        });
+
+        newTowerLayer.setOnDragExited(new EventHandler<DragEvent>() {
+            @Override
+            public void handle(DragEvent event) {
+                hoverImage.setVisible(false);;
+                hoverCircle.setVisible(false);
             }
         });
         return newTowerLayer;

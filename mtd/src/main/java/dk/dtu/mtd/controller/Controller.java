@@ -6,12 +6,15 @@ import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.LinkedList;
 import dk.dtu.mtd.model.Client;
+import dk.dtu.mtd.model.game.Game;
 import dk.dtu.mtd.model.game.Tower;
 //import dk.dtu.mtd.model.game.WaveManager;
-
+import dk.dtu.mtd.shared.EnemyType;
 import dk.dtu.mtd.view.GameGui;
+import dk.dtu.mtd.view.GameWaveGui;
 import dk.dtu.mtd.view.Gui;
 import javafx.application.Platform;
+import javafx.scene.Node;
 
 public class Controller {
     public static Controller controller;
@@ -66,17 +69,22 @@ public class Controller {
         client.damagePlayer(damage); // Inform the client to handle the damage
     }
 
-    public static void rewardEnemyToPlayer(int reward) {
-        client.rewardPlayer(reward);
-    }
-
     public static void sendMessage(String msg) {
         System.out.println("Controller handling message");
         client.sendMessage(msg);
     }
 
-    public static void upgradeTower() {
-        // client.upgradeTower();
+
+    public static void sendEnemies(EnemyType type) {
+        client.sendEnemies(type);
+    }
+
+    public static void upgradeTower(int towerId) {
+        client.upgradeTower(towerId);
+    }
+
+    public static int getPlayerId() {
+        return client.id;
     }
 
 }
@@ -129,25 +137,45 @@ class GUIMonitior implements Runnable {
                     // ("gui", "chat", (...) wave info , playerId)
                 } else if (update[1].toString().equals("wave")) {
                     // make apropriate gui calls to display wave
-                    int num = (int) update[2];
+                    String enemyTypes = (String) update[2];
 
-                    System.out.println("init waves in gui.");
                     Platform.runLater(() -> {
-                        GameGui.gameWaveGuiLeft.initEnemies(num);
-                        GameGui.gameWaveGuiRight.initEnemies(num);
+                        GameGui.gameWaveGuiLeft.initEnemies(enemyTypes);
+                        GameGui.gameWaveGuiRight.initEnemies(enemyTypes);
                     });
 
                     // ("gui", "chat", (...) enemy info , playerId)
+                } else if (update[1].toString().equals("sendEnemies")) {
+                    String types = (String) update[2];
+                    int waveId = (int) client.gameSpace.get(new ActualField("gui"),
+                            new ActualField("sendEnemiesWaveId"),
+                            new FormalField(Integer.class), new ActualField(client.id))[2];
+                    Platform.runLater(() -> {
+                        GameWaveGui wave = new GameWaveGui(waveId, GameGui.gameAreaWidth, GameGui.gameAreaHeight);
+                        GameGui.addNewWaveGui(wave);
+                        wave.initEnemies(types);
+
+                    });
                 } else if (update[1].toString().equals("enemyUpdateLeft")) {
                     // recive the information that applys to an enemy to update it accordingly
                     // eg. an enemy has died -> it should be removed from the gui / play the death
                     // animation
                     LinkedList<String> coords = (LinkedList<String>) update[2];
+                    int waveId = Integer.valueOf(coords.removeLast());
+
                     Platform.runLater(new Runnable() {
 
                         @Override
                         public void run() {
-                            GameGui.gameWaveGuiLeft.updateEnemies(coords);
+                            for (Node n : GameGui.gameArea.getChildren()) {
+                                if (n instanceof GameWaveGui) {
+                                    GameWaveGui gui = (GameWaveGui) n;
+                                    if (gui.waveGuiId == waveId) {
+                                        gui.updateEnemies(coords);
+                                    }
+                                }
+                            }
+
                         }
 
                     });
@@ -156,11 +184,22 @@ class GUIMonitior implements Runnable {
                     // eg. an enemy has died -> it should be removed from the gui / play the death
                     // animation
                     LinkedList<String> coords = (LinkedList<String>) update[2];
+                    int waveId = Integer.valueOf(coords.removeLast());
                     Platform.runLater(new Runnable() {
 
                         @Override
                         public void run() {
-                            GameGui.gameWaveGuiRight.updateEnemies(coords);
+                            for (Node n : GameGui.gameArea.getChildren()) {
+                                if (n instanceof GameWaveGui) {
+                                    GameWaveGui gui = (GameWaveGui) n;
+                                    if (gui.waveGuiId == waveId) {
+                                        if (waveId == 2) {
+                                            System.out.println("Updating wave " + waveId);
+                                        }
+                                        gui.updateEnemies(coords);
+                                    }
+                                }
+                            }
                         }
 
                     });
@@ -171,8 +210,8 @@ class GUIMonitior implements Runnable {
                     Platform.runLater(new Runnable() {
                         @Override
                         public void run() {
-                            GameGui.newTower(tower.getType(), tower.getSize(), tower.getRadius(), tower.getX(),
-                                    tower.getY());
+                          //TODO: illigal pass of tower class
+                          GameGui.newTower(tower);
                         }
 
                     });

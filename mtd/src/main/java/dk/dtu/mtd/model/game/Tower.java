@@ -6,7 +6,7 @@ public abstract class Tower {
 
     String type;
 
-    int radius, x, y, size, damage, fireRate, playerId, towerId;
+    int radius, x, y, size, damage, upgradeCost, towerCost, fireRate, playerId, towerId;
     int lastShot;
 
     int towerLevel = 0;
@@ -16,6 +16,8 @@ public abstract class Tower {
     public void upgradeTower() {
         towerLevel++;
         damage++;
+        upgradeCost += 10;
+        System.out.println("tower level is " + towerLevel);
     }
 
     public Boolean inRange(Enemy enemy) {
@@ -47,5 +49,20 @@ public abstract class Tower {
     public int getRadius() {
         return radius;
     }
+
+    public int getTowerCost() {
+        return towerCost;
+    }
+
+    public int getTowerId() {
+        return towerId;
+    }
+
+    public int getPlayerId() {
+        return playerId;
+    }
     
+    public int getUpgradeCost() {
+        return upgradeCost;
+    }
 }

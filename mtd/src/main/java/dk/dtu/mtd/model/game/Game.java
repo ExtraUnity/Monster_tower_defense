@@ -6,6 +6,8 @@ import org.jspace.FormalField;
 import org.jspace.SequentialSpace;
 import org.jspace.Space;
 
+import dk.dtu.mtd.shared.EnemyType;
+
 public class Game implements Runnable {
     public int id;
     public static GameTicker gameTicker;
@@ -18,8 +20,8 @@ public class Game implements Runnable {
 
     public Game(int id, int playerID1, int playerID2) {
         this.id = id;
-        player1 = new Player(playerID1, 150, 0);
-        player2 = new Player(playerID2, 150, 0);
+        player1 = new Player(playerID1, 150, 150);
+        player2 = new Player(playerID2, 150, 150);
         gameSpace = new SequentialSpace();
         playing = true;
         LinkedList<String> chat = new LinkedList<String>();
@@ -117,6 +119,8 @@ public class Game implements Runnable {
             }
         } else if (request[1].toString().equals("placeTower")) {
             towerManager.placeTower((int) request[2]);
+        } else if (request[1].toString().equals("upgradeTower")) {
+            towerManager.upgradeTower((int) request[2]); //request[2] = towerId
         } else if (request[1].toString().equals("chat")) {
             System.out.println("Game recieved chat request");
             // Retrieve chatlist and update to include message
@@ -132,6 +136,12 @@ public class Game implements Runnable {
             gameSpace.put("gui", "chat", chat, player1.id);
             gameSpace.put("gui", "chat", chat, player2.id);
             System.out.println("Game put chat updates");
+        } else if(request[1].toString().equals("sendEnemies")) {
+            Object[] res = gameSpace.get(new ActualField("data"), new ActualField("sendEnemies"), new FormalField(EnemyType.class));
+            int senderId = (int) request[2];
+            EnemyType type = (EnemyType) res[2];
+            int recieverId = senderId == player1.id ? player2.id : player1.id;
+            waveManager.sendEnemies(type, recieverId);
         }
     }
 

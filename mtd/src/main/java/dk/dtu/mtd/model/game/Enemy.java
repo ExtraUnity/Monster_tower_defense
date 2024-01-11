@@ -18,10 +18,10 @@ public abstract class Enemy {
     }
 
     // Method to take damage, reducing health
-    public void takeDamage(int amount) {
+    public void takeDamage(int amount, int playerId) {
         health -= amount;
         if (isDead()) {
-            die();
+            die(playerId);
         }
     }
 
@@ -30,8 +30,8 @@ public abstract class Enemy {
     }
 
 
-    protected void die() {
-        transferRewardToPlayer();
+    protected void die(int playerId) {
+        transferRewardToPlayer(playerId);
         performDeathAnimation();
     }
 
@@ -109,8 +109,14 @@ public abstract class Enemy {
     }
 
     // Method to transfer reward to the player
-    protected void transferRewardToPlayer() {
-        Controller.rewardEnemyToPlayer(this.reward);
+    protected void transferRewardToPlayer(int playerId) {
+        if(playerId == Game.player1.id) {
+            Game.player1.addReward(reward);
+            System.out.println("player 1 has " + Game.player1.getRewards() + " reward");
+        } else {
+            Game.player2.addReward(reward);
+            System.out.println("player 2 has " + Game.player2.getRewards() + " reward");
+        }
     }
 
     // Abstract method for death animation

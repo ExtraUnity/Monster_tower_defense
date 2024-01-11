@@ -27,11 +27,15 @@ public class Player {
     }
 
     public void spendRewards(int cost) {
-        rewards =- cost;
+        rewards -= cost;
     }
 
     public int getRewards(){
         return rewards;
+    }
+
+    public void addReward(int income) {
+        rewards += income;
     }
 
 
