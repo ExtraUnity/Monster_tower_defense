@@ -74,8 +74,12 @@ public class Controller {
         client.sendMessage(msg);
     }
 
-    public static void upgradeTower() {
-        //client.upgradeTower();
+    public static void upgradeTower(int towerId) {
+        client.upgradeTower(towerId);
+    }
+
+    public static int getPlayerId() {
+        return client.id;
     }
 
 }
@@ -168,7 +172,7 @@ class GUIMonitior implements Runnable {
                     Platform.runLater(new Runnable() {
                         @Override
                         public void run() {
-                            GameGui.newTower(tower.getType(),tower.getSize(), tower.getRadius(), tower.getX(), tower.getY());
+                            GameGui.newTower(tower);
                         }
 
                     });

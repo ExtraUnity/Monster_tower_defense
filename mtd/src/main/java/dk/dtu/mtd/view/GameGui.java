@@ -3,8 +3,11 @@ package dk.dtu.mtd.view;
 import java.util.LinkedList;
 
 import dk.dtu.mtd.controller.Controller;
+import dk.dtu.mtd.model.game.Tower;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.DragEvent;
@@ -38,6 +41,8 @@ public class GameGui extends StackPane {
     static Pane towerLayer;
     static GameTopGui gameTop;
     static GameChat gameChat;
+    static int lastSelected;
+    static Button upgradeButton;
     private ImageView hoverImage;
     private Circle hoverCircle;
 
@@ -56,6 +61,16 @@ public class GameGui extends StackPane {
         towerLayer.setBorder(new Border(new BorderStroke(Color.BLACK, 
             BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
         hoverImage = new ImageView(new Image("dk/dtu/mtd/assets/skelly.gif"));
+        upgradeButton = new Button();
+
+        lastSelected = -1;
+
+        upgradeButton.setVisible(false);
+        towerLayer.getChildren().add(upgradeButton);
+        upgradeButton.setOnAction(e -> {
+            Controller.upgradeTower(lastSelected);
+            System.out.println(lastSelected);
+        });
         hoverCircle = new Circle(0, 0, 300);
         gameWaveGuiLeft = new GameWaveGui(gameAreaWidth, gameAreaHeight);
         gameWaveGuiRight = new GameWaveGui(gameAreaWidth, gameAreaHeight);
@@ -130,15 +145,37 @@ public class GameGui extends StackPane {
         gameChat.displayChat();
     }
 
-    public static void newTower(String type, int size, int radius, int x, int y) {
+    public static void newTower(Tower objektTower) {
         System.out.println("I got a new tower!");
-        TowerGui tower = new TowerGui(type, size, radius, (int) ((gameAreaWidth * x)/1920),  (int) ((gameAreaHeight * y)/1080));
-        towerLayer.getChildren().add(tower.getCircle());
+        TowerGui tower = new TowerGui(objektTower, (int) ((gameAreaWidth * objektTower.getX())/1920),  (int) ((gameAreaHeight * objektTower.getY())/1080));
+        towerLayer.getChildren().add(0,tower.getCircle());
         towerLayer.getChildren().add(tower);
+    }
+
+    public static void towerClicked(int towerId, int playerId) {
+        if (playerId != Controller.getPlayerId()) {
+            return;
+        }
+        TowerGui tower = (TowerGui) towerLayer.lookup("#" + towerId);
+        if(lastSelected == towerId) {
+            upgradeButton.setVisible(false);
+            tower.setCircleVisible(false);
+            lastSelected = -1;
+        } else if (lastSelected == -1) {
+            lastSelected = towerId;
+            upgradeButton.setVisible(true);
+            tower.setCircleVisible(true);
+        } else {
+            TowerGui lastTower = (TowerGui) towerLayer.lookup("#" + lastSelected);
+            lastTower.setCircleVisible(false);
+            lastSelected = towerId;
+            tower.setCircleVisible(true);
+        }
     }
 
     public Pane towerLayer(double width, double height) {
         setMaxSize(width, height);
+
         Pane newTowerLayer = new Pane();
         newTowerLayer.setOnDragDropped(new EventHandler<DragEvent>() {
             @Override
