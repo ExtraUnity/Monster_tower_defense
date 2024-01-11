@@ -12,6 +12,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundImage;
@@ -97,8 +98,6 @@ public class GameGui extends StackPane {
 
         hoverCircle.setOpacity(0.2);
         hoverCircle.setVisible(false);
-
-        
 
         getChildren().add(layout);
         setAlignment(Pos.CENTER);
@@ -231,6 +230,17 @@ public class GameGui extends StackPane {
                 hoverCircle.setVisible(false);
             }
         });
+
+        this.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                TowerGui lastTower = (TowerGui) towerLayer.lookup("#" + lastSelected);
+                lastTower.setCircleVisible(false);
+                lastSelected = -1;
+                event.consume();
+            }
+       });
+
         return newTowerLayer;
     }
 
