@@ -107,9 +107,9 @@ public class WaveManager implements Runnable {
                 try {
                     System.out.println(
                             "I should now send enemies to player " + playerId + ". This is wave " + attackWave.waveId);
-                    space.put("gui", "sendEnemies", enemies.size(), Game.player1.id);
+                    space.put("gui", "sendEnemies", messageGenerator(attackWave), Game.player1.id);
                     space.put("gui", "sendEnemiesWaveId", attackWave.waveId, Game.player1.id);
-                    space.put("gui", "sendEnemies", enemies.size(), Game.player2.id);
+                    space.put("gui", "sendEnemies", messageGenerator(attackWave), Game.player2.id);
                     space.put("gui", "sendEnemiesWaveId", attackWave.waveId, Game.player2.id);
                 } catch (InterruptedException e) {
                     e.printStackTrace();

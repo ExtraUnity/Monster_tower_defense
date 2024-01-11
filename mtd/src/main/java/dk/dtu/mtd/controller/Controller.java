@@ -143,14 +143,14 @@ class GUIMonitior implements Runnable {
 
                     // ("gui", "chat", (...) enemy info , playerId)
                 } else if (update[1].toString().equals("sendEnemies")) {
-                    int num = (int) update[2];
+                    String types = (String) update[2];
                     int waveId = (int) client.gameSpace.get(new ActualField("gui"),
                             new ActualField("sendEnemiesWaveId"),
                             new FormalField(Integer.class), new ActualField(client.id))[2];
                     Platform.runLater(() -> {
                         GameWaveGui wave = new GameWaveGui(waveId);
                         GameGui.addNewWaveGui(wave);
-                        wave.initEnemies(num);
+                        wave.initEnemies(types);
 
                     });
                 } else if (update[1].toString().equals("enemyUpdateLeft")) {
