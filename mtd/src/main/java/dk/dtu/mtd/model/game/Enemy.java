@@ -1,7 +1,5 @@
 package dk.dtu.mtd.model.game;
 
-import dk.dtu.mtd.controller.Controller;
-
 public abstract class Enemy {
     protected int health;
     protected int speed;
@@ -37,9 +35,13 @@ public abstract class Enemy {
         performDeathAnimation();
     }
 
+    public void eliminateFromRoster(){
+        health = -1;
+    }
+
     // Is this enemy at the finish line
     public boolean reachedFinish() {
-        return this.y > 1080 && this.y < 2000 && !isDead();
+        return this.y > 1080 && this.y < 3500 && !isDead();
     }
 
     // Method to define the movement of the enemy
@@ -114,10 +116,10 @@ public abstract class Enemy {
     protected void transferRewardToPlayer(int playerId) {
         if(playerId == game.player1.id) {
             game.player1.addReward(reward);
-            System.out.println("player 1 has " + game.player1.getRewards() + " reward");
+            //System.out.println("player 1 has " + game.player1.getRewards() + " reward");
         } else {
             game.player2.addReward(reward);
-            System.out.println("player 2 has " + game.player2.getRewards() + " reward");
+            //System.out.println("player 2 has " + game.player2.getRewards() + " reward");
         }
     }
 

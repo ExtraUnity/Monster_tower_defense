@@ -6,10 +6,6 @@ import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.LinkedList;
 import dk.dtu.mtd.model.Client;
-import dk.dtu.mtd.model.game.BasicTower;
-import dk.dtu.mtd.model.game.Game;
-import dk.dtu.mtd.model.game.Tower;
-//import dk.dtu.mtd.model.game.WaveManager;
 import dk.dtu.mtd.shared.EnemyType;
 import dk.dtu.mtd.view.GameGui;
 import dk.dtu.mtd.view.GameWaveGui;
@@ -144,7 +140,7 @@ class GUIMonitior implements Runnable {
                         GameGui.gameWaveGuiRight.initEnemies(enemyTypes);
                     });
 
-                    // ("gui", "chat", (...) enemy info , playerId)
+                    // ("gui", "sendEnemies", String enemy info , playerId)
                 } else if (update[1].toString().equals("sendEnemies")) {
                     String types = (String) update[2];
                     int waveId = (int) client.gameSpace.get(new ActualField("gui"),
@@ -156,10 +152,9 @@ class GUIMonitior implements Runnable {
                         wave.initEnemies(types);
 
                     });
+                    // ("gui", "enemyUpdateLeft", LinkedList<String> coordinates , playerId)
+                    // Update the positions of every monster in the gui. (Left side)
                 } else if (update[1].toString().equals("enemyUpdateLeft")) {
-                    // recive the information that applys to an enemy to update it accordingly
-                    // eg. an enemy has died -> it should be removed from the gui / play the death
-                    // animation
                     LinkedList<String> coords = (LinkedList<String>) update[2];
                     int waveId = Integer.valueOf(coords.removeLast());
 
@@ -179,10 +174,9 @@ class GUIMonitior implements Runnable {
                         }
 
                     });
+                    // ("gui", "enemyUpdateRight", LinkedList<String> coordinates , playerId)
+                    // Update the positions of every monster in the gui. (Right side)
                 } else if (update[1].toString().equals("enemyUpdateRight")) {
-                    // recive the information that applys to an enemy to update it accordingly
-                    // eg. an enemy has died -> it should be removed from the gui / play the death
-                    // animation
                     LinkedList<String> coords = (LinkedList<String>) update[2];
                     int waveId = Integer.valueOf(coords.removeLast());
                     Platform.runLater(new Runnable() {
@@ -193,9 +187,6 @@ class GUIMonitior implements Runnable {
                                 if (n instanceof GameWaveGui) {
                                     GameWaveGui gui = (GameWaveGui) n;
                                     if (gui.waveGuiId == waveId) {
-                                        if (waveId == 2) {
-                                            System.out.println("Updating wave " + waveId);
-                                        }
                                         gui.updateEnemies(coords);
                                     }
                                 }

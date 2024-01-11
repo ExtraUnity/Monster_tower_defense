@@ -18,7 +18,7 @@ public class GameWaveGui extends StackPane {
 
     public GameWaveGui(int id, double gameAreaWidth, double gameAreaHeight) {
         wavePane = new Pane();
-        wavePane.setMinSize(500, 500);
+        wavePane.setMinSize(gameAreaWidth, gameAreaHeight);
         this.getChildren().add(wavePane);
         this.waveGuiId = id;
         this.gameAreaHeight = gameAreaHeight;
@@ -31,31 +31,22 @@ public class GameWaveGui extends StackPane {
 
         // Splttting the input:
         String[] pairs = enemyTypes.split(",");
-        //System.out.println("PRINTED ALL PAIRS " + enemyTypes);
+        if(pairs.length < 2){
+            return;
+        }
         for (String pair : pairs) { // For each pair
             String[] keyValue = pair.split(" ");
             System.out.println(pair);
 
             int numberOfEnemies = Integer.valueOf(keyValue[1]);
             String type = keyValue[0];
-
-            //enemyArray = new ArrayList<>();
         
             for (int i = 0; i < numberOfEnemies; i++) {
                 EnemyImage newEnemy = new EnemyImage(type);
                 enemyArray.add(newEnemy);
                 wavePane.getChildren().add(newEnemy);
-                System.out.println("Adding enemy " + type + " to wavePane" );
             }
-            //System.out.println("PRINTED FROM INITENEMIES" + pair);
         }        
-
-        /*enemyArray = new ArrayList<>();
-        for (int i = 0; i < keyValue[1]; i++) {
-            EnemyImage newEnemy = new EnemyImage(type);
-            enemyArray.add(newEnemy);
-            wavePane.getChildren().add(newEnemy);
-        }*/
     }
 
 
@@ -83,18 +74,14 @@ class EnemyImage extends ImageView {
     EnemyImage(String type) { //Pass in the image path, width and height
 
         if (type.equals("Skeleton")) {
-            this.image = new Image("dk/dtu/mtd/assets/skelly.gif", 100, 0, true, false);
-            //System.out.println("Skeleton created from GameGUI");
+            this.image = new Image("dk/dtu/mtd/assets/skelly.gif", 150, 0, true, false);
         } else if (type.equals("FatSkeleton")) {
             this.image = new Image("dk/dtu/mtd/assets/SuperMonkey.png", 100, 0, true, false);
-            //System.out.println("FatSkeleton created from GameGUI");
         } else if (type.equals("tankEnemy")) {
             this.image = new Image("dk/dtu/mtd/assets/skelly.gif", 100, 0, true, false);
         } else if (type.equals("bossEnemy")) {
             this.image = new Image("dk/dtu/mtd/assets/skelly.gif", 100, 0, true, false);
         }
-
-        //Image image = new Image("dk/dtu/mtd/assets/skelly.gif", 100, 0, true, false);
         
         setImage(image);
         setX(xCoord);
