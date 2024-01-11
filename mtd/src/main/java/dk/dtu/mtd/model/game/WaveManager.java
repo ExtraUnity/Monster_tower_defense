@@ -53,7 +53,7 @@ public class WaveManager implements Runnable {
             if (lastType != null && !lastType.equals(currentType)) {
                 // Append the count and type of the previous enemy batch
                 if (message.length() > 0) {
-                    message.append(" ");
+                    message.append(",");
                 }
                 message.append(lastType).append(" ").append(count);
                 count = 0; // Reset count for the new enemy type
@@ -134,8 +134,8 @@ public class WaveManager implements Runnable {
         }
         if (wave == 1) {
             for (int i = 0; i < 10; i++) {
-                enemies.add(new FatSkeleton());
                 enemies.add(new Skeleton());
+                enemies.add(new FatSkeleton()); //New enemy type
             }
 
         } else if (wave == 2) {

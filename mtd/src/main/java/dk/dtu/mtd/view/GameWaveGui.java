@@ -20,21 +20,25 @@ public class GameWaveGui extends StackPane {
     }
 
     public void initEnemies(String enemyTypes) {
+        enemyArray = new ArrayList<>();
+
         // Splttting the input:
-        String[] pairs = enemyTypes.split("(?<=\\G\\S+ \\S+) ");
+        String[] pairs = enemyTypes.split(",");
         //System.out.println("PRINTED ALL PAIRS " + enemyTypes);
         for (String pair : pairs) { // For each pair
             String[] keyValue = pair.split(" ");
+            System.out.println(pair);
 
             int numberOfEnemies = Integer.valueOf(keyValue[1]);
             String type = keyValue[0];
 
-            enemyArray = new ArrayList<>();
+            //enemyArray = new ArrayList<>();
+        
             for (int i = 0; i < numberOfEnemies; i++) {
                 EnemyImage newEnemy = new EnemyImage(type);
                 enemyArray.add(newEnemy);
                 wavePane.getChildren().add(newEnemy);
-                //System.out.println("Adding enemy " + type + " to wavePane" );
+                System.out.println("Adding enemy " + type + " to wavePane" );
             }
             //System.out.println("PRINTED FROM INITENEMIES" + pair);
         }        
