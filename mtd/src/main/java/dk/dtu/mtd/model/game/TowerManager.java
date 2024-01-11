@@ -76,10 +76,10 @@ public class TowerManager implements Runnable {
 
             if (legalTowerPlacement(tower, playerId)) {
                 towerList.add(tower);
-                // x, y, size, radius, type, id, playerId
-                String guiTowerInfoString = tower.getX() + " " + tower.getY() + " " + tower.getSize() + " "
-                        + tower.getRadius() + " " + tower.getType() + " " + tower.getTowerId() + " "
-                        + tower.getPlayerId();
+                // String type, int size, int radius, int towerId, int playerId, int x, int y
+                String guiTowerInfoString = tower.getType() + " " + tower.getSize() + " "
+                        + tower.getRadius() + " " + tower.getTowerId() + " "
+                        + tower.getPlayerId() + " " + tower.getX() + " " + tower.getY();
                 game.gameSpace.put("gui", "newTower", guiTowerInfoString, game.player1.id);
                 game.gameSpace.put("gui", "newTower", guiTowerInfoString, game.player2.id);
                 if (game.player1.id == playerId) {

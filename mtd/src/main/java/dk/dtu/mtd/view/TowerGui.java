@@ -12,7 +12,7 @@ public class TowerGui extends ImageView {
 
     Circle circle;
 
-    public TowerGui(int x, int y, int size, int radius, String type, int towerId, int playerId) {
+    public TowerGui(String type, int size, int radius, int towerId, int playerId, int x, int y) {
         this.setX(x - size/2);
         this.setY(y - size/2);
         this.setFitHeight(size);
