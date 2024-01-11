@@ -68,6 +68,7 @@ public class GameGui extends StackPane {
         upgradeButton.setVisible(false);
         towerLayer.getChildren().add(upgradeButton);
         upgradeButton.setOnAction(e -> {
+            Controller.upgradeTower(lastSelected);
             System.out.println(lastSelected);
         });
         hoverCircle = new Circle(0, 0, 300);

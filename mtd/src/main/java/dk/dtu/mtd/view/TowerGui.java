@@ -13,12 +13,12 @@ public class TowerGui extends ImageView {
     Circle circle;
 
     public TowerGui(Tower tower, int x, int y) {
-        this.setX(tower.getX() - tower.getSize()/2);
-        this.setY(tower.getY() - tower.getSize()/2);
+        this.setX(x - tower.getSize()/2);
+        this.setY(y - tower.getSize()/2);
         this.setFitHeight(tower.getSize());
         this.setFitWidth(tower.getSize());
 
-        circle = new Circle(tower.getX(), tower.getY(), tower.getRadius());
+        circle = new Circle(x, y, tower.getRadius());
         circle.setOpacity(0.2);
         circle.setVisible(false);
         circle.setMouseTransparent(true);
