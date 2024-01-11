@@ -25,7 +25,7 @@ import javafx.stage.Screen;
 
 public class GameGui extends StackPane {
     static VBox layout;
-    StackPane gameArea;
+    static public StackPane gameArea;
     public static GameWaveGui gameWaveGuiLeft;
     public static GameWaveGui gameWaveGuiRight;
 
@@ -44,8 +44,8 @@ public class GameGui extends StackPane {
         towerLayer = towerLayer();
         hoverImage = new ImageView(new Image("dk/dtu/mtd/assets/skelly.gif"));
         hoverCircle = new Circle(0, 0, 300);
-        gameWaveGuiLeft = new GameWaveGui();
-        gameWaveGuiRight = new GameWaveGui();
+        gameWaveGuiLeft = new GameWaveGui(0);
+        gameWaveGuiRight = new GameWaveGui(1);
 
         // confine the game area to be the same on all screens:
         double gameAreaHeight = Screen.getPrimary().getBounds().getHeight() - 200;
@@ -79,6 +79,16 @@ public class GameGui extends StackPane {
         getChildren().add(layout);
         setAlignment(Pos.CENTER);
 
+    }
+
+    public static void addNewWaveGui(GameWaveGui newWaveGui) {
+        gameArea.getChildren().remove(towerLayer);
+        gameArea.getChildren().add(newWaveGui);
+        gameArea.getChildren().add(towerLayer);
+    }
+
+    public void removeWaveGui(GameWaveGui waveGui) {
+        gameArea.getChildren().remove(waveGui);
     }
 
     public void handleDragOver(DragEvent event) {
