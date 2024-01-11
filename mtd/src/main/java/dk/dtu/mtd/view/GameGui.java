@@ -28,6 +28,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.robot.Robot;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javafx.stage.Screen;
@@ -177,13 +178,13 @@ public class GameGui extends StackPane {
         setMaxSize(width, height);
 
         Pane newTowerLayer = new Pane();
+        Robot robot = new Robot();
         newTowerLayer.setOnDragDropped(new EventHandler<DragEvent>() {
             @Override
             public void handle(DragEvent event) {
                 Dragboard dragboard = event.getDragboard();
-                if (dragboard.hasString()) {
-
-                    System.out.println("The coordinates of new tower" + event.getY()+ " "   + event.getX());
+                Color color = robot.getPixelColor(robot.getMouseX(), robot.getMouseY());
+                if (dragboard.hasString() && color.getGreen() > 0.27 && color.getGreen() < 0.37) {
                     Controller.placeTower(dragboard.getString(), (int) ((1920*event.getX())/width), (int) ((1080*event.getY())/height));
                 }
                 hoverImage.setVisible(false);
@@ -207,6 +208,14 @@ public class GameGui extends StackPane {
                 hoverCircle.setCenterX(event.getX());
                 hoverCircle.setCenterY(event.getY());
                 event.consume();
+            }
+        });
+
+        newTowerLayer.setOnDragExited(new EventHandler<DragEvent>() {
+            @Override
+            public void handle(DragEvent event) {
+                hoverImage.setVisible(false);;
+                hoverCircle.setVisible(false);
             }
         });
         return newTowerLayer;
