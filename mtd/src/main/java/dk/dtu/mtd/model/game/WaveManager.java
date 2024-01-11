@@ -7,11 +7,14 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.jspace.Space;
 
+import dk.dtu.mtd.shared.EnemyType;
+
 public class WaveManager implements Runnable {
 
     // TODO: remove unused fields
     private int currentWaveNumber;
     private int totalWaves; // Total number of waves
+    private int currentWaveId;
     public Wave waveLeft;
     public Wave waveRight;
     boolean playing;
@@ -24,6 +27,7 @@ public class WaveManager implements Runnable {
         this.playing = true;
         this.waveRound = 1;
         this.space = space;
+        this.currentWaveId = 2;
     }
 
     @Override
@@ -76,12 +80,50 @@ public class WaveManager implements Runnable {
     }
 
 
+    void sendEnemies(EnemyType type, int playerId) {
+
+        ArrayList<Enemy> enemies = new ArrayList<Enemy>();
+        switch (type) {
+            case SKELETON:
+                for (int i = 0; i < 6; i++) {
+                    enemies.add(new Skeleton());
+                }
+                break;
+
+            default:
+                break;
+        }
+        Wave attackWave;
+        if (playerId == Game.player1.id) {
+            attackWave = new Wave(enemies, space, 660, Game.player1.id, currentWaveId++);
+        } else {
+            attackWave = new Wave(enemies, space, 1800 - 660, Game.player2.id, currentWaveId++);
+        }
+
+        new Thread(new Runnable() {
+
+            @Override
+            public void run() {
+                try {
+                    System.out.println(
+                            "I should now send enemies to player " + playerId + ". This is wave " + attackWave.waveId);
+                    space.put("gui", "sendEnemies", enemies.size(), Game.player1.id);
+                    space.put("gui", "sendEnemiesWaveId", attackWave.waveId, Game.player1.id);
+                    space.put("gui", "sendEnemies", enemies.size(), Game.player2.id);
+                    space.put("gui", "sendEnemiesWaveId", attackWave.waveId, Game.player2.id);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                attackWave.run();
+            }
+
+        }).start();
+    }
+
     void spawnWave(int waveNumber) {
-        waveLeft = new Wave(waveGenerator(waveNumber), space, 660, Game.player1.id);
-        waveRight = new Wave(waveGenerator(waveNumber), space, 1800 - 660, Game.player2.id);
-
+        waveLeft = new Wave(waveGenerator(waveNumber), space, 660, Game.player1.id, 0);
+        waveRight = new Wave(waveGenerator(waveNumber), space, 1800 - 660, Game.player2.id, 1);
         String enemyTypes = messageGenerator(waveLeft);
-
         // left side
         Thread player1Wave = new Thread(new Runnable() {
             @Override
@@ -180,17 +222,19 @@ class Wave {
     final int START_X;
     final int START_Y = 0;
     int playerId;
+    int waveId;
 
-    public Wave(ArrayList<Enemy> enemies, Space space, int startX, int playerId) {
+    public Wave(ArrayList<Enemy> enemies, Space space, int startX, int playerId, int waveId) {
         this.enemies = enemies;
         this.space = space;
         START_X = startX;
         this.playerId = playerId;
+        this.waveId = waveId;
     }
 
     public void run() {
         int spawned = 0;
-        int spawnRate = 150; //In ticks
+        int spawnRate = 150; // In ticks
         int lastSpawnTick = Game.gameTicker.gameTick;
         int deltaTick = 0;
         while (true) {
@@ -218,15 +262,18 @@ class Wave {
                 }
                 LinkedList<String> coordinates = new LinkedList<String>();
                 for (int i = 0; i < enemies.size(); i++) {
-                    String xy = enemies.get(i).isDead() ? "4000 4000" : "" + enemies.get(i).getX() + " " + enemies.get(i).getY();
+                    String xy = enemies.get(i).isDead() ? "4000 4000"
+                            : "" + enemies.get(i).getX() + " " + enemies.get(i).getY();
                     coordinates.add(xy);
                 }
+                coordinates.add(""+waveId);
 
                 if (Game.player1.id == playerId) {
                     space.put("gui", "enemyUpdateLeft", coordinates, Game.player1.id);
-                    space.put("gui", "enemyUpdateRight", coordinates, Game.player2.id);
-                } else {
                     space.put("gui", "enemyUpdateLeft", coordinates, Game.player2.id);
+
+                } else {
+                    space.put("gui", "enemyUpdateRight", coordinates, Game.player2.id);
                     space.put("gui", "enemyUpdateRight", coordinates, Game.player1.id);
                 }
 

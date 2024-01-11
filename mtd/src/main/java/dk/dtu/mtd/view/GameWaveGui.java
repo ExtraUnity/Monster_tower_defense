@@ -11,11 +11,13 @@ import java.util.LinkedList;
 public class GameWaveGui extends StackPane {
     public ArrayList<EnemyImage> enemyArray;
     Pane wavePane;
+    public final int waveGuiId;
 
-    public GameWaveGui() {
+    public GameWaveGui(int id) {
         wavePane = new Pane();
         wavePane.setMinSize(500, 500);
         this.getChildren().add(wavePane);
+        this.waveGuiId = id;
 
     }
 
@@ -51,12 +53,25 @@ public class GameWaveGui extends StackPane {
         }*/
     }
 
-    public void updateEnemies(LinkedList<String> coordinates) {
-        for (int i = 0 ; i < enemyArray.size(); i++) {
-            String[] coord = coordinates.get(i).split(" ");
-            enemyArray.get(i).xCoord = Integer.valueOf(coord[0]) - 50;
-            enemyArray.get(i).yCoord = Integer.valueOf(coord[1]) - 50;
+    public void addEnemies(int num) {
+        for (int i = 0; i < num; i++) {
+            EnemyImage newEnemy = new EnemyImage();
+            enemyArray.add(newEnemy);
+            wavePane.getChildren().add(newEnemy);
         }
+    }
+
+    public void updateEnemies(LinkedList<String> coordinates) {
+        try {
+            for (int i = 0; i < enemyArray.size(); i++) {
+                String[] coord = coordinates.get(i).split(" ");
+                enemyArray.get(i).xCoord = Integer.valueOf(coord[0]) - 50;
+                enemyArray.get(i).yCoord = Integer.valueOf(coord[1]) - 50;
+            }
+        } catch (Exception e) {
+            System.out.println(coordinates.size() + " " + enemyArray.size());
+        }
+
     }
 
 }

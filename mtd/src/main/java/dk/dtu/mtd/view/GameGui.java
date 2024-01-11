@@ -19,19 +19,21 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javafx.stage.Screen;
 
 public class GameGui extends StackPane {
     static VBox layout;
-    StackPane gameArea;
+    static public StackPane gameArea;
     public static GameWaveGui gameWaveGuiLeft;
     public static GameWaveGui gameWaveGuiRight;
 
     static Pane towerLayer;
     static GameTopGui gameTop;
     static GameChat gameChat;
-    ImageView hoverImage;
+    private ImageView hoverImage;
+    private Circle hoverCircle;
 
     public GameGui(String health1, String health2) {
         layout = new VBox();
@@ -41,8 +43,9 @@ public class GameGui extends StackPane {
         gameChat = new GameChat();
         towerLayer = towerLayer();
         hoverImage = new ImageView(new Image("dk/dtu/mtd/assets/skelly.gif"));
-        gameWaveGuiLeft = new GameWaveGui();
-        gameWaveGuiRight = new GameWaveGui();
+        hoverCircle = new Circle(0, 0, 300);
+        gameWaveGuiLeft = new GameWaveGui(0);
+        gameWaveGuiRight = new GameWaveGui(1);
 
         // confine the game area to be the same on all screens:
         double gameAreaHeight = Screen.getPrimary().getBounds().getHeight() - 200;
@@ -63,13 +66,29 @@ public class GameGui extends StackPane {
         layout.getChildren().addAll(gameTop, gameArea, bottom);
 
         towerLayer.getChildren().add(hoverImage);
-        hoverImage.setOpacity(0);
+        towerLayer.getChildren().add(hoverCircle);
+
+        hoverImage.setOpacity(0.5);
         hoverImage.setFitHeight(100);
         hoverImage.setFitWidth(100);
+        hoverImage.setVisible(false);
+
+        hoverCircle.setOpacity(0.2);
+        hoverCircle.setVisible(false);
 
         getChildren().add(layout);
         setAlignment(Pos.CENTER);
 
+    }
+
+    public static void addNewWaveGui(GameWaveGui newWaveGui) {
+        gameArea.getChildren().remove(towerLayer);
+        gameArea.getChildren().add(newWaveGui);
+        gameArea.getChildren().add(towerLayer);
+    }
+
+    public void removeWaveGui(GameWaveGui waveGui) {
+        gameArea.getChildren().remove(waveGui);
     }
 
     public void handleDragOver(DragEvent event) {
@@ -122,7 +141,8 @@ public class GameGui extends StackPane {
                 if (dragboard.hasString()) {
                     Controller.placeTower(dragboard.getString(), (int) event.getX(), (int) event.getY());
                 }
-                hoverImage.setOpacity(0);
+                hoverImage.setVisible(false);
+                hoverCircle.setVisible(false);
                 event.consume();
             }
         });
@@ -135,9 +155,12 @@ public class GameGui extends StackPane {
                 if (dragboard.hasString() && dragboard.getString() == "basicTower") {
                     hoverImage.setImage(new Image("dk/dtu/mtd/assets/dartMonkey.png"));
                 }
-                hoverImage.setOpacity(0.5);
+                hoverImage.setVisible(true);
                 hoverImage.setX(event.getX() - hoverImage.getFitWidth() / 2);
                 hoverImage.setY(event.getY() - hoverImage.getFitWidth() / 2);
+                hoverCircle.setVisible(true);
+                hoverCircle.setCenterX(event.getX());
+                hoverCircle.setCenterY(event.getY());
                 event.consume();
             }
         });
