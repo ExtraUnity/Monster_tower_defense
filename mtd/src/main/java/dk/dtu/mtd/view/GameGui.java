@@ -18,10 +18,17 @@ import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
+import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.BorderStroke;
+import javafx.scene.layout.BorderStrokeStyle;
+import javafx.scene.layout.BorderWidths;
+import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javafx.stage.Screen;
 
@@ -36,18 +43,24 @@ public class GameGui extends StackPane {
     static GameChat gameChat;
     static int lastSelected;
     static Button upgradeButton;
-    ImageView hoverImage;
+    private ImageView hoverImage;
+    private Circle hoverCircle;
+
+    public static double gameAreaHeight;
+    public static double gameAreaWidth;
 
     public GameGui(String health1, String health2) {
+        gameAreaHeight = Screen.getPrimary().getBounds().getHeight() - 200;
+        gameAreaWidth = (gameAreaHeight / 3) * 5;
         layout = new VBox();
         gameArea = new StackPane();
         gameTop = new GameTopGui(health1, health2, 0);
 
         gameChat = new GameChat();
-        towerLayer = towerLayer();
+        towerLayer = towerLayer(gameAreaWidth, gameAreaHeight);
+        towerLayer.setBorder(new Border(new BorderStroke(Color.BLACK, 
+            BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
         hoverImage = new ImageView(new Image("dk/dtu/mtd/assets/skelly.gif"));
-        gameWaveGuiLeft = new GameWaveGui();
-        gameWaveGuiRight = new GameWaveGui();
         upgradeButton = new Button();
 
         lastSelected = -1;
@@ -57,14 +70,19 @@ public class GameGui extends StackPane {
         upgradeButton.setOnAction(e -> {
             System.out.println(lastSelected);
         });
+        hoverCircle = new Circle(0, 0, 300);
+        gameWaveGuiLeft = new GameWaveGui(gameAreaWidth, gameAreaHeight);
+        gameWaveGuiRight = new GameWaveGui(gameAreaWidth, gameAreaHeight);
 
         // confine the game area to be the same on all screens:
-        double gameAreaHeight = Screen.getPrimary().getBounds().getHeight() - 200;
-        double gameAreaWidth = (gameAreaHeight / 3) * 6;
         gameArea.setMaxWidth(gameAreaWidth);
         gameArea.setMaxHeight(gameAreaHeight);
 
-        gameArea.getChildren().addAll(gameAreaBackground(gameAreaWidth, gameAreaHeight), gameWaveGuiLeft, gameWaveGuiRight, towerLayer);
+        gameWaveGuiLeft = new GameWaveGui(gameAreaWidth, gameAreaHeight);
+        gameWaveGuiRight = new GameWaveGui(gameAreaWidth, gameAreaHeight);
+
+        gameArea.getChildren().addAll(gameAreaBackground(gameAreaWidth, gameAreaHeight), gameWaveGuiLeft,
+                gameWaveGuiRight, towerLayer);
 
         BorderPane bottom = new BorderPane();
         bottom.setMaxHeight(100);
@@ -77,9 +95,15 @@ public class GameGui extends StackPane {
         layout.getChildren().addAll(gameTop, gameArea, bottom);
 
         towerLayer.getChildren().add(hoverImage);
-        hoverImage.setOpacity(0);
+        towerLayer.getChildren().add(hoverCircle);
+
+        hoverImage.setOpacity(0.5);
         hoverImage.setFitHeight(100);
         hoverImage.setFitWidth(100);
+        hoverImage.setVisible(false);
+
+        hoverCircle.setOpacity(0.2);
+        hoverCircle.setVisible(false);
 
         getChildren().add(layout);
         setAlignment(Pos.CENTER);
@@ -102,7 +126,7 @@ public class GameGui extends StackPane {
     }
 
     public ImageView gameAreaBackground(double width, double height) {
-        return new ImageView(new Image("dk/dtu/mtd/assets/gameBackground.png", width, height, true, false));
+        return new ImageView(new Image("dk/dtu/mtd/assets/gameBackground.png", width, height, false, false));
     }
 
     public Background background() {
@@ -122,7 +146,7 @@ public class GameGui extends StackPane {
 
     public static void newTower(Tower objektTower) {
         System.out.println("I got a new tower!");
-        TowerGui tower = new TowerGui(objektTower);
+        TowerGui tower = new TowerGui(objektTower, (int) ((gameAreaWidth * objektTower.getX())/1920),  (int) ((gameAreaHeight * objektTower.getY())/1080));
         towerLayer.getChildren().add(0,tower.getCircle());
         towerLayer.getChildren().add(tower);
     }
@@ -148,16 +172,21 @@ public class GameGui extends StackPane {
         }
     }
 
-    public Pane towerLayer() {
+    public Pane towerLayer(double width, double height) {
+        setMaxSize(width, height);
+
         Pane newTowerLayer = new Pane();
         newTowerLayer.setOnDragDropped(new EventHandler<DragEvent>() {
             @Override
             public void handle(DragEvent event) {
                 Dragboard dragboard = event.getDragboard();
                 if (dragboard.hasString()) {
-                    Controller.placeTower(dragboard.getString(), (int) event.getX(), (int) event.getY());
+
+                    System.out.println("The coordinates of new tower" + event.getY()+ " "   + event.getX());
+                    Controller.placeTower(dragboard.getString(), (int) ((1920*event.getX())/width), (int) ((1080*event.getY())/height));
                 }
-                hoverImage.setOpacity(0);
+                hoverImage.setVisible(false);
+                hoverCircle.setVisible(false);
                 event.consume();
             }
         });
@@ -170,9 +199,12 @@ public class GameGui extends StackPane {
                 if (dragboard.hasString() && dragboard.getString() == "basicTower") {
                     hoverImage.setImage(new Image("dk/dtu/mtd/assets/dartMonkey.png"));
                 }
-                hoverImage.setOpacity(0.5);
+                hoverImage.setVisible(true);
                 hoverImage.setX(event.getX() - hoverImage.getFitWidth() / 2);
                 hoverImage.setY(event.getY() - hoverImage.getFitWidth() / 2);
+                hoverCircle.setVisible(true);
+                hoverCircle.setCenterX(event.getX());
+                hoverCircle.setCenterY(event.getY());
                 event.consume();
             }
         });

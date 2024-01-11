@@ -11,12 +11,17 @@ import java.util.LinkedList;
 public class GameWaveGui extends StackPane {
     public ArrayList<EnemyImage> enemyArray;
     Pane wavePane;
+    double gameAreaHeight;
+    double gameAreaWidth;
 
-    public GameWaveGui() {
+    public GameWaveGui(double gameAreaWidth, double gameAreaHeight) {
         wavePane = new Pane();
         wavePane.setMinSize(500, 500);
         this.getChildren().add(wavePane);
 
+        this.gameAreaHeight = gameAreaHeight;
+        this.gameAreaWidth = gameAreaWidth;
+        System.out.println(this.gameAreaHeight + " " + this.gameAreaWidth);
     }
 
     public void initEnemies(int num) {
@@ -29,10 +34,11 @@ public class GameWaveGui extends StackPane {
     }
 
     public void updateEnemies(LinkedList<String> coordinates) {
-        for (int i = 0 ; i < enemyArray.size(); i++) {
+        for (int i = 0; i < enemyArray.size(); i++) {
             String[] coord = coordinates.get(i).split(" ");
-            enemyArray.get(i).xCoord = Integer.valueOf(coord[0]) - 50;
-            enemyArray.get(i).yCoord = Integer.valueOf(coord[1]) - 50;
+
+            enemyArray.get(i).xCoord = (gameAreaWidth * ((Double.valueOf(coord[0])) / 1920)) - 50;
+            enemyArray.get(i).yCoord = (gameAreaHeight * ((Double.valueOf(coord[1])) / 1080)) - 50;
         }
     }
 
