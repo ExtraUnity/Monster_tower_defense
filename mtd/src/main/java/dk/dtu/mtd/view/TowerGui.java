@@ -1,7 +1,5 @@
 package dk.dtu.mtd.view;
 
-import dk.dtu.mtd.controller.Controller;
-import dk.dtu.mtd.model.game.Tower;
 import javafx.event.EventHandler;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;

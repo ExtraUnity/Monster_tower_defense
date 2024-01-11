@@ -110,10 +110,10 @@ public abstract class Enemy {
     protected void transferRewardToPlayer(int playerId) {
         if(playerId == Game.player1.id) {
             Game.player1.addReward(reward);
-            System.out.println("player 1 has " + Game.player1.getRewards() + " reward");
+            //System.out.println("player 1 has " + Game.player1.getRewards() + " reward");
         } else {
             Game.player2.addReward(reward);
-            System.out.println("player 2 has " + Game.player2.getRewards() + " reward");
+            //System.out.println("player 2 has " + Game.player2.getRewards() + " reward");
         }
     }
 

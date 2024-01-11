@@ -31,7 +31,7 @@ public class GameWaveGui extends StackPane {
 
         // Splttting the input:
         String[] pairs = enemyTypes.split(",");
-        //System.out.println("PRINTED ALL PAIRS " + enemyTypes);
+        
         for (String pair : pairs) { // For each pair
             String[] keyValue = pair.split(" ");
             System.out.println(pair);
@@ -43,7 +43,6 @@ public class GameWaveGui extends StackPane {
                 EnemyImage newEnemy = new EnemyImage(type);
                 enemyArray.add(newEnemy);
                 wavePane.getChildren().add(newEnemy);
-                System.out.println("Adding enemy " + type + " to wavePane" );
             }
         }        
     }

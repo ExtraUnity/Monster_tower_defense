@@ -11,7 +11,6 @@ import dk.dtu.mtd.shared.EnemyType;
 
 public class WaveManager implements Runnable {
 
-    // TODO: remove unused fields
     private int currentWaveNumber;
     private int totalWaves; // Total number of waves
     private int currentWaveId;
@@ -37,12 +36,14 @@ public class WaveManager implements Runnable {
     @Override
     public void run() {
         while (playing) {
+            System.out.println("Ready for wave " + waveRound);
             player1Done.set(false);
             player2Done.set(false);
             spawnWave(waveRound);
 
             waveRound++;
             try {
+                System.out.println("Sleeping for 1000 ms");
                 Thread.sleep(1000L);
             } catch (InterruptedException e) {
                 System.out.println("Wavemanger failed to sleep after round:" + (waveRound - 1));
@@ -187,6 +188,12 @@ public class WaveManager implements Runnable {
         if (wave < 1) {
             throw new InputMismatchException("Wave cannot be non-positive");
         }
+        // every 5th wave will have an additional set of fat skeletons
+        if (wave % 5 == 0){
+            for (int i = 0; i < wave; i++) {
+                enemies.add(new FatSkeleton()); //New enemy type
+            }
+        }
         if (wave == 1) {
             for (int i = 0; i < 10; i++) {
                 enemies.add(new Skeleton());
@@ -253,7 +260,6 @@ class Wave {
         while (true) {
             deltaTick = Game.gameTicker.gameTick - lastSpawnTick;
             try {
-                // System.out.println(deltaTime);
                 if (spawned < enemies.size() && deltaTick >= spawnRate) {
                     // spawn enemy
                     enemies.get(spawned).setX(START_X);
@@ -305,11 +311,13 @@ class Wave {
     }
 
     private boolean isComplete() {
+
         for (Enemy enemy : enemies) {
-            if (!enemy.reachedFinish()) {
+            if (!enemy.reachedFinish() && !enemy.isDead()) {
                 return false;
             }
         }
+        System.out.println("The wave is complete!");
         return true;
     }
 

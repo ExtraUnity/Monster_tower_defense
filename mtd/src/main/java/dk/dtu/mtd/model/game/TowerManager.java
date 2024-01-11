@@ -24,14 +24,12 @@ public class TowerManager implements Runnable {
     @Override
     public void run() {
         while (playing) {
-            // System.out.println(towerList.size());
+
             for (int i = 0; i < towerList.size(); i++) {
-                // System.out.println(towerList.get(i).playerId + " " + Game.player1.id + " " +
-                // Game.player2.id);
                 if (towerList.get(i).playerId == Game.player1.id) {
                     towerList.get(i).shoot(game.waveManager.leftEnemies);
                 } else {
-                    // System.out.println("Shooting right side");
+
                     // TODO: this can throw exceptions (possibly when another game had been started)
                     towerList.get(i).shoot(game.waveManager.rightEnemies);
                 }
