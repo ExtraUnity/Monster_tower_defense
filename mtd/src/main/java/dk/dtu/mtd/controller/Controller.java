@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.LinkedList;
 import dk.dtu.mtd.model.Client;
+import dk.dtu.mtd.model.game.BasicTower;
 import dk.dtu.mtd.model.game.Game;
 import dk.dtu.mtd.model.game.Tower;
 //import dk.dtu.mtd.model.game.WaveManager;
@@ -205,13 +206,15 @@ class GUIMonitior implements Runnable {
                     });
 
                 } else if (update[1].toString().equals("newTower")) {
-                    Tower tower = (Tower) update[2];
-                    System.out.println(tower.getType());
+                    //(x, y, size, radius, type, id, playerId)
+                    String towerInfo = (String) update[2];
+                    
+                    //System.out.println(tower.getType());
                     Platform.runLater(new Runnable() {
                         @Override
                         public void run() {
                           //TODO: illigal pass of tower class
-                          GameGui.newTower(tower);
+                          GameGui.newTower(towerInfo);
                         }
 
                     });

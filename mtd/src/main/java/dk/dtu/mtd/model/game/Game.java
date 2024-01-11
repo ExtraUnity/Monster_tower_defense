@@ -10,9 +10,9 @@ import dk.dtu.mtd.shared.EnemyType;
 
 public class Game implements Runnable {
     public int id;
-    public static GameTicker gameTicker;
-    public static Player player1;
-    public static Player player2;
+    public GameTicker gameTicker;
+    public Player player1;
+    public Player player2;
     public Space gameSpace;
     public WaveManager waveManager;
     public TowerManager towerManager;
@@ -31,14 +31,13 @@ public class Game implements Runnable {
             e.printStackTrace();
         }
 
-        // create new waveManager, this can be run as a thread:
-        waveManager = new WaveManager(gameSpace);
-        new Thread(waveManager).start();
-
         gameTicker = new GameTicker(this);
         new Thread(gameTicker).start();
+        // create new waveManager, this can be run as a thread:
+        waveManager = new WaveManager(this);
+        new Thread(waveManager).start();
 
-        towerManager = new TowerManager(gameSpace, this);
+        towerManager = new TowerManager(this);
         new Thread(towerManager).start();
     }
 
@@ -60,7 +59,7 @@ public class Game implements Runnable {
                 handleGameRequest(gameSpace.get(new ActualField("request"),
                         new FormalField(String.class), new FormalField(Integer.class)));
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                System.out.println("Game has failed on server side");
             }
         }
 
@@ -120,7 +119,7 @@ public class Game implements Runnable {
         } else if (request[1].toString().equals("placeTower")) {
             towerManager.placeTower((int) request[2]);
         } else if (request[1].toString().equals("upgradeTower")) {
-            towerManager.upgradeTower((int) request[2]); //request[2] = towerId
+            towerManager.upgradeTower((int) request[2]); // request[2] = towerId
         } else if (request[1].toString().equals("chat")) {
             System.out.println("Game recieved chat request");
             // Retrieve chatlist and update to include message
@@ -136,8 +135,9 @@ public class Game implements Runnable {
             gameSpace.put("gui", "chat", chat, player1.id);
             gameSpace.put("gui", "chat", chat, player2.id);
             System.out.println("Game put chat updates");
-        } else if(request[1].toString().equals("sendEnemies")) {
-            Object[] res = gameSpace.get(new ActualField("data"), new ActualField("sendEnemies"), new FormalField(EnemyType.class));
+        } else if (request[1].toString().equals("sendEnemies")) {
+            Object[] res = gameSpace.get(new ActualField("data"), new ActualField("sendEnemies"),
+                    new FormalField(EnemyType.class));
             int senderId = (int) request[2];
             EnemyType type = (EnemyType) res[2];
             int recieverId = senderId == player1.id ? player2.id : player1.id;
