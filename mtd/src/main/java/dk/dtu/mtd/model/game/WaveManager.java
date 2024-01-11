@@ -124,6 +124,7 @@ public class WaveManager implements Runnable {
         waveLeft = new Wave(waveGenerator(waveNumber), space, 660, Game.player1.id, 0);
         waveRight = new Wave(waveGenerator(waveNumber), space, 1800 - 660, Game.player2.id, 1);
         String enemyTypes = messageGenerator(waveLeft);
+
         // left side
         Thread player1Wave = new Thread(new Runnable() {
             @Override

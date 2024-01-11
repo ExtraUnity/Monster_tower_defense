@@ -1,11 +1,6 @@
 package dk.dtu.mtd.model.game;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.List;
-
-import java.math.*;
-
 import org.jspace.ActualField;
 import org.jspace.FormalField;
 import org.jspace.SequentialSpace;
@@ -24,8 +19,8 @@ public class Game implements Runnable {
 
     public Game(int id, int playerID1, int playerID2) {
         this.id = id;
-        player1 = new Player(playerID1, 150, 0);
-        player2 = new Player(playerID2, 150, 0);
+        player1 = new Player(playerID1, 150, 150);
+        player2 = new Player(playerID2, 150, 150);
         gameSpace = new SequentialSpace();
         LinkedList<String> chat = new LinkedList<String>();
         try {
@@ -62,6 +57,9 @@ public class Game implements Runnable {
     @SuppressWarnings("unchecked")
     void handleGameRequest(Object[] request) throws InterruptedException {
         if (request[1].toString().equals("exit")) {
+            waveManager.playing = false;
+            towerManager.playing = false;
+            
             if ((int) request[2] == player1.id) {
                 gameSpace.put("exit", player1.id);
                 gameSpace.put("gameClosed", player2.id);
@@ -108,6 +106,8 @@ public class Game implements Runnable {
             }
         } else if (request[1].toString().equals("placeTower")) {
             towerManager.placeTower((int) request[2]);
+        } else if (request[1].toString().equals("upgradeTower")) {
+            towerManager.upgradeTower((int) request[2]); //request[2] = towerId
         } else if (request[1].toString().equals("chat")) {
             System.out.println("Game recieved chat request");
             // Retrieve chatlist and update to include message

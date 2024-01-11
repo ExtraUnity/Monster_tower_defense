@@ -18,10 +18,10 @@ public abstract class Enemy {
     }
 
     // Method to take damage, reducing health
-    public void takeDamage(int amount) {
+    public void takeDamage(int amount, int playerId) {
         health -= amount;
         if (isDead()) {
-            die();
+            die(playerId);
         }
     }
 
@@ -30,8 +30,8 @@ public abstract class Enemy {
     }
 
 
-    protected void die() {
-        transferRewardToPlayer();
+    protected void die(int playerId) {
+        transferRewardToPlayer(playerId);
         performDeathAnimation();
     }
 
@@ -43,18 +43,24 @@ public abstract class Enemy {
     // Method to define the movement of the enemy
     //THIS IS CURSED DON'T HATE ME
     public void move() {
-        int distToCenterX = Math.abs(this.x - 900);
+        int distToCenterX = Math.abs(this.x - 960);
         if(this.y < 590 && distToCenterX < 310) { //First stretch moving downwards
             this.y += this.speed;
+
         } else if(distToCenterX < 520) { //Second stretch, moving to the side
             this.x += this.x > 960 ? this.speed : -this.speed;
+            
         } else if(distToCenterX < 560 && this.y > 390) {
             this.y -= this.speed;
+
         } else if(distToCenterX < 740) {
             this.x += this.x > 960 ? this.speed : -this.speed;
+            
         } else {
             this.y += this.speed;
         }
+
+
     }
 
     // Abstract method to define the attack behavior of the enemy
@@ -103,8 +109,14 @@ public abstract class Enemy {
     }
 
     // Method to transfer reward to the player
-    protected void transferRewardToPlayer() {
-        Controller.rewardEnemyToPlayer(this.reward);
+    protected void transferRewardToPlayer(int playerId) {
+        if(playerId == Game.player1.id) {
+            Game.player1.addReward(reward);
+            System.out.println("player 1 has " + Game.player1.getRewards() + " reward");
+        } else {
+            Game.player2.addReward(reward);
+            System.out.println("player 2 has " + Game.player2.getRewards() + " reward");
+        }
     }
 
     // Abstract method for death animation

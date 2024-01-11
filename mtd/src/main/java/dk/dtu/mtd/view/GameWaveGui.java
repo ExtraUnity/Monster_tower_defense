@@ -11,14 +11,19 @@ import java.util.LinkedList;
 public class GameWaveGui extends StackPane {
     public ArrayList<EnemyImage> enemyArray;
     Pane wavePane;
-    public final int waveGuiId;
 
-    public GameWaveGui(int id) {
+    public final int waveGuiId;
+    double gameAreaHeight;
+    double gameAreaWidth;
+
+    public GameWaveGui(int id, double gameAreaWidth, double gameAreaHeight) {
         wavePane = new Pane();
         wavePane.setMinSize(500, 500);
         this.getChildren().add(wavePane);
         this.waveGuiId = id;
-
+        this.gameAreaHeight = gameAreaHeight;
+        this.gameAreaWidth = gameAreaWidth;
+        System.out.println(this.gameAreaHeight + " " + this.gameAreaWidth);
     }
 
     public void initEnemies(String enemyTypes) {
@@ -58,8 +63,8 @@ public class GameWaveGui extends StackPane {
         try {
             for (int i = 0; i < enemyArray.size(); i++) {
                 String[] coord = coordinates.get(i).split(" ");
-                enemyArray.get(i).xCoord = Integer.valueOf(coord[0]) - 50;
-                enemyArray.get(i).yCoord = Integer.valueOf(coord[1]) - 50;
+                enemyArray.get(i).xCoord = (gameAreaWidth * ((Double.valueOf(coord[0])) / 1920)) - 50;
+                enemyArray.get(i).yCoord = (gameAreaHeight * ((Double.valueOf(coord[1])) / 1080)) - 50;
             }
         } catch (Exception e) {
             System.out.println(coordinates.size() + " " + enemyArray.size());

@@ -68,21 +68,21 @@ public class Controller {
         client.damagePlayer(damage); // Inform the client to handle the damage
     }
 
-    public static void rewardEnemyToPlayer(int reward) {
-        client.rewardPlayer(reward);
-    }
-
     public static void sendMessage(String msg) {
         System.out.println("Controller handling message");
         client.sendMessage(msg);
     }
 
-    public static void upgradeTower() {
-        // client.upgradeTower();
-    }
 
     public static void sendEnemies(EnemyType type) {
         client.sendEnemies(type);
+
+    public static void upgradeTower(int towerId) {
+        client.upgradeTower(towerId);
+    }
+
+    public static int getPlayerId() {
+        return client.id;
     }
 
 }
@@ -207,8 +207,8 @@ class GUIMonitior implements Runnable {
                     Platform.runLater(new Runnable() {
                         @Override
                         public void run() {
-                            GameGui.newTower(tower.getType(), tower.getSize(), tower.getRadius(), tower.getX(),
-                                    tower.getY());
+                          //TODO: illigal pass of tower class
+                          GameGui.newTower(tower);
                         }
 
                     });

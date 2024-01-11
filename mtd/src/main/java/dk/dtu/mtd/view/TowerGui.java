@@ -1,6 +1,7 @@
 package dk.dtu.mtd.view;
 
 import dk.dtu.mtd.controller.Controller;
+import dk.dtu.mtd.model.game.Tower;
 import javafx.event.EventHandler;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -11,38 +12,32 @@ public class TowerGui extends ImageView {
 
     Circle circle;
 
-    public TowerGui(String towerType, int size, int radius, int x, int y) {
-        this.setX(x - size/2);
-        this.setY(y - size/2);
-        this.setFitHeight(size);
-        this.setFitWidth(size);
+    public TowerGui(Tower tower, int x, int y) {
+        this.setX(x - tower.getSize()/2);
+        this.setY(y - tower.getSize()/2);
+        this.setFitHeight(tower.getSize());
+        this.setFitWidth(tower.getSize());
 
-        circle = new Circle(x, y, radius);
+        circle = new Circle(x, y, tower.getRadius());
         circle.setOpacity(0.2);
         circle.setVisible(false);
+        circle.setMouseTransparent(true);
 
-        if (towerType.equals("basicTower")) {
+        if (tower.getType().equals("basicTower")) {
             this.setImage(new Image("dk/dtu/mtd/assets/dartMonkey.png"));
-        } else if (towerType.equals("superTower")) {
+        } else if (tower.getType().equals("superTower")) {
             this.setImage(new Image("dk/dtu/mtd/assets/SuperMonkey.png"));
         } else {
             this.setImage(new Image("dk/dtu/mtd/assets/skelly.gif"));
         }
 
-        this.addEventHandler(MouseEvent.MOUSE_ENTERED, new EventHandler<MouseEvent>() {
+        this.setId("" + tower.getTowerId());
+
+        this.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
 
             @Override
             public void handle(MouseEvent event) {
-                circle.setVisible(true);
-                event.consume();
-            }
-       });
-
-       this.addEventHandler(MouseEvent.MOUSE_EXITED, new EventHandler<MouseEvent>() {
-
-            @Override
-            public void handle(MouseEvent event) {
-                circle.setVisible(false);
+                GameGui.towerClicked(tower.getTowerId(), tower.getPlayerId());
                 event.consume();
             }
        });
@@ -50,5 +45,9 @@ public class TowerGui extends ImageView {
 
     public Circle getCircle() {
         return circle;
+    }
+
+    public void setCircleVisible(boolean visible) {
+        circle.setVisible(visible);
     }
 }
