@@ -100,10 +100,10 @@ public class WaveManager implements Runnable {
         }
         Wave attackWave;
         if (playerId == Game.player1.id) {
-            attackWave = new Wave(enemies, space, 660, Game.player1.id, currentWaveId++);
+            attackWave = new Wave(enemies, space, 680, Game.player1.id, currentWaveId++);
             leftEnemies.addAll(enemies);
         } else {
-            attackWave = new Wave(enemies, space, 1800 - 660, Game.player2.id, currentWaveId++);
+            attackWave = new Wave(enemies, space, 1920 - 680, Game.player2.id, currentWaveId++);
             rightEnemies.addAll(enemies);
         }
 
@@ -130,8 +130,8 @@ public class WaveManager implements Runnable {
     void spawnWave(int waveNumber) {
         ArrayList<Enemy> leftSide = waveGenerator(waveNumber);
         ArrayList<Enemy> rightSide = waveGenerator(waveNumber);
-        waveLeft = new Wave(leftSide, space, 660, Game.player1.id, 0);
-        waveRight = new Wave(rightSide, space, 1800 - 660, Game.player2.id, 1);
+        waveLeft = new Wave(leftSide, space, 680, Game.player1.id, 0);
+        waveRight = new Wave(rightSide, space, 1920 - 680, Game.player2.id, 1);
         leftEnemies.addAll(leftSide);
         rightEnemies.addAll(rightSide);
         

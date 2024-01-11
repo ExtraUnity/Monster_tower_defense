@@ -1,7 +1,5 @@
 package dk.dtu.mtd.model.game;
 
-import dk.dtu.mtd.controller.Controller;
-
 public abstract class Enemy {
     protected int health;
     protected int speed;
