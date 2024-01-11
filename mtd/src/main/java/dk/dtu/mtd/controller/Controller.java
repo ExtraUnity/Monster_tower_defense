@@ -65,10 +65,6 @@ public class Controller {
         client.damagePlayer(damage); // Inform the client to handle the damage
     }
 
-    public static void rewardEnemyToPlayer(int reward) {
-        client.rewardPlayer(reward);
-    }
-
     public static void sendMessage(String msg) {
         System.out.println("Controller handling message");
         client.sendMessage(msg);
