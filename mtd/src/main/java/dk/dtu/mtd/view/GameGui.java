@@ -3,8 +3,11 @@ package dk.dtu.mtd.view;
 import java.util.LinkedList;
 
 import dk.dtu.mtd.controller.Controller;
+import dk.dtu.mtd.model.game.Tower;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.DragEvent;
@@ -31,6 +34,8 @@ public class GameGui extends StackPane {
     static Pane towerLayer;
     static GameTopGui gameTop;
     static GameChat gameChat;
+    static int lastSelected;
+    static Button upgradeButton;
     ImageView hoverImage;
 
     public GameGui(String health1, String health2) {
@@ -43,6 +48,15 @@ public class GameGui extends StackPane {
         hoverImage = new ImageView(new Image("dk/dtu/mtd/assets/skelly.gif"));
         gameWaveGuiLeft = new GameWaveGui();
         gameWaveGuiRight = new GameWaveGui();
+        upgradeButton = new Button();
+
+        lastSelected = -1;
+
+        upgradeButton.setVisible(false);
+        towerLayer.getChildren().add(upgradeButton);
+        upgradeButton.setOnAction(e -> {
+            System.out.println(lastSelected);
+        });
 
         // confine the game area to be the same on all screens:
         double gameAreaHeight = Screen.getPrimary().getBounds().getHeight() - 200;
@@ -106,11 +120,32 @@ public class GameGui extends StackPane {
         gameChat.displayChat();
     }
 
-    public static void newTower(String type, int size, int radius, int x, int y) {
+    public static void newTower(Tower objektTower) {
         System.out.println("I got a new tower!");
-        TowerGui tower = new TowerGui(type, size, radius, x, y);
-        towerLayer.getChildren().add(tower.getCircle());
+        TowerGui tower = new TowerGui(objektTower);
+        towerLayer.getChildren().add(0,tower.getCircle());
         towerLayer.getChildren().add(tower);
+    }
+
+    public static void towerClicked(int towerId, int playerId) {
+        if (playerId != Controller.getPlayerId()) {
+            return;
+        }
+        TowerGui tower = (TowerGui) towerLayer.lookup("#" + towerId);
+        if(lastSelected == towerId) {
+            upgradeButton.setVisible(false);
+            tower.setCircleVisible(false);
+            lastSelected = -1;
+        } else if (lastSelected == -1) {
+            lastSelected = towerId;
+            upgradeButton.setVisible(true);
+            tower.setCircleVisible(true);
+        } else {
+            TowerGui lastTower = (TowerGui) towerLayer.lookup("#" + lastSelected);
+            lastTower.setCircleVisible(false);
+            lastSelected = towerId;
+            tower.setCircleVisible(true);
+        }
     }
 
     public Pane towerLayer() {
