@@ -10,13 +10,13 @@ public class FatSkeleton extends Enemy{
      @Override
     public void attack() {
         // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'attack'");
+        //throw new UnsupportedOperationException("Unimplemented method 'attack'");
     }
 
     @Override
     protected void performDeathAnimation() {
         // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'performDeathAnimation'");
+        //throw new UnsupportedOperationException("Unimplemented method 'performDeathAnimation'");
     }
     
 }

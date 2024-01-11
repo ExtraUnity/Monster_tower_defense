@@ -76,6 +76,7 @@ public class Controller {
 
     public static void sendEnemies(EnemyType type) {
         client.sendEnemies(type);
+    }
 
     public static void upgradeTower(int towerId) {
         client.upgradeTower(towerId);
@@ -148,7 +149,7 @@ class GUIMonitior implements Runnable {
                             new ActualField("sendEnemiesWaveId"),
                             new FormalField(Integer.class), new ActualField(client.id))[2];
                     Platform.runLater(() -> {
-                        GameWaveGui wave = new GameWaveGui(waveId);
+                        GameWaveGui wave = new GameWaveGui(waveId, GameGui.gameAreaWidth, GameGui.gameAreaHeight);
                         GameGui.addNewWaveGui(wave);
                         wave.initEnemies(types);
 
