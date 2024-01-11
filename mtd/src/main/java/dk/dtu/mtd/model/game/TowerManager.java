@@ -26,21 +26,24 @@ public class TowerManager implements Runnable {
         while (playing) {
             // System.out.println(towerList.size());
             for (int i = 0; i < towerList.size(); i++) {
-                //System.out.println(towerList.get(i).playerId + " " + Game.player1.id + " " + Game.player2.id);
+                // System.out.println(towerList.get(i).playerId + " " + Game.player1.id + " " +
+                // Game.player2.id);
                 if (towerList.get(i).playerId == Game.player1.id) {
                     towerList.get(i).shoot(game.waveManager.waveLeft.enemies);
                 } else {
-                    //System.out.println("Shooting right side");
+                    // System.out.println("Shooting right side");
                     // TODO: this can throw exceptions (possibly when another game had been started)
                     towerList.get(i).shoot(game.waveManager.waveRight.enemies);
                 }
             }
         }
+        System.out.println("Towermanger " + game.id + " closing");
     }
 
     public Boolean legalTowerPlacement(Tower newTower, int playerId) {
         for (Tower tower : towerList) {
-            if(Math.pow(tower.size,2) + Math.pow(newTower.size,2) >= Math.pow((tower.getX() - newTower.x), 2) + Math.pow((tower.getY() - newTower.y), 2)) {
+            if (Math.pow(tower.size, 2) + Math.pow(newTower.size, 2) >= Math.pow((tower.getX() - newTower.x), 2)
+                    + Math.pow((tower.getY() - newTower.y), 2)) {
                 return false;
             }
         }
@@ -57,7 +60,7 @@ public class TowerManager implements Runnable {
             Tower tower;
             Object[] towerInfo = gameSpace.get(new ActualField("towerInfo"), new FormalField(String.class),
                     new FormalField(Integer.class), new FormalField(Integer.class));
-            if(towerInfo[1].equals("basicTower")) {
+            if (towerInfo[1].equals("basicTower")) {
                 tower = new BasicTower((int) towerInfo[2], (int) towerInfo[3], playerId);
             } else if (towerInfo[1].equals("superTower")) {
                 tower = new BasicTower((int) towerInfo[2], (int) towerInfo[3], playerId);
@@ -70,7 +73,7 @@ public class TowerManager implements Runnable {
                 gameSpace.put("gui", "newTower", tower, Game.player1.id);
                 gameSpace.put("gui", "newTower", tower, Game.player2.id);
                 System.out.println("Tower placed at " + towerList.get(towerList.size() - 1).x + " "
-                            + towerList.get(towerList.size() - 1).y);
+                        + towerList.get(towerList.size() - 1).y);
             }
         } catch (InterruptedException e) {
             e.printStackTrace();

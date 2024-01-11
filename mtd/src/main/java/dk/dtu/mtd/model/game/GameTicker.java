@@ -5,9 +5,11 @@ public class GameTicker implements Runnable {
     private long deltaTime;
     private long previousTime;
     private long msPerTick;
+    boolean playing;
 
     Game game;
     public GameTicker(Game game) {
+        this.playing = true;
         this.game = game;
         gameTick = 0;
         previousTime = System.nanoTime() / 1_000_000L;;
@@ -16,15 +18,17 @@ public class GameTicker implements Runnable {
     }
     @Override
     public void run() {
-        while(true) {
+        while(playing) {
             deltaTime = System.nanoTime() / 1_000_000L - previousTime;
             if(deltaTime > msPerTick) {
-                System.out.println(this.toString() + " currently at game tick " + gameTick);
+                //System.out.println(this.toString() + " currently at game tick " + gameTick);
                 gameTick++;
                 deltaTime = 0;
                 previousTime = System.nanoTime() / 1_000_000L;
             }
         }
+
+        System.out.println("Game Ticker" + game.id + " closing");
     }
 
     @Override 

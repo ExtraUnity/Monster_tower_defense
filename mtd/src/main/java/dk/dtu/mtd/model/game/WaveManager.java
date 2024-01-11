@@ -14,7 +14,7 @@ public class WaveManager implements Runnable {
     private int totalWaves; // Total number of waves
     public Wave waveLeft;
     public Wave waveRight;
-    boolean playing;
+    public boolean playing;
     int waveRound;
     volatile AtomicBoolean player1Done = new AtomicBoolean(false);
     volatile AtomicBoolean player2Done = new AtomicBoolean(false);
@@ -40,6 +40,7 @@ public class WaveManager implements Runnable {
                 System.out.println("Wavemanger failed to sleep after round:" + (waveRound - 1));
             }
         }
+        System.out.println("Wavemaneger closing");
     }
 
     void spawnWave(int waveNumber) {
