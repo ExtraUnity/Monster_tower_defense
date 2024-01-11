@@ -17,8 +17,10 @@ public class Server {
     int IDrequest = 0;
     int IDgame = 0;
     Queue<Integer> gameQueue;
+    LinkedList<Game> gameList;
 
     public Server() {
+        gameList = new LinkedList<Game>();
         server = new SpaceRepository();
         lobby = new SequentialSpace();
         gameQueue = new LinkedList<Integer>();
@@ -57,9 +59,9 @@ public class Server {
             } else if ((request[1].toString()).equals("game")) {
                 System.out.println("Game request received by: " + request[2].toString());
                 gameQueue.add((Integer) request[2]);
-            } else if ((request[1].toString()).equals("closeGame")){
+            } else if ((request[1].toString()).equals("closeGame")) {
                 System.out.println("Exit request received for game: " + request[2].toString());
-                
+
                 closeGame(request[2].toString());
             }
         } catch (Exception e) {
@@ -69,6 +71,7 @@ public class Server {
 
     void createGame(int playerID1, int playerID2) {
         Game newGame = new Game(IDgame, playerID1, playerID2);
+        gameList.add(newGame);
         System.out.println("Creating game...");
         server.add(("game" + IDgame), newGame.gameSpace);
         new Thread(newGame).start();
@@ -82,13 +85,20 @@ public class Server {
         IDgame++;
     }
 
-    void closeGame(String gameID){
-        server.remove("game" + gameID);
+    void closeGame(String gameID) {
         System.out.println("Closing game " + gameID);
+        for (int i = 0; i < gameList.size(); i++) {
+            if (("" + gameList.get(i).id).equals(gameID)) {
+                gameList.get(i).closeGame();
+                break;
+            }
+        }
+        server.remove("game" + gameID);
     }
 
     public static void main(String[] args) {
         Server ser = new Server();
         ser.launch();
     }
+
 }

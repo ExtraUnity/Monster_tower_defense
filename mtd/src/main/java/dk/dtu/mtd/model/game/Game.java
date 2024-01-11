@@ -13,15 +13,17 @@ public class Game implements Runnable {
     public static GameTicker gameTicker;
     public static Player player1;
     public static Player player2;
-    public static Space gameSpace;
-    public static WaveManager waveManager;
-    public static TowerManager towerManager;
+    public Space gameSpace;
+    public WaveManager waveManager;
+    public TowerManager towerManager;
+    private boolean playing;
 
     public Game(int id, int playerID1, int playerID2) {
         this.id = id;
         player1 = new Player(playerID1, 150, 150);
         player2 = new Player(playerID2, 150, 150);
         gameSpace = new SequentialSpace();
+        playing = true;
         LinkedList<String> chat = new LinkedList<String>();
         try {
             gameSpace.put("chatList", chat);
@@ -32,18 +34,27 @@ public class Game implements Runnable {
         // create new waveManager, this can be run as a thread:
         waveManager = new WaveManager(gameSpace);
         new Thread(waveManager).start();
-        
-        gameTicker = new GameTicker();
+
+        gameTicker = new GameTicker(this);
         new Thread(gameTicker).start();
 
-        towerManager = new TowerManager();
+        towerManager = new TowerManager(gameSpace, this);
         new Thread(towerManager).start();
+    }
+
+    public void closeGame() {
+        gameTicker.playing = false;
+        towerManager.playing = false;
+        waveManager.player1Done.set(true);
+        waveManager.player2Done.set(true);
+        waveManager.playing = false;
+        playing = false;
     }
 
     @Override
     public void run() {
 
-        while (true) {
+        while (playing) {
             try {
                 // Tuple contens: ("request" , 'type of request' , 'player ID')
                 handleGameRequest(gameSpace.get(new ActualField("request"),
@@ -52,14 +63,16 @@ public class Game implements Runnable {
                 e.printStackTrace();
             }
         }
+
+        System.out.println("Game " + id + " ending it's run loop");
     }
 
     @SuppressWarnings("unchecked")
     void handleGameRequest(Object[] request) throws InterruptedException {
         if (request[1].toString().equals("exit")) {
-            waveManager.playing = false;
-            towerManager.playing = false;
-            
+            // waveManager.playing = false;
+            // towerManager.playing = false;
+
             if ((int) request[2] == player1.id) {
                 gameSpace.put("exit", player1.id);
                 gameSpace.put("gameClosed", player2.id);
@@ -131,6 +144,5 @@ public class Game implements Runnable {
             waveManager.sendEnemies(type, recieverId);
         }
     }
-
 
 }

@@ -33,6 +33,7 @@ public class Controller {
     }
 
     public static void joinGame() {
+        //TODO: somewhere along here the previous game crashes.
         client.requestGame();
         client.joinGame();
         guiThread = new Thread(guiMonitior);
@@ -90,6 +91,7 @@ public class Controller {
 
 // hmm
 class GUIMonitior implements Runnable {
+    int counter = 0;
     Boolean playing = true;
     Client client;
 
@@ -216,7 +218,19 @@ class GUIMonitior implements Runnable {
 
                 }
             } catch (InterruptedException e) {
-                System.out.println("GUImonitor failing");
+                counter++;
+
+                if (counter == 100) {
+                    System.out.println("GuiMonitor failing, assuming disconnected");
+                    System.out.println("Returning to main menu");
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run(){
+                            GameGui.returnToLobbyPrompt();
+                        }
+                    });
+                    playing = false;
+                }
             }
         }
     }

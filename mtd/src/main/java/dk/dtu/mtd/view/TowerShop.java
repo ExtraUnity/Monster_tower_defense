@@ -16,7 +16,7 @@ public class TowerShop extends HBox {
         setMaxHeight(100);
         setAlignment(Pos.CENTER_RIGHT);
         
-        final ImageView basicTower = new ImageView(new Image("dk/dtu/mtd/assets/dartMonkey.png", 100, 0, true, true));
+        final ImageView basicTower = new ImageView(new Image("dk/dtu/mtd/assets/BasicTower.png", 100, 0, true, true));
         this.getChildren().add(basicTower);
         basicTower.addEventHandler(MouseEvent.DRAG_DETECTED, new EventHandler<MouseEvent>() {
             @Override
