@@ -6,6 +6,9 @@ import java.util.List;
 import org.jspace.ActualField;
 import org.jspace.FormalField;
 import org.jspace.Space;
+import org.jspace.Tuple;
+
+import com.google.gson.Gson;
 
 public class TowerManager implements Runnable {
     public volatile List<Tower> towerList;
@@ -27,11 +30,11 @@ public class TowerManager implements Runnable {
                 // System.out.println(towerList.get(i).playerId + " " + Game.player1.id + " " +
                 // Game.player2.id);
                 if (towerList.get(i).playerId == game.player1.id) {
-                    towerList.get(i).shoot(game.waveManager.leftEnemies);
+                    towerList.get(i).shoot(game.waveManager.leftEnemies, game);
                 } else {
                     // System.out.println("Shooting right side");
                     // TODO: this can throw exceptions (possibly when another game had been started)
-                    towerList.get(i).shoot(game.waveManager.rightEnemies);
+                    towerList.get(i).shoot(game.waveManager.rightEnemies, game);
                 }
             }
         }
@@ -76,12 +79,8 @@ public class TowerManager implements Runnable {
 
             if (legalTowerPlacement(tower, playerId)) {
                 towerList.add(tower);
-                // String type, int size, int radius, int towerId, int playerId, int x, int y
-                String guiTowerInfoString = tower.getType() + " " + tower.getSize() + " "
-                        + tower.getRadius() + " " + tower.getTowerId() + " "
-                        + tower.getPlayerId() + " " + tower.getX() + " " + tower.getY();
-                game.gameSpace.put("gui", "newTower", guiTowerInfoString, game.player1.id);
-                game.gameSpace.put("gui", "newTower", guiTowerInfoString, game.player2.id);
+                 game.gameSpace.put("gui", "newTower", tower, game.player1.id);
+                 game.gameSpace.put("gui", "newTower", tower, game.player2.id);
                 if (game.player1.id == playerId) {
                     game.player1.spendRewards(tower.getTowerCost());
                 } else {
