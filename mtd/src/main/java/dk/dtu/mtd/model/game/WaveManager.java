@@ -17,6 +17,8 @@ public class WaveManager implements Runnable {
     private int currentWaveId;
     public Wave waveLeft;
     public Wave waveRight;
+    public ArrayList<Enemy> leftEnemies;
+    public ArrayList<Enemy> rightEnemies;
     public boolean playing;
     int waveRound;
     volatile AtomicBoolean player1Done = new AtomicBoolean(false);
@@ -28,6 +30,8 @@ public class WaveManager implements Runnable {
         this.waveRound = 1;
         this.space = space;
         this.currentWaveId = 2;
+        this.leftEnemies = new ArrayList<Enemy>();
+        this.rightEnemies = new ArrayList<Enemy>();
     }
 
     @Override
@@ -97,8 +101,10 @@ public class WaveManager implements Runnable {
         Wave attackWave;
         if (playerId == Game.player1.id) {
             attackWave = new Wave(enemies, space, 660, Game.player1.id, currentWaveId++);
+            leftEnemies.addAll(enemies);
         } else {
             attackWave = new Wave(enemies, space, 1800 - 660, Game.player2.id, currentWaveId++);
+            rightEnemies.addAll(enemies);
         }
 
         new Thread(new Runnable() {
@@ -122,8 +128,13 @@ public class WaveManager implements Runnable {
     }
 
     void spawnWave(int waveNumber) {
-        waveLeft = new Wave(waveGenerator(waveNumber), space, 660, Game.player1.id, 0);
-        waveRight = new Wave(waveGenerator(waveNumber), space, 1800 - 660, Game.player2.id, 1);
+        ArrayList<Enemy> leftSide = waveGenerator(waveNumber);
+        ArrayList<Enemy> rightSide = waveGenerator(waveNumber);
+        waveLeft = new Wave(leftSide, space, 660, Game.player1.id, 0);
+        waveRight = new Wave(rightSide, space, 1800 - 660, Game.player2.id, 1);
+        leftEnemies.addAll(leftSide);
+        rightEnemies.addAll(rightSide);
+        
         String enemyTypes = messageGenerator(waveLeft);
 
         // left side

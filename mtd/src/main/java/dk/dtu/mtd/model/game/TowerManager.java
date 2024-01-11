@@ -29,11 +29,11 @@ public class TowerManager implements Runnable {
                 // System.out.println(towerList.get(i).playerId + " " + Game.player1.id + " " +
                 // Game.player2.id);
                 if (towerList.get(i).playerId == Game.player1.id) {
-                    towerList.get(i).shoot(game.waveManager.waveLeft.enemies);
+                    towerList.get(i).shoot(game.waveManager.leftEnemies);
                 } else {
                     // System.out.println("Shooting right side");
                     // TODO: this can throw exceptions (possibly when another game had been started)
-                    towerList.get(i).shoot(game.waveManager.waveRight.enemies);
+                    towerList.get(i).shoot(game.waveManager.rightEnemies);
                 }
             }
         }
