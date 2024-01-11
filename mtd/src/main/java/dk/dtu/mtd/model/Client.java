@@ -81,6 +81,14 @@ public class Client {
         }
     }
 
+    public void upgradeTower(int towerId) {
+        try {
+            gameSpace.put("request", "upgradeTower", towerId);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
     
 
     public void exitGame() {

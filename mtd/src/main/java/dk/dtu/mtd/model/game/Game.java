@@ -104,6 +104,8 @@ public class Game implements Runnable {
             }
         } else if (request[1].toString().equals("placeTower")) {
             towerManager.placeTower((int) request[2]);
+        } else if (request[1].toString().equals("upgradeTower")) {
+            towerManager.upgradeTower((int) request[2]); //request[2] = towerId
         } else if (request[1].toString().equals("chat")) {
             System.out.println("Game recieved chat request");
             // Retrieve chatlist and update to include message

@@ -51,11 +51,11 @@ public class TowerManager implements Runnable {
             Object[] towerInfo = Game.gameSpace.get(new ActualField("towerInfo"), new FormalField(String.class),
                     new FormalField(Integer.class), new FormalField(Integer.class));
             if(towerInfo[1].equals("basicTower")) {
-                tower = new BasicTower((int) towerInfo[2], (int) towerInfo[3], playerId);
+                tower = new BasicTower((int) towerInfo[2], (int) towerInfo[3], towerList.size(), playerId);
             } else if (towerInfo[1].equals("superTower")) {
-                tower = new BasicTower((int) towerInfo[2], (int) towerInfo[3], playerId);
+                tower = new BasicTower((int) towerInfo[2], (int) towerInfo[3], towerList.size(), playerId);
             } else {
-                tower = new BasicTower(0, 0, playerId);
+                tower = new BasicTower(0, 0,towerList.size(), playerId);
             }
 
             if (legalTowerPlacement(tower, playerId)) {
@@ -67,6 +67,15 @@ public class TowerManager implements Runnable {
             }
         } catch (InterruptedException e) {
             e.printStackTrace();
+        }
+    }
+
+    public void upgradeTower(int towerId) {
+        for (Tower tower : towerList) {
+            if(tower.getTowerId() == towerId) {
+                tower.upgradeTower();
+                break;
+            }
         }
     }
 

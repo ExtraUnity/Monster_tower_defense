@@ -3,12 +3,13 @@ package dk.dtu.mtd.model.game;
 import java.util.List;
 
 public class BasicTower extends Tower {
-    public BasicTower(int x, int y, int playerId) {
+    public BasicTower(int x, int y, int towerId, int playerId) {
         this.x = x;
         this.y = y;
         this.playerId = playerId;
         this.type = "basicTower";
         this.lastShot = Game.gameTicker.gameTick;
+        this.towerId = towerId;
         radius = 300;
         damage = 10;
         size = 100;

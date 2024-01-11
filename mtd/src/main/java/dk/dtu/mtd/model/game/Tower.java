@@ -16,6 +16,7 @@ public abstract class Tower {
     public void upgradeTower() {
         towerLevel++;
         damage++;
+        System.out.println("tower level is " + towerLevel);
     }
 
     public Boolean inRange(Enemy enemy) {
@@ -46,6 +47,14 @@ public abstract class Tower {
 
     public int getRadius() {
         return radius;
+    }
+
+    public int getTowerId() {
+        return towerId;
+    }
+
+    public int getPlayerId() {
+        return playerId;
     }
     
 }
