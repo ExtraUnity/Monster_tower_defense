@@ -35,7 +35,7 @@ import javafx.stage.Screen;
 
 public class GameGui extends StackPane {
     static VBox layout;
-    StackPane gameArea;
+    static public StackPane gameArea;
     public static GameWaveGui gameWaveGuiLeft;
     public static GameWaveGui gameWaveGuiRight;
 
@@ -73,15 +73,15 @@ public class GameGui extends StackPane {
             System.out.println(lastSelected);
         });
         hoverCircle = new Circle(0, 0, 300);
-        gameWaveGuiLeft = new GameWaveGui(gameAreaWidth, gameAreaHeight);
-        gameWaveGuiRight = new GameWaveGui(gameAreaWidth, gameAreaHeight);
+
+
 
         // confine the game area to be the same on all screens:
         gameArea.setMaxWidth(gameAreaWidth);
         gameArea.setMaxHeight(gameAreaHeight);
-
-        gameWaveGuiLeft = new GameWaveGui(gameAreaWidth, gameAreaHeight);
-        gameWaveGuiRight = new GameWaveGui(gameAreaWidth, gameAreaHeight);
+      
+        gameWaveGuiLeft = new GameWaveGui(0 ,gameAreaWidth, gameAreaHeight);
+        gameWaveGuiRight = new GameWaveGui(1 ,gameAreaWidth, gameAreaHeight);
 
         gameArea.getChildren().addAll(gameAreaBackground(gameAreaWidth, gameAreaHeight), gameWaveGuiLeft,
                 gameWaveGuiRight, towerLayer);
@@ -110,6 +110,16 @@ public class GameGui extends StackPane {
         getChildren().add(layout);
         setAlignment(Pos.CENTER);
 
+    }
+
+    public static void addNewWaveGui(GameWaveGui newWaveGui) {
+        gameArea.getChildren().remove(towerLayer);
+        gameArea.getChildren().add(newWaveGui);
+        gameArea.getChildren().add(towerLayer);
+    }
+
+    public void removeWaveGui(GameWaveGui waveGui) {
+        gameArea.getChildren().remove(waveGui);
     }
 
     public void handleDragOver(DragEvent event) {

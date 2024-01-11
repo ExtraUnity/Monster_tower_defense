@@ -8,6 +8,7 @@ import org.jspace.FormalField;
 import org.jspace.RemoteSpace;
 
 import dk.dtu.mtd.controller.Controller;
+import dk.dtu.mtd.shared.EnemyType;
 
 public class Client {
     public RemoteSpace lobby;
@@ -22,13 +23,13 @@ public class Client {
     }
 
     public void joinLobby(String serverIp) throws UnknownHostException, IOException, InterruptedException {
-            // Join lobby
-            this.hostIP = serverIp;
-            lobby = new RemoteSpace("tcp://" + hostIP + ":37331/lobby?keep");
-            // Get uniqe id from server
-            lobby.put("request", "id", -1); // Request new id
-            id = (int) lobby.get(new ActualField("id"), new FormalField(Integer.class))[1];
-            System.out.println("Successful connection to lobby");
+        // Join lobby
+        this.hostIP = serverIp;
+        lobby = new RemoteSpace("tcp://" + hostIP + ":37331/lobby?keep");
+        // Get uniqe id from server
+        lobby.put("request", "id", -1); // Request new id
+        id = (int) lobby.get(new ActualField("id"), new FormalField(Integer.class))[1];
+        System.out.println("Successful connection to lobby");
     }
 
     public void requestGame() {
@@ -55,7 +56,7 @@ public class Client {
         }
     }
 
-    public void damagePlayer(int damage){
+    public void damagePlayer(int damage) {
         try {
             gameSpace.put("request", "damage", id); // Send request to damage
             gameSpace.put("data", "damage", damage); // Send damage amount
@@ -73,6 +74,18 @@ public class Client {
         }
     }
 
+    public void sendEnemies(EnemyType type) {
+        try {
+            gameSpace.put("request", "sendEnemies", id);
+            gameSpace.put("data", "sendEnemies", type);
+        } catch (InterruptedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        
+    }
+
+
     public void upgradeTower(int towerId) {
         try {
             gameSpace.put("request", "upgradeTower", id);
@@ -81,8 +94,6 @@ public class Client {
             e.printStackTrace();
         }
     }
-
-    
 
     public void exitGame() {
         try {
@@ -110,7 +121,6 @@ public class Client {
     public int getGameID() {
         return gameId;
     }
-
 
     public void sendMessage(String msg) {
         try {

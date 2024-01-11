@@ -6,6 +6,8 @@ import org.jspace.FormalField;
 import org.jspace.SequentialSpace;
 import org.jspace.Space;
 
+import dk.dtu.mtd.shared.EnemyType;
+
 public class Game implements Runnable {
     public int id;
     public static GameTicker gameTicker;
@@ -121,6 +123,12 @@ public class Game implements Runnable {
             gameSpace.put("gui", "chat", chat, player1.id);
             gameSpace.put("gui", "chat", chat, player2.id);
             System.out.println("Game put chat updates");
+        } else if(request[1].toString().equals("sendEnemies")) {
+            Object[] res = gameSpace.get(new ActualField("data"), new ActualField("sendEnemies"), new FormalField(EnemyType.class));
+            int senderId = (int) request[2];
+            EnemyType type = (EnemyType) res[2];
+            int recieverId = senderId == player1.id ? player2.id : player1.id;
+            waveManager.sendEnemies(type, recieverId);
         }
     }
 
