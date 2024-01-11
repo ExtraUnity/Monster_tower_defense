@@ -22,8 +22,6 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.scene.robot.Robot;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javafx.stage.Screen;
@@ -184,15 +182,12 @@ public class GameGui extends StackPane {
 
     public Pane towerLayer(double width, double height) {
         setMaxSize(width, height);
-
         Pane newTowerLayer = new Pane();
-        Robot robot = new Robot();
         newTowerLayer.setOnDragDropped(new EventHandler<DragEvent>() {
             @Override
             public void handle(DragEvent event) {
                 Dragboard dragboard = event.getDragboard();
-                Color color = robot.getPixelColor(robot.getMouseX(), robot.getMouseY());
-                if (dragboard.hasString() && color.getGreen() > 0.27 && color.getGreen() < 0.37) {
+                if (dragboard.hasString()) {
                     Controller.placeTower(dragboard.getString(), (int) ((1920*event.getX())/width), (int) ((1080*event.getY())/height));
                 }
                 hoverImage.setVisible(false);
