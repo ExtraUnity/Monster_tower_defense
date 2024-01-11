@@ -15,6 +15,7 @@ public class BasicTower extends Tower {
         size = 100;
         fireRate = 100;
         towerCost = 15;
+        upgradeCost = 5;
     }
 
     public void shoot(List<Enemy> enemies) {
@@ -24,7 +25,7 @@ public class BasicTower extends Tower {
             for (int i = 0; i < enemies.size(); i++) {
                 if (inRange(enemies.get(i)) && !enemies.get(i).isDead()) {
                     System.out.println("Enemy hit!!!!!");
-                    enemies.get(i).takeDamage(damage);
+                    enemies.get(i).takeDamage(damage, playerId);
                     lastShot = Game.gameTicker.gameTick;
                     deltaTick = 0;
                     break;

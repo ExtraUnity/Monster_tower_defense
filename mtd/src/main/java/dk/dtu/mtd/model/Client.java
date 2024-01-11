@@ -64,14 +64,6 @@ public class Client {
         }
     }
 
-    public void rewardPlayer(int reward) {
-        try {
-            gameSpace.put("reward", "damage", id, reward);
-        } catch (Exception e) {
-            System.err.println("Error in client reward");
-        }
-    }
-
     public void placeTower(String type, int x, int y) {
         try {
             gameSpace.put("request", "placeTower", id);
@@ -83,7 +75,8 @@ public class Client {
 
     public void upgradeTower(int towerId) {
         try {
-            gameSpace.put("request", "upgradeTower", towerId);
+            gameSpace.put("request", "upgradeTower", id);
+            gameSpace.put("towerId", towerId);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
