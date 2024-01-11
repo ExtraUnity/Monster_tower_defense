@@ -98,6 +98,8 @@ public class GameGui extends StackPane {
         hoverCircle.setOpacity(0.2);
         hoverCircle.setVisible(false);
 
+        
+
         getChildren().add(layout);
         setAlignment(Pos.CENTER);
         setBackground(background());
@@ -196,14 +198,22 @@ public class GameGui extends StackPane {
             }
         });
 
-        newTowerLayer.setOnDragOver(new EventHandler<DragEvent>() {
+        newTowerLayer.setOnDragEntered(new EventHandler<DragEvent>() {
+
             @Override
             public void handle(DragEvent event) {
-                event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
                 Dragboard dragboard = event.getDragboard();
                 if (dragboard.hasString() && dragboard.getString() == "basicTower") {
                     hoverImage.setImage(new Image("dk/dtu/mtd/assets/BasicTower.png"));
                 }
+            }
+            
+        });
+
+        newTowerLayer.setOnDragOver(new EventHandler<DragEvent>() {
+            @Override
+            public void handle(DragEvent event) {
+                event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
                 hoverImage.setVisible(true);
                 hoverImage.setX(event.getX() - hoverImage.getFitWidth() / 2);
                 hoverImage.setY(event.getY() - hoverImage.getFitWidth() / 2);
