@@ -21,7 +21,7 @@ public class TowerGui extends ImageView {
         circle.setVisible(false);
 
         if (towerType.equals("basicTower")) {
-            this.setImage(new Image("dk/dtu/mtd/assets/dartMonkey.png"));
+            this.setImage(new Image("dk/dtu/mtd/assets/BasicTower.png"));
         } else if (towerType.equals("superTower")) {
             this.setImage(new Image("dk/dtu/mtd/assets/SuperMonkey.png"));
         } else {

@@ -34,7 +34,7 @@ public class Game implements Runnable {
         gameTicker = new GameTicker();
         new Thread(gameTicker).start();
 
-        towerManager = new TowerManager(gameSpace);
+        towerManager = new TowerManager(gameSpace, this);
         new Thread(towerManager).start();
     }
 

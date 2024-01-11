@@ -12,11 +12,13 @@ public class TowerManager implements Runnable {
     public volatile boolean playing;
 
     Space gameSpace;
+    Game game;
 
-    public TowerManager(Space gameSpace) {
+    public TowerManager(Space gameSpace, Game game) {
         this.towerList = new ArrayList<Tower>();
         this.playing = true;
         this.gameSpace = gameSpace;
+        this.game = game;
     }
 
     @Override
@@ -26,10 +28,11 @@ public class TowerManager implements Runnable {
             for (int i = 0; i < towerList.size(); i++) {
                 //System.out.println(towerList.get(i).playerId + " " + Game.player1.id + " " + Game.player2.id);
                 if (towerList.get(i).playerId == Game.player1.id) {
-                    towerList.get(i).shoot(Game.waveManager.waveLeft.enemies);
+                    towerList.get(i).shoot(game.waveManager.waveLeft.enemies);
                 } else {
                     //System.out.println("Shooting right side");
-                    towerList.get(i).shoot(Game.waveManager.waveRight.enemies);
+                    // TODO: this can throw exceptions (possibly when another game had been started)
+                    towerList.get(i).shoot(game.waveManager.waveRight.enemies);
                 }
             }
         }

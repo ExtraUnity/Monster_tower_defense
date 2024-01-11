@@ -30,6 +30,7 @@ public class Controller {
     }
 
     public static void joinGame() {
+        //TODO: somewhere along here the previous game crashes.
         client.requestGame();
         client.joinGame();
         guiThread = new Thread(guiMonitior);

@@ -46,7 +46,7 @@ public class GameGui extends StackPane {
 
     public GameGui(String health1, String health2) {
         gameAreaHeight = Screen.getPrimary().getBounds().getHeight() - 200;
-        gameAreaWidth = (gameAreaHeight / 3) * 5;
+        gameAreaWidth = (gameAreaHeight / 9) * 16;
         layout = new VBox();
         gameArea = new StackPane();
         gameTop = new GameTopGui(health1, health2, 0);
@@ -132,7 +132,7 @@ public class GameGui extends StackPane {
 
     public static void newTower(String type, int size, int radius, int x, int y) {
         System.out.println("I got a new tower!");
-        TowerGui tower = new TowerGui(type, size, radius, (int) ((gameAreaWidth * x)/1920),  (int) ((gameAreaHeight * y)/1080));
+        TowerGui tower = new TowerGui(type, size, (int) ((gameAreaWidth * radius)/1920), (int) ((gameAreaWidth * x)/1920),  (int) ((gameAreaHeight * y)/1080));
         towerLayer.getChildren().add(tower.getCircle());
         towerLayer.getChildren().add(tower);
     }
