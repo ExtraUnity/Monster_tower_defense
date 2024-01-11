@@ -34,7 +34,6 @@ public class TowerGui extends ImageView {
         this.setId("" + towerId);
 
         this.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
-
             @Override
             public void handle(MouseEvent event) {
                 GameGui.towerClicked(towerId, playerId);

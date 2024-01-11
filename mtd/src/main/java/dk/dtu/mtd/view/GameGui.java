@@ -12,6 +12,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundImage;
@@ -196,14 +197,22 @@ public class GameGui extends StackPane {
             }
         });
 
-        newTowerLayer.setOnDragOver(new EventHandler<DragEvent>() {
+        newTowerLayer.setOnDragEntered(new EventHandler<DragEvent>() {
+
             @Override
             public void handle(DragEvent event) {
-                event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
                 Dragboard dragboard = event.getDragboard();
                 if (dragboard.hasString() && dragboard.getString() == "basicTower") {
                     hoverImage.setImage(new Image("dk/dtu/mtd/assets/BasicTower.png"));
                 }
+            }
+            
+        });
+
+        newTowerLayer.setOnDragOver(new EventHandler<DragEvent>() {
+            @Override
+            public void handle(DragEvent event) {
+                event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
                 hoverImage.setVisible(true);
                 hoverImage.setX(event.getX() - hoverImage.getFitWidth() / 2);
                 hoverImage.setY(event.getY() - hoverImage.getFitWidth() / 2);
@@ -221,6 +230,17 @@ public class GameGui extends StackPane {
                 hoverCircle.setVisible(false);
             }
         });
+
+        this.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                TowerGui lastTower = (TowerGui) towerLayer.lookup("#" + lastSelected);
+                lastTower.setCircleVisible(false);
+                lastSelected = -1;
+                event.consume();
+            }
+       });
+
         return newTowerLayer;
     }
 
