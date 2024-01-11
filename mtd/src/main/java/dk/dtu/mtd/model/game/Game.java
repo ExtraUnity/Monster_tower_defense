@@ -12,8 +12,8 @@ public class Game implements Runnable {
     public static Player player1;
     public static Player player2;
     public Space gameSpace;
-    public static WaveManager waveManager;
-    public static TowerManager towerManager;
+    public WaveManager waveManager;
+    public TowerManager towerManager;
 
     public Game(int id, int playerID1, int playerID2) {
         this.id = id;
@@ -31,7 +31,7 @@ public class Game implements Runnable {
         waveManager = new WaveManager(gameSpace);
         new Thread(waveManager).start();
         
-        gameTicker = new GameTicker();
+        gameTicker = new GameTicker(this);
         new Thread(gameTicker).start();
 
         towerManager = new TowerManager(gameSpace, this);
