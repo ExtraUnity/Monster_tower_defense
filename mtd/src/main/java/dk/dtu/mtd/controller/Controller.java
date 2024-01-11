@@ -134,11 +134,11 @@ class GUIMonitior implements Runnable {
                     // ("gui", "chat", (...) wave info , playerId)
                 } else if (update[1].toString().equals("wave")) {
                     // make apropriate gui calls to display wave
-                    int num = (int) update[2];
-                    System.out.println("init waves in gui.");
+                    String enemyTypes = (String) update[2];
+
                     Platform.runLater(() -> {
-                        GameGui.gameWaveGuiLeft.initEnemies(num);
-                        GameGui.gameWaveGuiRight.initEnemies(num);
+                        GameGui.gameWaveGuiLeft.initEnemies(enemyTypes);
+                        GameGui.gameWaveGuiRight.initEnemies(enemyTypes);
                     });
 
                     // ("gui", "chat", (...) enemy info , playerId)
