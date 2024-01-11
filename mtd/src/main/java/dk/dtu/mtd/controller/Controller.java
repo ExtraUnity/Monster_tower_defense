@@ -210,8 +210,7 @@ class GUIMonitior implements Runnable {
                     Platform.runLater(new Runnable() {
                         @Override
                         public void run() {
-                          //TODO: illigal pass of tower class
-                          GameGui.newTower(tower);
+                          GameGui.newTower(tower.getType(), tower.getSize(), tower.getRadius(), tower.getTowerId(), tower.getPlayerId(), tower.getX(), tower.getY());
                         }
 
                     });

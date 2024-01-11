@@ -12,32 +12,32 @@ public class TowerGui extends ImageView {
 
     Circle circle;
 
-    public TowerGui(Tower tower, int x, int y) {
-        this.setX(x - tower.getSize()/2);
-        this.setY(y - tower.getSize()/2);
-        this.setFitHeight(tower.getSize());
-        this.setFitWidth(tower.getSize());
+    public TowerGui(String type, int size, int radius, int towerId, int playerId, int x, int y) {
+        this.setX(x - size/2);
+        this.setY(y - size/2);
+        this.setFitHeight(size);
+        this.setFitWidth(size);
 
-        circle = new Circle(x, y, tower.getRadius());
+        circle = new Circle(x, y, radius);
         circle.setOpacity(0.2);
         circle.setVisible(false);
         circle.setMouseTransparent(true);
 
-        if (tower.getType().equals("basicTower")) {
+        if (type.equals("basicTower")) {
             this.setImage(new Image("dk/dtu/mtd/assets/BasicTower.png"));
-        } else if (tower.getType().equals("superTower")) {
+        } else if (type.equals("superTower")) {
             this.setImage(new Image("dk/dtu/mtd/assets/SuperMonkey.png"));
         } else {
             this.setImage(new Image("dk/dtu/mtd/assets/skelly.gif"));
         }
 
-        this.setId("" + tower.getTowerId());
+        this.setId("" + towerId);
 
         this.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
 
             @Override
             public void handle(MouseEvent event) {
-                GameGui.towerClicked(tower.getTowerId(), tower.getPlayerId());
+                GameGui.towerClicked(towerId, playerId);
                 event.consume();
             }
        });
