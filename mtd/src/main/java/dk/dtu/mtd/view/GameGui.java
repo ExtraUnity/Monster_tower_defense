@@ -4,6 +4,7 @@ import java.util.LinkedList;
 
 import dk.dtu.mtd.controller.Controller;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -11,6 +12,7 @@ import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
@@ -25,6 +27,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javafx.stage.Screen;
@@ -53,10 +56,8 @@ public class GameGui extends StackPane {
 
         gameChat = new GameChat();
         towerLayer = towerLayer(gameAreaWidth, gameAreaHeight);
-        towerLayer.setBorder(new Border(new BorderStroke(Color.BLACK, 
-            BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
         hoverImage = new ImageView(new Image("dk/dtu/mtd/assets/skelly.gif"));
-        hoverCircle = new Circle(0, 0, 300);
+        hoverCircle = new Circle(0, 0, ((300*gameAreaWidth)/1920));
         gameWaveGuiLeft = new GameWaveGui(gameAreaWidth, gameAreaHeight);
         gameWaveGuiRight = new GameWaveGui(gameAreaWidth, gameAreaHeight);
 
@@ -93,6 +94,9 @@ public class GameGui extends StackPane {
 
         getChildren().add(layout);
         setAlignment(Pos.CENTER);
+        setBackground(background());
+        minWidth(2000);
+        minHeight(2000);
 
     }
 
@@ -112,15 +116,17 @@ public class GameGui extends StackPane {
     }
 
     public ImageView gameAreaBackground(double width, double height) {
-        return new ImageView(new Image("dk/dtu/mtd/assets/gameBackground.png", width, height, false, false));
+        return new ImageView(new Image("dk/dtu/mtd/assets/GameArea.png", width, height, false, true));
     }
 
     public Background background() {
-        Image background = new Image("dk/dtu/mtd/assets/gameBackground.png", Gui.stage.getWidth(),
+
+        Image background = new Image("dk/dtu/mtd/assets/Green.png", Gui.stage.getWidth(),
                 Gui.stage.getHeight(), true, false);
         Background backgoundView = new Background(new BackgroundImage(background, BackgroundRepeat.NO_REPEAT,
                 BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,
                 new BackgroundSize(Gui.stage.getHeight(), Gui.stage.getWidth(), false, false, false, true)));
+    
         return backgoundView;
     }
 
@@ -161,7 +167,7 @@ public class GameGui extends StackPane {
                 event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
                 Dragboard dragboard = event.getDragboard();
                 if (dragboard.hasString() && dragboard.getString() == "basicTower") {
-                    hoverImage.setImage(new Image("dk/dtu/mtd/assets/dartMonkey.png"));
+                    hoverImage.setImage(new Image("dk/dtu/mtd/assets/BasicTower.png"));
                 }
                 hoverImage.setVisible(true);
                 hoverImage.setX(event.getX() - hoverImage.getFitWidth() / 2);

@@ -50,7 +50,7 @@ class EnemyImage extends ImageView {
     public double yCoord = 900;
 
     EnemyImage() {
-        Image image = new Image("dk/dtu/mtd/assets/skelly.gif", 100, 0, true, false);
+        Image image = new Image("dk/dtu/mtd/assets/skelly.gif", 150, 0, true, false);
         setImage(image);
         setX(xCoord);
         setY(yCoord);

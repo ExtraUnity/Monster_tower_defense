@@ -44,7 +44,7 @@ public abstract class Enemy {
     //THIS IS CURSED DON'T HATE ME
     public void move() {
         int distToCenterX = Math.abs(this.x - 960);
-        if(this.y < 590 && distToCenterX < 310) { //First stretch moving downwards
+        if(this.y < 580 && distToCenterX < 310) { //First stretch moving downwards
             this.y += this.speed;
 
         } else if(distToCenterX < 520) { //Second stretch, moving to the side
