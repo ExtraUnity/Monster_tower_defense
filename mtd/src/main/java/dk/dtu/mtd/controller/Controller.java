@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.LinkedList;
 import dk.dtu.mtd.model.Client;
-import dk.dtu.mtd.model.game.Tower;
 import dk.dtu.mtd.shared.EnemyType;
 import dk.dtu.mtd.view.GameGui;
 import dk.dtu.mtd.view.GameWaveGui;
@@ -197,12 +196,15 @@ class GUIMonitior implements Runnable {
                     });
 
                 } else if (update[1].toString().equals("newTower")) {
-                    Tower tower = (Tower) update[2];
+                    // String type, int size, int radius, int towerId, int playerId, int x, int y
+                    String[] towerInfo = ((String) update[2]).split(" ");
+
                     Platform.runLater(new Runnable() {
                         @Override
                         public void run() {
-                            GameGui.newTower(tower.getType(), tower.getSize(), tower.getRadius(), tower.getTowerId(),
-                                    tower.getPlayerId(), tower.getX(), tower.getY());
+                            GameGui.newTower(towerInfo[0], Integer.valueOf(towerInfo[1]), Integer.valueOf(towerInfo[2]),
+                                    Integer.valueOf(towerInfo[3]), Integer.valueOf(towerInfo[4]),
+                                    Integer.valueOf(towerInfo[5]), Integer.valueOf(towerInfo[6]));
                         }
 
                     });
