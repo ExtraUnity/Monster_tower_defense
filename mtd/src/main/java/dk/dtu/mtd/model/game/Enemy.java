@@ -33,9 +33,13 @@ public abstract class Enemy {
         performDeathAnimation();
     }
 
+    public void eliminateFromRoster(){
+        health = -1;
+    }
+
     // Is this enemy at the finish line
     public boolean reachedFinish() {
-        return this.y > 1080 && this.y < 2000 && !isDead();
+        return this.y > 1080 && this.y < 3500 && !isDead();
     }
 
     // Method to define the movement of the enemy

@@ -31,7 +31,9 @@ public class GameWaveGui extends StackPane {
 
         // Splttting the input:
         String[] pairs = enemyTypes.split(",");
-        
+        if(pairs.length < 2){
+            return;
+        }
         for (String pair : pairs) { // For each pair
             String[] keyValue = pair.split(" ");
             System.out.println(pair);

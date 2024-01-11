@@ -270,13 +270,14 @@ class Wave {
 
                 for (int i = 0; i < spawned; i++) {
                     enemies.get(i).move();
-                    if (enemies.get(i).reachedFinish()) {
+                    if (enemies.get(i).reachedFinish() && !enemies.get(i).isDead()) {
                         enemies.get(i).setY(3000);
                         enemies.get(i).transferDamageToPlayer(playerId);
 
                         String newHp = "" + Game.player1.getHealth() + " " + Game.player2.getHealth();
                         space.put("gui", "damage", newHp, Game.player1.id);
                         space.put("gui", "damage", newHp, Game.player2.id);
+                        enemies.get(i).eliminateFromRoster();
                     }
                 }
                 LinkedList<String> coordinates = new LinkedList<String>();
@@ -317,7 +318,7 @@ class Wave {
                 return false;
             }
         }
-        System.out.println("The wave is complete!");
+        System.out.println("The wave is complete!" + playerId);
         return true;
     }
 
