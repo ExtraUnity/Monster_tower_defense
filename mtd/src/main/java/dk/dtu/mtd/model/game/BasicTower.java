@@ -13,6 +13,7 @@ public class BasicTower extends Tower {
         damage = 10;
         size = 100;
         fireRate = 100;
+        towerCost = 15;
     }
 
     public void shoot(List<Enemy> enemies) {

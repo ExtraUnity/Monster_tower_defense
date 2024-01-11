@@ -6,7 +6,7 @@ public abstract class Tower {
 
     String type;
 
-    int radius, x, y, size, damage, fireRate, playerId, towerId;
+    int radius, x, y, size, damage, towerCost, fireRate, playerId, towerId;
     int lastShot;
 
     int towerLevel = 0;
@@ -46,6 +46,10 @@ public abstract class Tower {
 
     public int getRadius() {
         return radius;
+    }
+
+    public int getTowerCost() {
+        return towerCost;
     }
     
 }

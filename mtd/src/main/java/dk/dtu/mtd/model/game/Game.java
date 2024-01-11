@@ -17,8 +17,8 @@ public class Game implements Runnable {
 
     public Game(int id, int playerID1, int playerID2) {
         this.id = id;
-        player1 = new Player(playerID1, 150, 0);
-        player2 = new Player(playerID2, 150, 0);
+        player1 = new Player(playerID1, 150, 25);
+        player2 = new Player(playerID2, 150, 25);
         gameSpace = new SequentialSpace();
         LinkedList<String> chat = new LinkedList<String>();
         try {

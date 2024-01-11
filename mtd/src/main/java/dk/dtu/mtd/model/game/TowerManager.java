@@ -42,6 +42,12 @@ public class TowerManager implements Runnable {
         } else if (Game.player2.id == playerId && newTower.x < 960) {
             return false;
         }
+
+        if (Game.player1.id == playerId && Game.player1.getRewards() < newTower.getTowerCost()) {
+            return false;
+        } else if (Game.player2.id == playerId && Game.player2.getRewards() < newTower.getTowerCost()) {
+            return false;
+        }
         return true;
     }
 
@@ -62,6 +68,11 @@ public class TowerManager implements Runnable {
                 towerList.add(tower);
                 Game.gameSpace.put("gui", "newTower", tower, Game.player1.id);
                 Game.gameSpace.put("gui", "newTower", tower, Game.player2.id);
+                if(Game.player1.id == playerId) {
+                    Game.player1.spendRewards(tower.getTowerCost());
+                } else {
+                    Game.player2.spendRewards(tower.getTowerCost());
+                }
                 System.out.println("Tower placed at " + towerList.get(towerList.size() - 1).x + " "
                             + towerList.get(towerList.size() - 1).y);
             }
