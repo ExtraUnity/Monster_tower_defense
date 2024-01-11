@@ -152,9 +152,9 @@ public class GameGui extends StackPane {
         gameChat.displayChat();
     }
 
-    public static void newTower(Tower objektTower) {
+    public static void newTower(String type, int size, int radius, int towerId, int playerId, int x, int y) {
         System.out.println("I got a new tower!");
-        TowerGui tower = new TowerGui(objektTower, (int) ((gameAreaWidth * objektTower.getX())/1920),  (int) ((gameAreaHeight * objektTower.getY())/1080));
+        TowerGui tower = new TowerGui(type, size, radius, towerId, playerId, (int) ((gameAreaWidth * x)/1920),  (int) ((gameAreaHeight * y)/1080));
         towerLayer.getChildren().add(0,tower.getCircle());
         towerLayer.getChildren().add(tower);
     }
