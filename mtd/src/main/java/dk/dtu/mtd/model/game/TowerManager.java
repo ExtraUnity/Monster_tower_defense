@@ -81,6 +81,7 @@ public class TowerManager implements Runnable {
                     game.player2.spendRewards(tower.getTowerCost());
                 }
             }
+            game.updateReward();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -101,6 +102,7 @@ public class TowerManager implements Runnable {
                     break;
                 }
             }
+            game.updateReward();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

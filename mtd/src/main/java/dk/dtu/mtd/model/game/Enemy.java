@@ -1,5 +1,7 @@
 package dk.dtu.mtd.model.game;
 
+import org.jspace.ActualField;
+
 public abstract class Enemy {
     protected int health;
     protected int speed;
@@ -119,20 +121,13 @@ public abstract class Enemy {
 
     // Method to transfer reward to the player
     protected void transferRewardToPlayer(int playerId, Game game) {
+        System.out.println("Transering reward " + reward + " to player with id " + playerId);
         if (playerId == game.player1.id) {
             game.player1.addReward(reward);
-
-            // System.out.println("player 1 has " + game.player1.getRewards() + " reward");
         } else {
             game.player2.addReward(reward);
-            // System.out.println("player 2 has " + game.player2.getRewards() + " reward");
         }
-
-        try {
-            game.gameSpace.put("request", "reward", reward, playerId);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        game.updateReward();
 
     }
 

@@ -22,7 +22,6 @@ public class GameBottomGui extends BorderPane {
     }
 
     public void updateGameBottomGui(String newReward) {
-        System.out.println("new reward in GUI" + newReward);
         shop.updateRewardBox(newReward);
     }
 

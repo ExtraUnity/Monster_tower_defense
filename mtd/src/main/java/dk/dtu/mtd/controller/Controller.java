@@ -224,12 +224,11 @@ class GUIMonitior implements Runnable {
                         }
                     });
                 } else if (update[1].toString().equals("reward")) {
-                    System.out.println("Reciving reward " + client.id);
-                    String reward = (String) update[2];
+                    int reward = (int) update[2];
                     Platform.runLater(new Runnable() {
                         @Override
                         public void run() {
-                            GameGui.bottom.updateGameBottomGui(reward);
+                            GameGui.bottom.updateGameBottomGui("" + reward);
                         }
                     });
                 }
