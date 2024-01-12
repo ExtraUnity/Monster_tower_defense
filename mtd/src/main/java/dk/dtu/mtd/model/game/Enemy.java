@@ -7,21 +7,21 @@ public abstract class Enemy {
     protected int reward; // Amount of money gained from killing enemy 
 
     protected int x, y;
-    Game game;
 
-    public Enemy(int health, int speed, int damage, int reward, Game game) {
+    public Enemy(int health, int speed, int damage, int reward) {
         this.health = health;
         this.speed = speed;
         this.damage = damage;
         this.reward = reward;
-        this.game = game;
+        this.x = -1000;
+        this.y = 500;
     }
 
     // Method to take damage, reducing health
-    public void takeDamage(int amount, int playerId) {
+    public void takeDamage(int amount, int playerId, Game game) {
         health -= amount;
         if (isDead()) {
-            die(playerId);
+            die(playerId, game);
         }
     }
 
@@ -30,12 +30,15 @@ public abstract class Enemy {
     }
 
 
-    protected void die(int playerId) {
-        transferRewardToPlayer(playerId);
+    protected void die(int playerId, Game game) {
+        transferRewardToPlayer(playerId, game);
         performDeathAnimation();
     }
 
+    //remove an enemy that is not neccesarely dead.
     public void eliminateFromRoster(){
+        this.x = 3000;
+        this.y = 3000;
         health = -1;
     }
 
@@ -47,6 +50,10 @@ public abstract class Enemy {
     // Method to define the movement of the enemy
     //THIS IS CURSED DON'T HATE ME
     public void move() {
+        if(this.x < 0){
+            System.out.println("I'm not spawned");
+            return;
+        }
         int distToCenterX = Math.abs(this.x - 960);
         if(this.y < 580 && distToCenterX < 310) { //First stretch moving downwards
             this.y += this.speed;
@@ -113,7 +120,7 @@ public abstract class Enemy {
     }
 
     // Method to transfer reward to the player
-    protected void transferRewardToPlayer(int playerId) {
+    protected void transferRewardToPlayer(int playerId, Game game) {
         if(playerId == game.player1.id) {
             game.player1.addReward(reward);
             //System.out.println("player 1 has " + game.player1.getRewards() + " reward");

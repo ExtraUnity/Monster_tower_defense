@@ -175,6 +175,7 @@ public class Game implements Runnable {
 
             System.out.println("Game put chat updates");
         } else if (request[1].toString().equals("sendEnemies")) {
+            System.out.println("Send enemies request recived!!!");
             Object[] res = gameSpace.get(new ActualField("data"), new ActualField("sendEnemies"),
                     new FormalField(EnemyType.class));
             int senderId = (int) request[2];

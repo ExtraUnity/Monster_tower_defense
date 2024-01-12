@@ -14,6 +14,7 @@ public class TowerShop extends HBox {
 
     public TowerShop() {
         setMaxHeight(100);
+        setMinWidth(500);
         setAlignment(Pos.CENTER_RIGHT);
         
         final ImageView basicTower = new ImageView(new Image("dk/dtu/mtd/assets/BasicTower.png", 100, 0, true, true));
