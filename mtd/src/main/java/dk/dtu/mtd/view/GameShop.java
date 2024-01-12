@@ -41,7 +41,7 @@ public class GameShop extends StackPane {
     }
 
     void updateRewardBox(String newReward) {
-        stackPane.getChildren().remove(1);
+        stackPane.getChildren().remove(3);
         stackPane.getChildren().add(new Text(newReward));
     }
 }

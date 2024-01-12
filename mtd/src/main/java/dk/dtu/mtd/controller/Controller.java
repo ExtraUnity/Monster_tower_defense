@@ -2,10 +2,6 @@ package dk.dtu.mtd.controller;
 
 import org.jspace.ActualField;
 import org.jspace.FormalField;
-import org.jspace.Tuple;
-
-import com.google.gson.Gson;
-
 import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.LinkedList;
@@ -72,7 +68,6 @@ public class Controller {
     }
 
     public static void sendMessage(String msg) {
-        System.out.println("Controller handling message");
         client.sendMessage(msg);
     }
 
@@ -112,7 +107,6 @@ class GUIMonitior implements Runnable {
 
                 // ("gui", "damage", (int) new hp , playerId)
                 if (update[1].toString().equals("damage")) {
-                    // System.out.println("updating GUI");
                     String[] hp = ((String) update[2]).split(" ");
                     final String hp1 = hp[0];
                     final String hp2 = hp[1];
@@ -125,7 +119,6 @@ class GUIMonitior implements Runnable {
                     // ("gui", "chat", (LinkedList<String>) chat log , playerId)
                 } else if (update[1].toString().equals("chat")) {
                     LinkedList<String> chat = (LinkedList<String>) update[2];
-                    System.out.println("Gui recieved request to update");
                     Platform.runLater(new Runnable() {
 
                         @Override
@@ -147,7 +140,6 @@ class GUIMonitior implements Runnable {
 
                     // ("gui", "sendEnemies", String enemy info , playerId)
                 } else if (update[1].toString().equals("sendEnemies")) {
-                    System.out.println("GUI recived enemies");
                     String types = (String) update[2];
                     int waveId = (int) client.gameSpace.get(new ActualField("gui"),
                             new ActualField("sendEnemiesWaveId"),
@@ -213,8 +205,6 @@ class GUIMonitior implements Runnable {
                         }
 
                     });
-
-
                 } else if (update[1].toString().equals("playerLost")) {
                     Platform.runLater(new Runnable() {
                         @Override
@@ -234,7 +224,7 @@ class GUIMonitior implements Runnable {
                     Platform.runLater(new Runnable() {
                         @Override
                         public void run() {
-                            for(int i = 0; i < GameGui.gameArea.getChildren().size(); i++){
+                            for (int i = 0; i < GameGui.gameArea.getChildren().size(); i++) {
                                 Node n = GameGui.gameArea.getChildren().get(i);
                                 if (n instanceof GameWaveGui) {
                                     GameWaveGui gui = (GameWaveGui) n;
@@ -246,11 +236,20 @@ class GUIMonitior implements Runnable {
                             }
                         }
                     });
+                } else if (update[1].toString().equals("reward")) {
+                    int reward = (int) update[2];
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            GameGui.bottom.updateGameBottomGui("" + reward);
+                        }
+                    });
                 }
             } catch (InterruptedException e) {
                 counter++;
 
                 if (counter == 100) {
+                    // These prints are to let the player know they have been disconected
                     System.out.println("GuiMonitor failing, assuming disconnected");
                     System.out.println("Returning to main menu");
                     Platform.runLater(new Runnable() {

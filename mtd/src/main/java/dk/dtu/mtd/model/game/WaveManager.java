@@ -36,20 +36,18 @@ public class WaveManager implements Runnable {
     @Override
     public void run() {
         while (playing) {
-            System.out.println("Ready for wave " + waveRound);
             player1Done.set(false);
             player2Done.set(false);
             spawnWave(waveRound);
 
             waveRound++;
             try {
-                System.out.println("Sleeping for 1000 ms");
                 Thread.sleep(1000L);
             } catch (InterruptedException e) {
                 System.out.println("Wavemanger failed to sleep after round:" + (waveRound - 1));
             }
         }
-        System.out.println("Wavemaneger closing");
+        System.out.println("Wavemaneger " + game.id + " closing");
     }
 
     String messageGenerator(Wave wave) {
@@ -80,13 +78,10 @@ public class WaveManager implements Runnable {
             }
             message.append(lastType).append(" ").append(count);
         }
-
-        System.out.println(message.toString()); // This line is for debugging
         return message.toString();
     }
 
     void sendEnemies(EnemyType type, int playerId) {
-        System.out.println("Wavemaneger Sending enemies called");
 
         ArrayList<Enemy> enemies = new ArrayList<Enemy>();
         switch (type) {
@@ -113,8 +108,7 @@ public class WaveManager implements Runnable {
             @Override
             public void run() {
                 try {
-                    System.out.println(
-                            "I should now send enemies to player " + playerId + ". This is wave " + attackWave.waveId);
+                    System.out.println("Sending enemies to player " + playerId + ". This is wave " + attackWave.waveId);
                     game.gameSpace.put("gui", "sendEnemies", messageGenerator(attackWave), game.player1.id);
                     game.gameSpace.put("gui", "sendEnemiesWaveId", attackWave.waveId, game.player1.id);
                     game.gameSpace.put("gui", "sendEnemies", messageGenerator(attackWave), game.player2.id);
@@ -178,9 +172,6 @@ public class WaveManager implements Runnable {
                 e.printStackTrace();
             }
         }
-
-        System.out.println("Spawning wave " + waveNumber);
-
     }
 
     ArrayList<Enemy> waveGenerator(int wave) {
@@ -310,7 +301,6 @@ class Wave {
             }
 
             if (isComplete()) {
-                System.out.println("The wave is complete " + waveId);
                 try {
                     space.put("gui", "waveEnded", waveId, game.player1.id);
                     space.put("gui", "waveEnded", waveId, game.player2.id);
@@ -332,7 +322,6 @@ class Wave {
                 return false;
             }
         }
-        System.out.println("The wave is complete!" + playerId);
         return true;
     }
 

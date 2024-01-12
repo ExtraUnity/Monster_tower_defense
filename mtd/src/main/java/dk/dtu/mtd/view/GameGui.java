@@ -34,7 +34,7 @@ public class GameGui extends StackPane {
 
     static Pane towerLayer;
     static GameTopGui gameTop;
-    GameBottomGui bottom;
+    public static GameBottomGui bottom;
     static GameChat gameChat;
     static int lastSelected;
     static Button upgradeButton;
@@ -64,7 +64,6 @@ public class GameGui extends StackPane {
         towerLayer.getChildren().add(upgradeButton);
         upgradeButton.setOnAction(e -> {
             Controller.upgradeTower(lastSelected);
-            System.out.println(lastSelected);
         });
         hoverCircle = new Circle(0, 0, 300);
 
@@ -158,14 +157,12 @@ public class GameGui extends StackPane {
     }
 
     public static void updateGameGui(LinkedList<String> newChat) {
-        System.out.println("Got new chat list!");
         gameChat.chatList = newChat;
         gameChat.displayChat();
     }
 
 
     public static void newTower(String type, int size, int radius, int towerId, int playerId, int x, int y) {
-        System.out.println("I got a new tower!");
         TowerGui tower = new TowerGui(type, size, (int) ((gameAreaWidth * radius)/1920), towerId, playerId, (int) ((gameAreaWidth * x)/1920),  (int) ((gameAreaHeight * y)/1080));
         towerLayer.getChildren().add(0,tower.getCircle());
         towerLayer.getChildren().add(tower);
@@ -262,7 +259,6 @@ public class GameGui extends StackPane {
                     upgradeButton.setVisible(false);
                     lastSelected = -1;
                 }
-                System.out.println("Clicked at: (" + (int) ((1920 * event.getX()) / width) + "," + (int) ((1080 * event.getY()) / height) + ")");
                 event.consume();
             }
        });

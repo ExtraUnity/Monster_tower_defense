@@ -56,6 +56,15 @@ public class Game implements Runnable {
         }
     }
 
+    public void updateReward() {
+        try {
+            gameSpace.put("gui", "reward", player1.getRewards(), player1.id);
+            gameSpace.put("gui", "reward", player2.getRewards(), player2.id);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     @Override
     public void run() {
 
@@ -134,7 +143,8 @@ public class Game implements Runnable {
                 gameSpace.put("gui", "damage", newHealth, player2.id);
             }
         } else if (request[1].toString().equals("reward")) {
-            int reward = (int) request[3];
+            // TODO: ABSOLUT UNLOVLIG fix it plz!!!!!!!
+            int reward = (int) request[2];
 
             if ((int) request[2] == player1.id) {
                 player2.setRewards(player2.getRewards() + reward);
@@ -157,12 +167,9 @@ public class Game implements Runnable {
             towerManager.upgradeTower((int) request[2]); // request[2] = towerId
 
         } else if (request[1].toString().equals("chat")) {
-            System.out.println("Game recieved chat request");
-            // Retrieve chatlist and update to include message
 
             String msg = (String) gameSpace.get(new ActualField("data"), new ActualField("chat"),
                     new FormalField(String.class))[2];
-            System.out.println("Game recieved message");
 
             String player = String.valueOf((int) request[2]);
             Object[] res = gameSpace.get(new ActualField("chatList"), new FormalField(LinkedList.class));
@@ -173,9 +180,8 @@ public class Game implements Runnable {
             gameSpace.put("gui", "chat", chat, player1.id);
             gameSpace.put("gui", "chat", chat, player2.id);
 
-            System.out.println("Game put chat updates");
         } else if (request[1].toString().equals("sendEnemies")) {
-            System.out.println("Send enemies request recived!!!");
+
             Object[] res = gameSpace.get(new ActualField("data"), new ActualField("sendEnemies"),
                     new FormalField(EnemyType.class));
             int senderId = (int) request[2];

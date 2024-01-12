@@ -23,26 +23,19 @@ public class GameWaveGui extends StackPane {
         this.waveGuiId = id;
         this.gameAreaHeight = gameAreaHeight;
         this.gameAreaWidth = gameAreaWidth;
-        System.out.println(this.gameAreaHeight + " " + this.gameAreaWidth);
     }
 
     public void initEnemies(String enemyTypes) {
         wavePane = new Pane();
         enemyArray = new ArrayList<>();
-
-        System.out.println("Initializing Enemies for next wave");
-        System.out.println(enemyTypes);
-
         // Splttting the input:
         String[] pairs = enemyTypes.split(",");
-        System.out.println(Arrays.toString(pairs));
         if (pairs[0].equals("")) {
             System.out.println("Recived empty wave");
             return;
         }
         for (String pair : pairs) { // For each pair
             String[] keyValue = pair.split(" ");
-            System.out.println(pair);
 
             int numberOfEnemies = Integer.valueOf(keyValue[1]);
             String type = keyValue[0];
@@ -70,14 +63,8 @@ public class GameWaveGui extends StackPane {
     }
 
     public void removeWave() {
-        System.out.println("Removing the wave from gui!!");
         getChildren().remove(wavePane);
-
-        if (GameGui.gameWaveGuiLeft.equals(this)) {
-            System.out.println("Im the left gameVaveGui");
-        } else if (GameGui.gameWaveGuiRight.equals(this)) {
-            System.out.println("Im the right gameVaveGui");
-        } else {
+        if (!GameGui.gameWaveGuiLeft.equals(this) && !GameGui.gameWaveGuiRight.equals(this)) {
             GameGui.gameArea.getChildren().remove(this);
         }
     }

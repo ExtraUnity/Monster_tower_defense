@@ -12,18 +12,16 @@ public class GameBottomGui extends BorderPane {
 
     public GameBottomGui() {
         this.shop = new GameShop();
-
         ImageView chatButton = chatButton();
 
         BorderPane.setAlignment(chatButton, Pos.CENTER_RIGHT);
-
         setMinWidth(Screen.getPrimary().getBounds().getWidth());
         setMaxHeight(100);
         setCenter(shop);
         setRight(chatButton);
     }
 
-    void updateGameBottomGui(String newReward) {
+    public void updateGameBottomGui(String newReward) {
         shop.updateRewardBox(newReward);
     }
 
