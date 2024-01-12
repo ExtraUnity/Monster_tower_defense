@@ -1,5 +1,6 @@
 package dk.dtu.mtd.model.game;
 
+import java.rmi.UnexpectedException;
 import java.util.LinkedList;
 import org.jspace.ActualField;
 import org.jspace.FormalField;
@@ -16,7 +17,7 @@ public class Game implements Runnable {
     public Space gameSpace;
     public WaveManager waveManager;
     public TowerManager towerManager;
-    private boolean playing;
+    private volatile boolean playing;
 
     public Game(int id, int playerID1, int playerID2) {
         this.id = id;
@@ -48,6 +49,11 @@ public class Game implements Runnable {
         waveManager.player2Done.set(true);
         waveManager.playing = false;
         playing = false;
+        try {
+            gameSpace.put("request", "displayFinish", 0);
+        } catch (InterruptedException e) {
+            System.out.println("lol, hvorfor må vi ikke lukke spillet");
+        }
     }
 
     @Override
@@ -62,8 +68,34 @@ public class Game implements Runnable {
                 System.out.println("Game has failed on server side");
             }
         }
-
+        try {
+            displayWinner();
+        } catch (UnexpectedException e) {
+            e.printStackTrace();
+        }
         System.out.println("Game " + id + " ending it's run loop");
+    }
+
+    public void displayWinner() throws UnexpectedException {
+        if(player1.hasLost) {
+            // ("gui", (String) type, (Object) data, playerId)
+            try {
+                gameSpace.put("gui", "playerLost", "", player1.id);
+                gameSpace.put("gui", "playerWon", "", player2.id);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            
+        } else if (player2.hasLost) {
+            try {
+                gameSpace.put("gui", "playerLost", "", player2.id);
+                gameSpace.put("gui", "playerWon", "", player1.id);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        } else {
+            throw new UnexpectedException("Nobody lost, it was a tie and now we can go be happy.");
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -143,6 +175,8 @@ public class Game implements Runnable {
             EnemyType type = (EnemyType) res[2];
             int recieverId = senderId == player1.id ? player2.id : player1.id;
             waveManager.sendEnemies(type, recieverId);
+        } else if (request[1].toString().equals("displayFinish")) {
+            //Do nothing, just register the request.
         }
     }
 

@@ -274,7 +274,7 @@ class Wave {
                     enemies.get(i).move();
                     if (enemies.get(i).reachedFinish() && !enemies.get(i).isDead()) {
                         enemies.get(i).setY(3000);
-                        enemies.get(i).transferDamageToPlayer(playerId);
+                        enemies.get(i).transferDamageToPlayer(playerId, game);
 
                         String newHp = "" + game.player1.getHealth() + " " + game.player2.getHealth();
                         space.put("gui", "damage", newHp, game.player1.id);

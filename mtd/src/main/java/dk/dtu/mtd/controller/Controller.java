@@ -209,6 +209,20 @@ class GUIMonitior implements Runnable {
 
                     });
 
+                } else if (update[1].toString().equals("playerLost")) {
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            GameGui.displayWin();
+                        }
+                    });
+                } else if (update[1].toString().equals("playerWon")) {
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            GameGui.displayLose();
+                        }
+                    });
                 }
             } catch (InterruptedException e) {
                 counter++;
