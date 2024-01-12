@@ -31,7 +31,7 @@ public class TowerShop extends HBox {
                 event.consume();
             }
         });
-        final ImageView superTower = new ImageView(new Image("dk/dtu/mtd/assets/SuperMonkey.png", 100, 0, true, true));
+        final ImageView superTower = new ImageView(new Image("dk/dtu/mtd/assets/dartMonkey.png", 100, 0, true, true));
         this.getChildren().add(superTower);
         superTower.addEventHandler(MouseEvent.DRAG_DETECTED, new EventHandler<MouseEvent>() {
             @Override
@@ -39,7 +39,7 @@ public class TowerShop extends HBox {
                 Dragboard db = superTower.startDragAndDrop(TransferMode.ANY);
 
                 ClipboardContent content = new ClipboardContent();
-                content.putString("superTower");
+                content.putString("aoeTower");
                 db.setContent(content);
 
                 event.consume();

@@ -222,6 +222,9 @@ public class GameGui extends StackPane {
                 if (dragboard.hasString() && dragboard.getString() == "basicTower") {
                     hoverImage.setImage(new Image("dk/dtu/mtd/assets/BasicTower.png"));
                     hoverCircle.setRadius((gameAreaWidth * 300)/1920);
+                } else if (dragboard.hasString() && dragboard.getString() == "aoeTower") {
+                    hoverImage.setImage(new Image("dk/dtu/mtd/assets/dartMonkey.png"));
+                    hoverCircle.setRadius((gameAreaWidth * 200)/1920);
                 }
             }
             

@@ -64,8 +64,8 @@ public class TowerManager implements Runnable {
             if (towerInfo[1].equals("basicTower")) {
                 tower = new BasicTower((int) towerInfo[2], (int) towerInfo[3], towerList.size(), playerId,
                         game.gameTicker);
-            } else if (towerInfo[1].equals("superTower")) {
-                tower = new BasicTower((int) towerInfo[2], (int) towerInfo[3], towerList.size(), playerId,
+            } else if (towerInfo[1].equals("aoeTower")) {
+                tower = new AoeTower((int) towerInfo[2], (int) towerInfo[3], towerList.size(), playerId,
                         game.gameTicker);
             } else {
                 tower = new BasicTower(0, 0, towerList.size(), playerId, game.gameTicker);
