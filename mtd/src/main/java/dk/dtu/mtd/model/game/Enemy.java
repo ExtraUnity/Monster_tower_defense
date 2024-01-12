@@ -35,7 +35,10 @@ public abstract class Enemy {
         performDeathAnimation();
     }
 
+    //remove an enemy that is not neccesarely dead.
     public void eliminateFromRoster(){
+        this.x = 3000;
+        this.y = 3000;
         health = -1;
     }
 

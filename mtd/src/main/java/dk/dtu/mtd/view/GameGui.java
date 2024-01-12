@@ -57,6 +57,7 @@ public class GameGui extends StackPane {
         lastSelected = -1;
 
         upgradeButton.setVisible(false);
+        
         towerLayer.getChildren().add(upgradeButton);
         upgradeButton.setOnAction(e -> {
             Controller.upgradeTower(lastSelected);
