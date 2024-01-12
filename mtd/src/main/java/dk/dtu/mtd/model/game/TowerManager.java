@@ -5,10 +5,6 @@ import java.util.List;
 
 import org.jspace.ActualField;
 import org.jspace.FormalField;
-import org.jspace.Space;
-import org.jspace.Tuple;
-
-import com.google.gson.Gson;
 
 public class TowerManager implements Runnable {
     public volatile List<Tower> towerList;
@@ -25,15 +21,11 @@ public class TowerManager implements Runnable {
     @Override
     public void run() {
         while (playing) {
-            // System.out.println(towerList.size());
+
             for (int i = 0; i < towerList.size(); i++) {
-                // System.out.println(towerList.get(i).playerId + " " + Game.player1.id + " " +
-                // Game.player2.id);
                 if (towerList.get(i).playerId == game.player1.id) {
                     towerList.get(i).shoot(game.waveManager.leftEnemies, game);
                 } else {
-                    // System.out.println("Shooting right side");
-                    // TODO: this can throw exceptions (possibly when another game had been started)
                     towerList.get(i).shoot(game.waveManager.rightEnemies, game);
                 }
             }

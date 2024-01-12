@@ -28,7 +28,6 @@ public class BasicTower extends Tower {
         if (deltaTick > fireRate) {
             for (int i = 0; i < enemies.size(); i++) {
                 if (inRange(enemies.get(i)) && !enemies.get(i).isDead()) {
-                    System.out.println("Enemy hit!!!!!");
                     enemies.get(i).takeDamage(damage, playerId, game);
                     lastShot = game.gameTicker.gameTick;
                     deltaTick = 0;

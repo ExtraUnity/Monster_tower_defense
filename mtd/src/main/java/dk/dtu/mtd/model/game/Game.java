@@ -89,15 +89,11 @@ public class Game implements Runnable {
                 String newHealth = "" + player1.getHealth() + " " + player2.getHealth();
                 gameSpace.put("gui", "damage", newHealth, player1.id);
                 gameSpace.put("gui", "damage", newHealth, player2.id);
-
-                System.out.println("player2 recived " + damage + " damage");
             } else {
                 player1.setHealth(player1.getHealth() - damage);
                 String newHealth = "" + player1.getHealth() + " " + player2.getHealth();
                 gameSpace.put("gui", "damage", newHealth, player1.id);
                 gameSpace.put("gui", "damage", newHealth, player2.id);
-
-                System.out.println("player1 recived " + damage + " damage");
             }
         } else if (request[1].toString().equals("reward")) {
             int reward = (int) request[3];
@@ -118,14 +114,18 @@ public class Game implements Runnable {
             }
         } else if (request[1].toString().equals("placeTower")) {
             towerManager.placeTower((int) request[2]);
+
         } else if (request[1].toString().equals("upgradeTower")) {
-            towerManager.upgradeTower((int) request[2]); // request[2] = towerId
+            towerManager.upgradeTower((int) request[2]); //request[2] = towerId
+
         } else if (request[1].toString().equals("chat")) {
             System.out.println("Game recieved chat request");
             // Retrieve chatlist and update to include message
+
             String msg = (String) gameSpace.get(new ActualField("data"), new ActualField("chat"),
                     new FormalField(String.class))[2];
             System.out.println("Game recieved message");
+
             String player = String.valueOf((int) request[2]);
             Object[] res = gameSpace.get(new ActualField("chatList"), new FormalField(LinkedList.class));
             LinkedList<String> chat = (LinkedList<String>) res[1];
@@ -134,6 +134,7 @@ public class Game implements Runnable {
             // One for each player
             gameSpace.put("gui", "chat", chat, player1.id);
             gameSpace.put("gui", "chat", chat, player2.id);
+
             System.out.println("Game put chat updates");
         } else if (request[1].toString().equals("sendEnemies")) {
             Object[] res = gameSpace.get(new ActualField("data"), new ActualField("sendEnemies"),
