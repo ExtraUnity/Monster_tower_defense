@@ -279,6 +279,9 @@ class Wave {
                         String newHp = "" + game.player1.getHealth() + " " + game.player2.getHealth();
                         space.put("gui", "damage", newHp, game.player1.id);
                         space.put("gui", "damage", newHp, game.player2.id);
+
+                        // DEN HER FUNCTION SKAL KALDES FOR AT DE IKKE LÆNGERE DEALER DAMAGE
+                        enemies.get(i).eliminateFromRoster();
                     }
                 }
                 LinkedList<String> coordinates = new LinkedList<String>();
