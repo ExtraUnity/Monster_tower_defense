@@ -146,6 +146,7 @@ class GUIMonitior implements Runnable {
 
                     // ("gui", "sendEnemies", String enemy info , playerId)
                 } else if (update[1].toString().equals("sendEnemies")) {
+                    System.out.println("GUI recived enemies");
                     String types = (String) update[2];
                     int waveId = (int) client.gameSpace.get(new ActualField("gui"),
                             new ActualField("sendEnemiesWaveId"),
@@ -212,6 +213,23 @@ class GUIMonitior implements Runnable {
 
                     });
 
+                } else if (update[1].toString().equals("waveEnded")){
+                    int waveId =  (int) update[2];
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            for(int i = 0; i < GameGui.gameArea.getChildren().size(); i++){
+                                Node n = GameGui.gameArea.getChildren().get(i);
+                                if (n instanceof GameWaveGui) {
+                                    GameWaveGui gui = (GameWaveGui) n;
+                                    if (gui.waveGuiId == waveId) {
+                                        gui.removeWave();
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    });
                 }
             } catch (InterruptedException e) {
                 counter++;

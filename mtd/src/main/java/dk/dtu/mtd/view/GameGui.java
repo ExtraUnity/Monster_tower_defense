@@ -33,6 +33,7 @@ public class GameGui extends StackPane {
 
     static Pane towerLayer;
     static GameTopGui gameTop;
+    GameBottomGui bottom;
     static GameChat gameChat;
     static int lastSelected;
     static Button upgradeButton;
@@ -57,6 +58,7 @@ public class GameGui extends StackPane {
         lastSelected = -1;
 
         upgradeButton.setVisible(false);
+
         towerLayer.getChildren().add(upgradeButton);
         upgradeButton.setOnAction(e -> {
             Controller.upgradeTower(lastSelected);
@@ -74,12 +76,7 @@ public class GameGui extends StackPane {
         gameArea.getChildren().addAll(gameAreaBackground(gameAreaWidth, gameAreaHeight), gameWaveGuiLeft,
                 gameWaveGuiRight, towerLayer);
 
-        BorderPane bottom = new BorderPane();
-        bottom.setMaxHeight(100);
-        ImageView chatButton = chatButton();
-        bottom.setCenter(new GameShop());
-        bottom.setRight(chatButton);
-        BorderPane.setAlignment(chatButton, Pos.CENTER_RIGHT);
+        bottom = new GameBottomGui();
 
         layout.setAlignment(Pos.CENTER);
         layout.getChildren().addAll(gameTop, gameArea, bottom);
@@ -181,6 +178,7 @@ public class GameGui extends StackPane {
     public Pane towerLayer(double width, double height) {
         setMaxSize(width, height);
         Pane newTowerLayer = new Pane();
+
         newTowerLayer.setOnDragDropped(new EventHandler<DragEvent>() {
             @Override
             public void handle(DragEvent event) {
@@ -206,6 +204,7 @@ public class GameGui extends StackPane {
                 Dragboard dragboard = event.getDragboard();
                 if (dragboard.hasString() && dragboard.getString() == "basicTower") {
                     hoverImage.setImage(new Image("dk/dtu/mtd/assets/BasicTower.png"));
+                    hoverCircle.setRadius((gameAreaWidth * 300)/1920);
                 }
             }
             
@@ -237,9 +236,13 @@ public class GameGui extends StackPane {
         this.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                TowerGui lastTower = (TowerGui) towerLayer.lookup("#" + lastSelected);
-                lastTower.setCircleVisible(false);
-                lastSelected = -1;
+                if (lastSelected != -1) {
+                    TowerGui lastTower = (TowerGui) towerLayer.lookup("#" + lastSelected);
+                    lastTower.setCircleVisible(false);
+                    upgradeButton.setVisible(false);
+                    lastSelected = -1;
+                }
+                System.out.println("Clicked at: (" + (int) ((1920 * event.getX()) / width) + "," + (int) ((1080 * event.getY()) / height) + ")");
                 event.consume();
             }
        });
@@ -247,18 +250,6 @@ public class GameGui extends StackPane {
         return newTowerLayer;
     }
 
-    public ImageView chatButton() {
-        ImageView chatButton = new ImageView(new Image("dk/dtu/mtd/assets/chatButton.jpg", 50, 50, true, false));
-        chatButton.setOnMouseClicked(e -> {
-            if (gameTop.getChildren().contains(gameChat)) {
-                gameTop.getChildren().remove(gameChat);
-            } else {
-                gameTop.getChildren().add(gameChat);
-            }
-        });
-
-        return chatButton;
-    }
 
     public static void returnToLobbyPrompt() {
         Gui.root.getChildren().remove(0);

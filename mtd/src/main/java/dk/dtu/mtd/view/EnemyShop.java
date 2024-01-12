@@ -15,6 +15,7 @@ public class EnemyShop extends HBox {
 
     public EnemyShop() {
         setMaxHeight(100);
+        setMinWidth(500);
         ArrayList<ImageView> items = new ArrayList<ImageView>();
 
         final ImageView skellyEnemy = new ImageView(new Image("dk/dtu/mtd/assets/skelly.gif", 70, 0, true, true));
@@ -22,7 +23,7 @@ public class EnemyShop extends HBox {
         skellyEnemy.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                
+                System.out.println("Please send some enemies!!!");
                 Controller.sendEnemies(EnemyType.SKELETON);
 
                 event.consume();

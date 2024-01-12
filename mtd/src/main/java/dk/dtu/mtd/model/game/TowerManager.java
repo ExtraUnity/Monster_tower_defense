@@ -40,7 +40,9 @@ public class TowerManager implements Runnable {
                 return false;
             }
         }
-        if (game.player1.id == playerId && newTower.x > 960) {
+        if (game.player1.id == playerId && 
+            (newTower.x > 920 || newTower.x < 25 || newTower.y > 1090 || newTower.y < 80 || // Play Area
+                (newTower.x > 610 && newTower.x < 770 && newTower.y > 0 && newTower.y < 540) )) {
             return false;
         } else if (game.player2.id == playerId && newTower.x < 960) {
             return false;
