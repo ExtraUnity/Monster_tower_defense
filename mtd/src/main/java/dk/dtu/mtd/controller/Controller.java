@@ -205,9 +205,22 @@ class GUIMonitior implements Runnable {
                         }
 
                     });
-
-                } else if (update[1].toString().equals("waveEnded")) {
-                    int waveId = (int) update[2];
+                } else if (update[1].toString().equals("playerLost")) {
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            GameGui.displayWin();
+                        }
+                    });
+                } else if (update[1].toString().equals("playerWon")) {
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            GameGui.displayLose();
+                        }
+                    });
+                } else if (update[1].toString().equals("waveEnded")){
+                    int waveId =  (int) update[2];
                     Platform.runLater(new Runnable() {
                         @Override
                         public void run() {

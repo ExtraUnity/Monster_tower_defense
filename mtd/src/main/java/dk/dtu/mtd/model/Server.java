@@ -90,10 +90,10 @@ public class Server {
         for (int i = 0; i < gameList.size(); i++) {
             if (("" + gameList.get(i).id).equals(gameID)) {
                 gameList.get(i).closeGame();
+                server.remove("game" + gameID);
                 break;
             }
         }
-        server.remove("game" + gameID);
     }
 
     public static void main(String[] args) {

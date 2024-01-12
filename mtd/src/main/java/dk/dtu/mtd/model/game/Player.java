@@ -4,25 +4,40 @@ public class Player {
     public int id;
     private int health;
     private int rewards;
+    public boolean hasLost;
 
-    public Player(int id, int health, int rewards){
+    public Player(int id, int health, int rewards) {
         this.id = id;
         this.health = health;
         this.rewards = rewards;
+        this.hasLost = false;
     }
 
-    public void setHealth(int newHealth){
+    public void setHealth(int newHealth) {
         health = newHealth;
     }
-    public int getHealth(){
+
+    public int getHealth() {
         return health;
     }
 
-    public void takeDamage(int damage) {
-        this.health -= damage;
+    public void takeDamage(int damage, Game game) {
+        if (this.health - damage <= 0) {
+            System.out.println("Player is dead");
+            this.health = 0;
+            lose(game);
+        } else {
+            this.health -= damage;
+        }
+        
     }
 
-    public void setRewards(int newReward){
+    public void lose(Game game) {
+        this.hasLost = true;
+        game.closeGame();
+    }
+
+    public void setRewards(int newReward) {
         rewards = newReward;
     }
 
@@ -30,13 +45,12 @@ public class Player {
         rewards -= cost;
     }
 
-    public int getRewards(){
+    public int getRewards() {
         return rewards;
     }
 
     public void addReward(int income) {
         rewards += income;
     }
-
 
 }
