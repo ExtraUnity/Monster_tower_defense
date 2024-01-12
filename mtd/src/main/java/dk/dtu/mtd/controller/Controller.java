@@ -210,6 +210,23 @@ class GUIMonitior implements Runnable {
 
                     });
 
+                } else if (update[1].toString().equals("waveEnded")){
+                    int waveId =  (int) update[2];
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            for(int i = 0; i < GameGui.gameArea.getChildren().size(); i++){
+                                Node n = GameGui.gameArea.getChildren().get(i);
+                                if (n instanceof GameWaveGui) {
+                                    GameWaveGui gui = (GameWaveGui) n;
+                                    if (gui.waveGuiId == waveId) {
+                                        gui.removeWave();
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    });
                 }
             } catch (InterruptedException e) {
                 counter++;

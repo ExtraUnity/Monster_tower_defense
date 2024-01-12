@@ -6,6 +6,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
 
 public class GameWaveGui extends StackPane {
@@ -29,9 +30,14 @@ public class GameWaveGui extends StackPane {
     public void initEnemies(String enemyTypes) {
         enemyArray = new ArrayList<>();
 
+        System.out.println("Initializing Enemies for next wave");
+        System.out.println(enemyTypes);
+
         // Splttting the input:
         String[] pairs = enemyTypes.split(",");
-        if(pairs.length < 2){
+        System.out.println(Arrays.toString(pairs));
+        if(pairs[0].equals("")){
+            System.out.println("Recived empty wave");
             return;
         }
         for (String pair : pairs) { // For each pair
@@ -61,6 +67,12 @@ public class GameWaveGui extends StackPane {
             System.out.println(coordinates.size() + " " + enemyArray.size());
         }
 
+    }
+
+    public void removeWave(){
+        System.out.println("Removing the wave from gui!!");
+        getChildren().remove(wavePane);
+        GameGui.gameArea.getChildren().remove(this);
     }
 
 }
