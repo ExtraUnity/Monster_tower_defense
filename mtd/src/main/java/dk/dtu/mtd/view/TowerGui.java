@@ -3,9 +3,12 @@ package dk.dtu.mtd.view;
 import javafx.event.EventHandler;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.Clipboard;
+import javafx.scene.input.ClipboardContent;
+import javafx.scene.input.DataFormat;
 import javafx.scene.input.DragEvent;
+import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.input.TransferMode;
 import javafx.scene.shape.Circle;
 
 public class TowerGui extends ImageView {
@@ -41,13 +44,19 @@ public class TowerGui extends ImageView {
             }
        });
 
-       this.setOnDragOver(new EventHandler<DragEvent>() {
-        @Override
-        public void handle(DragEvent event) {
-            event.acceptTransferModes(TransferMode.NONE);
-            System.out.println("no");
-        }
-    });
+        this.setOnDragEntered(new EventHandler<DragEvent>() {
+            @Override
+            public void handle(DragEvent event) {
+                GameGui.legalPlacmentHover(false);
+            }
+        });
+
+        this.setOnDragExited(new EventHandler<DragEvent>() {
+            @Override
+            public void handle(DragEvent event) {
+                 GameGui.legalPlacmentHover(true);
+            }
+        });
 
     }
 

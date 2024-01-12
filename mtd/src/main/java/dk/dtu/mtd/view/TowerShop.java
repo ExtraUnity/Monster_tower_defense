@@ -22,11 +22,9 @@ public class TowerShop extends HBox {
             @Override
             public void handle(MouseEvent event) {
                 Dragboard db = basicTower.startDragAndDrop(TransferMode.ANY);
-
                 ClipboardContent content = new ClipboardContent();
                 content.putString("basicTower");
                 db.setContent(content);
-
                 event.consume();
             }
         });

@@ -21,6 +21,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javafx.stage.Screen;
@@ -37,7 +38,7 @@ public class GameGui extends StackPane {
     static int lastSelected;
     static Button upgradeButton;
     private ImageView hoverImage;
-    private Circle hoverCircle;
+    private static Circle hoverCircle;
 
     public static double gameAreaHeight;
     public static double gameAreaWidth;
@@ -100,6 +101,20 @@ public class GameGui extends StackPane {
         setBackground(background());
         minWidth(2000);
         minHeight(2000);
+
+        this.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                if (lastSelected != -1) {
+                    TowerGui lastTower = (TowerGui) towerLayer.lookup("#" + lastSelected);
+                    lastTower.setCircleVisible(false);
+                    upgradeButton.setVisible(false);
+                    lastSelected = -1;
+                }
+                System.out.println("Clicked at: (" + (int) ((1920 * event.getX()) / gameAreaWidth) + "," + (int) ((1080 * event.getY()) / gameAreaHeight) + ")");
+                event.consume();
+            }
+       });
 
     }
 
@@ -216,14 +231,18 @@ public class GameGui extends StackPane {
         newTowerLayer.setOnDragOver(new EventHandler<DragEvent>() {
             @Override
             public void handle(DragEvent event) {
-                event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
+                System.out.println(event.getDragboard().hasString() + ": " + event.getDragboard().getString());
+                if (event.getDragboard().hasString() && event.getDragboard().getString() != "") {
+                    System.out.println("can place");
+                    event.acceptTransferModes(TransferMode.MOVE);
+                }
                 hoverImage.setVisible(true);
                 hoverImage.setX(event.getX() - hoverImage.getFitWidth() / 2);
                 hoverImage.setY(event.getY() - hoverImage.getFitWidth() / 2);
                 hoverCircle.setVisible(true);
                 hoverCircle.setCenterX(event.getX());
                 hoverCircle.setCenterY(event.getY());
-                event.consume();
+                event.consume();       
             }
         });
 
@@ -231,24 +250,12 @@ public class GameGui extends StackPane {
             @Override
             public void handle(DragEvent event) {
                 hoverImage.setVisible(false);
-                ;
                 hoverCircle.setVisible(false);
             }
         });
 
-        this.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                if (lastSelected != -1) {
-                    TowerGui lastTower = (TowerGui) towerLayer.lookup("#" + lastSelected);
-                    lastTower.setCircleVisible(false);
-                    upgradeButton.setVisible(false);
-                    lastSelected = -1;
-                }
-                System.out.println("Clicked at: (" + (int) ((1920 * event.getX()) / width) + "," + (int) ((1080 * event.getY()) / height) + ")");
-                event.consume();
-            }
-       });
+        
+        
 
         return newTowerLayer;
     }
@@ -269,5 +276,15 @@ public class GameGui extends StackPane {
     public static void returnToLobbyPrompt() {
         Gui.root.getChildren().remove(0);
         Gui.root.getChildren().add(Gui.lobbyPrompt());
+    }
+
+    public static void legalPlacmentHover(boolean canPlace) {
+        if (canPlace) {
+            hoverCircle.setFill(Color.BLACK);
+            hoverCircle.setOpacity(0.2);
+        } else {
+            hoverCircle.setFill(Color.RED);
+            hoverCircle.setOpacity(0.4);
+        }
     }
 }
