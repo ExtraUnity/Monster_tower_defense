@@ -97,12 +97,17 @@ public class Client {
         }
     }
 
+    public void resign() {
+        try {
+            gameSpace.put("request","resign", id);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void exitGame() {
         try {
             // Exit a game
-            System.out.println("exiting game");
-            gameSpace.put("request", "exit", id);
-            gameSpace.get(new ActualField("exit"), new ActualField(id));
             gameSpace.close();
         } catch (Exception e) {
             System.out.println("Not able to close a game");
