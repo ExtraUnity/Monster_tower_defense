@@ -1,9 +1,8 @@
 package dk.dtu.mtd.model.game;
 
-import java.io.Serializable;
 import java.util.List;
 
-public abstract class Tower implements Serializable {
+public abstract class Tower {
 
     String type;
 
