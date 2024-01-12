@@ -26,6 +26,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Screen;
 
 public class GameGui extends StackPane {
+    static StackPane root;
     static VBox layout;
     static public StackPane gameArea;
     public static GameWaveGui gameWaveGuiLeft;
@@ -46,6 +47,7 @@ public class GameGui extends StackPane {
     public GameGui(String health1, String health2) {
         gameAreaHeight = Screen.getPrimary().getBounds().getHeight() - 200;
         gameAreaWidth = (gameAreaHeight / 9) * 16;
+        root = new StackPane();
         layout = new VBox();
         gameArea = new StackPane();
         gameTop = new GameTopGui(health1, health2, 0);
@@ -92,11 +94,16 @@ public class GameGui extends StackPane {
         hoverCircle.setOpacity(0.2);
         hoverCircle.setVisible(false);
 
-        getChildren().add(layout);
+        root.getChildren().add(layout);
+        getChildren().add(root);
         setAlignment(Pos.CENTER);
         setBackground(background());
         minWidth(2000);
         minHeight(2000);
+        root.setAlignment(Pos.CENTER);
+        root.setBackground(background());
+        root.minWidth(2000);
+        root.minHeight(2000);
 
     }
 
@@ -112,6 +119,16 @@ public class GameGui extends StackPane {
 
     public void handleDragOver(DragEvent event) {
         event.acceptTransferModes(TransferMode.ANY);
+    }
+
+    public static void displayWin() {
+        WinnerDisplay winnerDisplay = new WinnerDisplay("YOU WON!!!");
+        root.getChildren().add(winnerDisplay);
+    }
+
+    public static void displayLose() {
+        WinnerDisplay loserDisplay = new WinnerDisplay("YOU LOST :(");
+        root.getChildren().add(loserDisplay);
     }
 
     public static void updateGameGui(String newHealth1, String newHealth2) {

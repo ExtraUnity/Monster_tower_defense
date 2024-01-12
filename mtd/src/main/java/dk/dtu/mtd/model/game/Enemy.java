@@ -113,9 +113,9 @@ public abstract class Enemy {
     // Method to transfer damage to the tower
     protected void transferDamageToPlayer(int playerId, Game game) {
         if(playerId == game.player1.id) {
-            game.player1.takeDamage(this.damage);
+            game.player1.takeDamage(this.damage, game);
         } else {
-            game.player2.takeDamage(this.damage);
+            game.player2.takeDamage(this.damage, game);
         }
     }
 
