@@ -20,7 +20,6 @@ public class GameWaveGui extends StackPane {
     public GameWaveGui(int id, double gameAreaWidth, double gameAreaHeight) {
         wavePane = new Pane();
         wavePane.setMinSize(gameAreaWidth, gameAreaHeight);
-        this.getChildren().add(wavePane);
         this.waveGuiId = id;
         this.gameAreaHeight = gameAreaHeight;
         this.gameAreaWidth = gameAreaWidth;
@@ -28,6 +27,7 @@ public class GameWaveGui extends StackPane {
     }
 
     public void initEnemies(String enemyTypes) {
+        wavePane = new Pane();
         enemyArray = new ArrayList<>();
 
         System.out.println("Initializing Enemies for next wave");
@@ -36,7 +36,7 @@ public class GameWaveGui extends StackPane {
         // Splttting the input:
         String[] pairs = enemyTypes.split(",");
         System.out.println(Arrays.toString(pairs));
-        if(pairs[0].equals("")){
+        if (pairs[0].equals("")) {
             System.out.println("Recived empty wave");
             return;
         }
@@ -46,15 +46,15 @@ public class GameWaveGui extends StackPane {
 
             int numberOfEnemies = Integer.valueOf(keyValue[1]);
             String type = keyValue[0];
-        
+
             for (int i = 0; i < numberOfEnemies; i++) {
                 EnemyImage newEnemy = new EnemyImage(type);
                 enemyArray.add(newEnemy);
                 wavePane.getChildren().add(newEnemy);
             }
-        }        
+        }
+        this.getChildren().add(wavePane);
     }
-
 
     public void updateEnemies(LinkedList<String> coordinates) {
         try {
@@ -69,10 +69,17 @@ public class GameWaveGui extends StackPane {
 
     }
 
-    public void removeWave(){
+    public void removeWave() {
         System.out.println("Removing the wave from gui!!");
         getChildren().remove(wavePane);
-        GameGui.gameArea.getChildren().remove(this);
+
+        if (GameGui.gameWaveGuiLeft.equals(this)) {
+            System.out.println("Im the left gameVaveGui");
+        } else if (GameGui.gameWaveGuiRight.equals(this)) {
+            System.out.println("Im the right gameVaveGui");
+        } else {
+            GameGui.gameArea.getChildren().remove(this);
+        }
     }
 
 }
@@ -83,7 +90,7 @@ class EnemyImage extends ImageView {
     public double yCoord = 900;
     Image image;
 
-    EnemyImage(String type) { //Pass in the image path, width and height
+    EnemyImage(String type) { // Pass in the image path, width and height
 
         if (type.equals("Skeleton")) {
             this.image = new Image("dk/dtu/mtd/assets/skelly.gif", 150, 0, true, false);
@@ -94,7 +101,7 @@ class EnemyImage extends ImageView {
         } else if (type.equals("bossEnemy")) {
             this.image = new Image("dk/dtu/mtd/assets/skelly.gif", 100, 0, true, false);
         }
-        
+
         setImage(image);
         setX(xCoord);
         setY(yCoord);

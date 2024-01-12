@@ -13,6 +13,8 @@ public abstract class Enemy {
         this.speed = speed;
         this.damage = damage;
         this.reward = reward;
+        this.x = -1000;
+        this.y = 500;
     }
 
     // Method to take damage, reducing health
@@ -48,6 +50,10 @@ public abstract class Enemy {
     // Method to define the movement of the enemy
     //THIS IS CURSED DON'T HATE ME
     public void move() {
+        if(this.x < 0){
+            System.out.println("I'm not spawned");
+            return;
+        }
         int distToCenterX = Math.abs(this.x - 960);
         if(this.y < 580 && distToCenterX < 310) { //First stretch moving downwards
             this.y += this.speed;
