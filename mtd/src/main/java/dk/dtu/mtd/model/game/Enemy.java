@@ -121,7 +121,7 @@ public abstract class Enemy {
 
     // Method to transfer reward to the player
     protected void transferRewardToPlayer(int playerId, Game game) {
-        System.out.println("Transering reward " + reward + " to player with id " + playerId);
+        //System.out.println("Transering reward " + reward + " to player with id " + playerId);
         if (playerId == game.player1.id) {
             game.player1.addReward(reward);
         } else {
