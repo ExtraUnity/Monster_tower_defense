@@ -168,6 +168,7 @@ public class GameGui extends StackPane {
     public static void newTower(String type, int size, int radius, int towerId, int playerId, int x, int y) {
         System.out.println("I got a new tower!");
         TowerGui tower = new TowerGui(type, size, (int) ((gameAreaWidth * radius)/1920), towerId, playerId, (int) ((gameAreaWidth * x)/1920),  (int) ((gameAreaHeight * y)/1080));
+        towerLayer.getChildren().add(tower.getSquare());
         towerLayer.getChildren().add(0,tower.getCircle());
         towerLayer.getChildren().add(tower);
     }
@@ -231,11 +232,7 @@ public class GameGui extends StackPane {
         newTowerLayer.setOnDragOver(new EventHandler<DragEvent>() {
             @Override
             public void handle(DragEvent event) {
-                System.out.println(event.getDragboard().hasString() + ": " + event.getDragboard().getString());
-                if (event.getDragboard().hasString() && event.getDragboard().getString() != "") {
-                    System.out.println("can place");
-                    event.acceptTransferModes(TransferMode.MOVE);
-                }
+                event.acceptTransferModes(TransferMode.MOVE);
                 hoverImage.setVisible(true);
                 hoverImage.setX(event.getX() - hoverImage.getFitWidth() / 2);
                 hoverImage.setY(event.getY() - hoverImage.getFitWidth() / 2);
@@ -253,9 +250,6 @@ public class GameGui extends StackPane {
                 hoverCircle.setVisible(false);
             }
         });
-
-        
-        
 
         return newTowerLayer;
     }

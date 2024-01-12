@@ -35,7 +35,7 @@ public class TowerManager implements Runnable {
 
     public Boolean legalTowerPlacement(Tower newTower, int playerId) {
         for (Tower tower : towerList) {
-            if (Math.pow(tower.size, 2) + Math.pow(newTower.size, 2) >= Math.pow((tower.getX() - newTower.x), 2)
+            if (Math.pow(tower.size/2, 2) + Math.pow(newTower.size/2, 2) >= Math.pow((tower.getX() - newTower.x), 2)
                     + Math.pow((tower.getY() - newTower.y), 2)) {
                 return false;
             }

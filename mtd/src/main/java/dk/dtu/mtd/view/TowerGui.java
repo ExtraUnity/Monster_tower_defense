@@ -10,10 +10,12 @@ import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
 
 public class TowerGui extends ImageView {
 
     Circle circle;
+    Rectangle square;
 
     public TowerGui(String type, int size, int radius, int towerId, int playerId, int x, int y) {
         this.setX(x - size/2);
@@ -25,6 +27,9 @@ public class TowerGui extends ImageView {
         circle.setOpacity(0.2);
         circle.setVisible(false);
         circle.setMouseTransparent(true);
+
+        square = new Rectangle(x - size / 2, y - size / 2, size, size);
+        //square.setMouseTransparent(true);
 
         if (type.equals("basicTower")) {
             this.setImage(new Image("dk/dtu/mtd/assets/BasicTower.png"));
@@ -44,14 +49,15 @@ public class TowerGui extends ImageView {
             }
        });
 
-        this.setOnDragEntered(new EventHandler<DragEvent>() {
+        square.setOnDragEntered(new EventHandler<DragEvent>() {
             @Override
             public void handle(DragEvent event) {
                 GameGui.legalPlacmentHover(false);
+                System.out.println("test");
             }
         });
 
-        this.setOnDragExited(new EventHandler<DragEvent>() {
+        square.setOnDragExited(new EventHandler<DragEvent>() {
             @Override
             public void handle(DragEvent event) {
                  GameGui.legalPlacmentHover(true);
@@ -62,6 +68,10 @@ public class TowerGui extends ImageView {
 
     public Circle getCircle() {
         return circle;
+    }
+
+    public Rectangle getSquare() {
+        return square;
     }
 
     public void setCircleVisible(boolean visible) {
