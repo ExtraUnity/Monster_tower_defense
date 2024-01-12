@@ -46,7 +46,6 @@ public class TowerGui extends ImageView {
         @Override
         public void handle(DragEvent event) {
             event.acceptTransferModes(TransferMode.NONE);
-            System.out.println("no");
         }
     });
 

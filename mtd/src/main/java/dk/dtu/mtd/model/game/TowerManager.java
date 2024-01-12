@@ -80,8 +80,6 @@ public class TowerManager implements Runnable {
                 } else {
                     game.player2.spendRewards(tower.getTowerCost());
                 }
-                System.out.println("Tower placed at " + towerList.get(towerList.size() - 1).x + " "
-                        + towerList.get(towerList.size() - 1).y);
             }
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -91,7 +89,6 @@ public class TowerManager implements Runnable {
     public void upgradeTower(int playerId) {
         try {
             int towerId = (int) game.gameSpace.get(new ActualField("towerId"), new FormalField(Integer.class))[1];
-            System.out.println("tried to upgrade tower");
             for (Tower tower : towerList) {
                 if (tower.getTowerId() == towerId) {
                     if (playerId == game.player1.id && tower.getUpgradeCost() <= game.player1.getRewards()) {

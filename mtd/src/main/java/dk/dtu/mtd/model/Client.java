@@ -40,7 +40,6 @@ public class Client {
                     new FormalField(Integer.class))[2];
         } catch (Exception e) {
             e.printStackTrace();
-            System.out.println("requesting a failed");
         }
     }
 
@@ -72,16 +71,13 @@ public class Client {
         } catch (InterruptedException e) {
             System.out.println("This is a problem");
         }
-        //System.out.println("hello good sir!");
     }
 
     public void sendEnemies(EnemyType type) {
         try {
-            System.out.println("hello to you good sir!");
             gameSpace.put("request", "sendEnemies", id);
             gameSpace.put("data", "sendEnemies", type);
         } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         
@@ -128,7 +124,6 @@ public class Client {
         try {
             gameSpace.put("request", "chat", id);
             gameSpace.put("data", "chat", msg);
-            System.out.println("Client sent message request");
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

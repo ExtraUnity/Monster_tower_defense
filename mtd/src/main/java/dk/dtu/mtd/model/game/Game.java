@@ -62,7 +62,6 @@ public class Game implements Runnable {
                 System.out.println("Game has failed on server side");
             }
         }
-
         System.out.println("Game " + id + " ending it's run loop");
     }
 
@@ -119,12 +118,9 @@ public class Game implements Runnable {
             towerManager.upgradeTower((int) request[2]); //request[2] = towerId
 
         } else if (request[1].toString().equals("chat")) {
-            System.out.println("Game recieved chat request");
-            // Retrieve chatlist and update to include message
 
             String msg = (String) gameSpace.get(new ActualField("data"), new ActualField("chat"),
                     new FormalField(String.class))[2];
-            System.out.println("Game recieved message");
 
             String player = String.valueOf((int) request[2]);
             Object[] res = gameSpace.get(new ActualField("chatList"), new FormalField(LinkedList.class));
@@ -135,9 +131,9 @@ public class Game implements Runnable {
             gameSpace.put("gui", "chat", chat, player1.id);
             gameSpace.put("gui", "chat", chat, player2.id);
 
-            System.out.println("Game put chat updates");
+
         } else if (request[1].toString().equals("sendEnemies")) {
-            System.out.println("Send enemies request recived!!!");
+
             Object[] res = gameSpace.get(new ActualField("data"), new ActualField("sendEnemies"),
                     new FormalField(EnemyType.class));
             int senderId = (int) request[2];

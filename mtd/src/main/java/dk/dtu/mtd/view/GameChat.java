@@ -41,7 +41,6 @@ public class GameChat extends StackPane {
     }
 
     public void submitMessage() {
-        System.out.println("Submitting message");
         String msg = chatWriter.getText().trim();
         Controller.sendMessage(msg);
     }
