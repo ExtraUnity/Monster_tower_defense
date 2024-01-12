@@ -33,6 +33,7 @@ public class GameGui extends StackPane {
 
     static Pane towerLayer;
     static GameTopGui gameTop;
+    GameBottomGui bottom;
     static GameChat gameChat;
     static int lastSelected;
     static Button upgradeButton;
@@ -57,7 +58,7 @@ public class GameGui extends StackPane {
         lastSelected = -1;
 
         upgradeButton.setVisible(false);
-        
+
         towerLayer.getChildren().add(upgradeButton);
         upgradeButton.setOnAction(e -> {
             Controller.upgradeTower(lastSelected);
@@ -75,12 +76,7 @@ public class GameGui extends StackPane {
         gameArea.getChildren().addAll(gameAreaBackground(gameAreaWidth, gameAreaHeight), gameWaveGuiLeft,
                 gameWaveGuiRight, towerLayer);
 
-        BorderPane bottom = new BorderPane();
-        bottom.setMaxHeight(100);
-        ImageView chatButton = chatButton();
-        bottom.setCenter(new GameShop());
-        bottom.setRight(chatButton);
-        BorderPane.setAlignment(chatButton, Pos.CENTER_RIGHT);
+        bottom = new GameBottomGui();
 
         layout.setAlignment(Pos.CENTER);
         layout.getChildren().addAll(gameTop, gameArea, bottom);
@@ -248,18 +244,6 @@ public class GameGui extends StackPane {
         return newTowerLayer;
     }
 
-    public ImageView chatButton() {
-        ImageView chatButton = new ImageView(new Image("dk/dtu/mtd/assets/chatButton.jpg", 50, 50, true, false));
-        chatButton.setOnMouseClicked(e -> {
-            if (gameTop.getChildren().contains(gameChat)) {
-                gameTop.getChildren().remove(gameChat);
-            } else {
-                gameTop.getChildren().add(gameChat);
-            }
-        });
-
-        return chatButton;
-    }
 
     public static void returnToLobbyPrompt() {
         Gui.root.getChildren().remove(0);

@@ -15,6 +15,7 @@ public class EnemyShop extends HBox {
 
     public EnemyShop() {
         setMaxHeight(100);
+        setMinWidth(500);
         ArrayList<ImageView> items = new ArrayList<ImageView>();
 
         final ImageView skellyEnemy = new ImageView(new Image("dk/dtu/mtd/assets/skelly.gif", 70, 0, true, true));

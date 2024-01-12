@@ -15,6 +15,7 @@ public class TowerGui extends ImageView {
         this.setY(y - size/2);
         this.setFitHeight(size);
         this.setFitWidth(size);
+        
 
         circle = new Circle(x, y, radius);
         circle.setOpacity(0.2);
