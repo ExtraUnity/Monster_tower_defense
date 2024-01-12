@@ -142,6 +142,7 @@ class GUIMonitior implements Runnable {
 
                     // ("gui", "sendEnemies", String enemy info , playerId)
                 } else if (update[1].toString().equals("sendEnemies")) {
+                    System.out.println("GUI recived enemies");
                     String types = (String) update[2];
                     int waveId = (int) client.gameSpace.get(new ActualField("gui"),
                             new ActualField("sendEnemiesWaveId"),

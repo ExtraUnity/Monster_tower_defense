@@ -23,7 +23,7 @@ public class EnemyShop extends HBox {
         skellyEnemy.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                
+                System.out.println("Please send some enemies!!!");
                 Controller.sendEnemies(EnemyType.SKELETON);
 
                 event.consume();

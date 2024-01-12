@@ -87,6 +87,7 @@ public class WaveManager implements Runnable {
 
 
     void sendEnemies(EnemyType type, int playerId) {
+        System.out.println("Wavemaneger Sending enemies called");
 
         ArrayList<Enemy> enemies = new ArrayList<Enemy>();
         switch (type) {
