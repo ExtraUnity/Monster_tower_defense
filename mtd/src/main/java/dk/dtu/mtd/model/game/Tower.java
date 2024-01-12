@@ -8,7 +8,7 @@ public abstract class Tower {
 
     int radius, x, y, size, damage, upgradeCost, towerCost, fireRate, playerId, towerId;
     int lastShot;
-    GameTicker gameTicker;
+    //GameTicker gameTicker;
 
     int towerLevel = 0;
 
@@ -25,7 +25,7 @@ public abstract class Tower {
         return radius * radius > (enemy.x - x) * (enemy.x - x) + (enemy.y - y) * (enemy.y - y);
     }
 
-    public abstract void shoot(List<Enemy> enemies);
+    public abstract void shoot(List<Enemy> enemies, Game game);
 
     public boolean legal() {
         return true;

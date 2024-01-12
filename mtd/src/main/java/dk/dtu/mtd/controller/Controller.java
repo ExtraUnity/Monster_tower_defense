@@ -2,6 +2,10 @@ package dk.dtu.mtd.controller;
 
 import org.jspace.ActualField;
 import org.jspace.FormalField;
+import org.jspace.Tuple;
+
+import com.google.gson.Gson;
+
 import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.LinkedList;
@@ -197,15 +201,14 @@ class GUIMonitior implements Runnable {
                     });
 
                 } else if (update[1].toString().equals("newTower")) {
-                    // String type, int size, int radius, int towerId, int playerId, int x, int y
-                    String[] towerInfo = ((String) update[2]).split(" ");
+                    Tower tower = (Tower) update[2];
 
                     Platform.runLater(new Runnable() {
                         @Override
                         public void run() {
-                            GameGui.newTower(towerInfo[0], Integer.valueOf(towerInfo[1]), Integer.valueOf(towerInfo[2]),
-                                    Integer.valueOf(towerInfo[3]), Integer.valueOf(towerInfo[4]),
-                                    Integer.valueOf(towerInfo[5]), Integer.valueOf(towerInfo[6]));
+                            GameGui.newTower(tower.getType(), tower.getSize(), tower.getRadius(),
+                                    tower.getTowerId(), tower.getPlayerId(),
+                                    tower.getX(), tower.getY());
                         }
 
                     });

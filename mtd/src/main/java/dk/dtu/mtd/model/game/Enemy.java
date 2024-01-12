@@ -7,21 +7,19 @@ public abstract class Enemy {
     protected int reward; // Amount of money gained from killing enemy 
 
     protected int x, y;
-    Game game;
 
-    public Enemy(int health, int speed, int damage, int reward, Game game) {
+    public Enemy(int health, int speed, int damage, int reward) {
         this.health = health;
         this.speed = speed;
         this.damage = damage;
         this.reward = reward;
-        this.game = game;
     }
 
     // Method to take damage, reducing health
-    public void takeDamage(int amount, int playerId) {
+    public void takeDamage(int amount, int playerId, Game game) {
         health -= amount;
         if (isDead()) {
-            die(playerId);
+            die(playerId, game);
         }
     }
 
@@ -30,8 +28,8 @@ public abstract class Enemy {
     }
 
 
-    protected void die(int playerId) {
-        transferRewardToPlayer(playerId);
+    protected void die(int playerId, Game game) {
+        transferRewardToPlayer(playerId, game);
         performDeathAnimation();
     }
 
@@ -107,7 +105,7 @@ public abstract class Enemy {
     }
 
     // Method to transfer damage to the tower
-    protected void transferDamageToPlayer(int playerId) {
+    protected void transferDamageToPlayer(int playerId, Game game) {
         if(playerId == game.player1.id) {
             game.player1.takeDamage(this.damage);
         } else {
@@ -116,7 +114,7 @@ public abstract class Enemy {
     }
 
     // Method to transfer reward to the player
-    protected void transferRewardToPlayer(int playerId) {
+    protected void transferRewardToPlayer(int playerId, Game game) {
         if(playerId == game.player1.id) {
             game.player1.addReward(reward);
             //System.out.println("player 1 has " + game.player1.getRewards() + " reward");
