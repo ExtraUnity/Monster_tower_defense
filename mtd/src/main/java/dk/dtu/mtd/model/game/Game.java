@@ -68,16 +68,11 @@ public class Game implements Runnable {
                 System.out.println("Game has failed on server side");
             }
         }
-        try {
-            displayWinner();
-        } catch (UnexpectedException e) {
-            e.printStackTrace();
-        }
         System.out.println("Game " + id + " ending it's run loop");
     }
 
     public void displayWinner() throws UnexpectedException {
-        if(player1.hasLost) {
+        if (player1.hasLost) {
             // ("gui", (String) type, (Object) data, playerId)
             try {
                 gameSpace.put("gui", "playerLost", "", player1.id);
@@ -85,7 +80,7 @@ public class Game implements Runnable {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            
+
         } else if (player2.hasLost) {
             try {
                 gameSpace.put("gui", "playerLost", "", player2.id);
@@ -96,6 +91,17 @@ public class Game implements Runnable {
         } else {
             throw new UnexpectedException("Nobody lost, it was a tie and now we can go be happy.");
         }
+        try {
+            Thread.sleep(5000L);
+            System.out.println("Ending game!");
+            
+            gameSpace.put("gameClosed",player1.id);
+            gameSpace.put("gameClosed", player2.id);
+        } catch (InterruptedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
     }
 
     @SuppressWarnings("unchecked")
@@ -148,7 +154,7 @@ public class Game implements Runnable {
             towerManager.placeTower((int) request[2]);
 
         } else if (request[1].toString().equals("upgradeTower")) {
-            towerManager.upgradeTower((int) request[2]); //request[2] = towerId
+            towerManager.upgradeTower((int) request[2]); // request[2] = towerId
 
         } else if (request[1].toString().equals("chat")) {
             System.out.println("Game recieved chat request");
@@ -176,7 +182,11 @@ public class Game implements Runnable {
             int recieverId = senderId == player1.id ? player2.id : player1.id;
             waveManager.sendEnemies(type, recieverId);
         } else if (request[1].toString().equals("displayFinish")) {
-            //Do nothing, just register the request.
+            try {
+                displayWinner();
+            } catch (UnexpectedException e) {
+                e.printStackTrace();
+            }
         }
     }
 
