@@ -35,7 +35,7 @@ public class GameTopGui extends HBox {
 
         Button exitGameButton = new Button("exit");
         exitGameButton.setOnAction(e -> {
-            Controller.exitGame();
+            Controller.resign();
         });
 
         layout.getChildren().addAll(healthPlayer1, waveNumber, healthPlayer2);

@@ -2,6 +2,8 @@ package dk.dtu.mtd.model.game;
 
 import java.util.List;
 
+import com.google.gson.Gson;
+
 public abstract class Tower {
 
     String type;
@@ -23,8 +25,8 @@ public abstract class Tower {
 
     public Boolean inRange(Enemy enemy) {
         return radius * radius > (enemy.x - x) * (enemy.x - x) + (enemy.y - y) * (enemy.y - y);
-    }
 
+    }
     public abstract void shoot(List<Enemy> enemies, Game game);
 
     public boolean legal() {

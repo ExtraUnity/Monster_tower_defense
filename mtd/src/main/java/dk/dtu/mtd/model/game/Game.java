@@ -194,6 +194,18 @@ public class Game implements Runnable {
             } catch (UnexpectedException e) {
                 e.printStackTrace();
             }
+        } else if (request[1].toString().equals("resign")) {
+            //This should be reverse but it works.
+            if ((int) request[2] == player1.id) {
+                player2.hasLost = true;
+            } else {
+                player1.hasLost = true;
+            }
+            try {
+                displayWinner();
+            } catch (UnexpectedException e) {
+                e.printStackTrace();
+            }
         }
     }
 

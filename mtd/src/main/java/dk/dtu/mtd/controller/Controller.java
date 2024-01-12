@@ -52,7 +52,13 @@ public class Controller {
     public static void exit() {
         // exit the application
         guiMonitior.playing = false;
+        System.out.println("Exiting");
         client.exit();
+        System.out.println("Exited");
+    }
+
+    public static void resign() {
+        client.resign();
     }
 
     public static void damage() {
