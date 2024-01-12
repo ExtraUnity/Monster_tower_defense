@@ -92,7 +92,7 @@ public class WaveManager implements Runnable {
         switch (type) {
             case SKELETON:
                 for (int i = 0; i < 6; i++) {
-                    enemies.add(new Skeleton(game));
+                    enemies.add(new Skeleton());
                 }
                 break;
 
@@ -196,21 +196,21 @@ public class WaveManager implements Runnable {
         }
         if (wave == 1) {
             for (int i = 0; i < 10; i++) {
-                enemies.add(new Skeleton(game));
-                enemies.add(new FatSkeleton(game)); //New enemy type
+                enemies.add(new Skeleton());
+                enemies.add(new FatSkeleton()); //New enemy type
             }
 
         } else if (wave == 2) {
             int numberOfNormalEnemies = 6;
 
             for (int i = 0; i < numberOfNormalEnemies; i++) {
-                enemies.add(new Skeleton(game));
+                enemies.add(new Skeleton());
             }
             
-            enemies.add(new FatSkeleton(game)); //New enemy type
+            enemies.add(new FatSkeleton()); //New enemy type
             
             for (int i = 0; i < numberOfNormalEnemies; i++) {
-                enemies.add(new Skeleton(game));
+                enemies.add(new Skeleton());
             }
 
         }
@@ -274,7 +274,7 @@ class Wave {
                     enemies.get(i).move();
                     if (enemies.get(i).reachedFinish() && !enemies.get(i).isDead()) {
                         enemies.get(i).setY(3000);
-                        enemies.get(i).transferDamageToPlayer(playerId);
+                        enemies.get(i).transferDamageToPlayer(playerId, game);
 
                         String newHp = "" + game.player1.getHealth() + " " + game.player2.getHealth();
                         space.put("gui", "damage", newHp, game.player1.id);
