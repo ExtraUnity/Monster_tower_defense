@@ -178,6 +178,7 @@ public class GameGui extends StackPane {
     public Pane towerLayer(double width, double height) {
         setMaxSize(width, height);
         Pane newTowerLayer = new Pane();
+
         newTowerLayer.setOnDragDropped(new EventHandler<DragEvent>() {
             @Override
             public void handle(DragEvent event) {
@@ -203,6 +204,7 @@ public class GameGui extends StackPane {
                 Dragboard dragboard = event.getDragboard();
                 if (dragboard.hasString() && dragboard.getString() == "basicTower") {
                     hoverImage.setImage(new Image("dk/dtu/mtd/assets/BasicTower.png"));
+                    hoverCircle.setRadius((gameAreaWidth * 300)/1920);
                 }
             }
             
@@ -234,9 +236,13 @@ public class GameGui extends StackPane {
         this.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                TowerGui lastTower = (TowerGui) towerLayer.lookup("#" + lastSelected);
-                lastTower.setCircleVisible(false);
-                lastSelected = -1;
+                if (lastSelected != -1) {
+                    TowerGui lastTower = (TowerGui) towerLayer.lookup("#" + lastSelected);
+                    lastTower.setCircleVisible(false);
+                    upgradeButton.setVisible(false);
+                    lastSelected = -1;
+                }
+                System.out.println("Clicked at: (" + (int) ((1920 * event.getX()) / width) + "," + (int) ((1080 * event.getY()) / height) + ")");
                 event.consume();
             }
        });
