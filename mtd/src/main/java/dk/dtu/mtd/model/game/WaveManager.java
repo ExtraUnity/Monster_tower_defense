@@ -191,13 +191,13 @@ public class WaveManager implements Runnable {
         // every 5th wave will have an additional set of fat skeletons
         if (wave % 5 == 0) {
             for (int i = 0; i < wave; i++) {
-                enemies.add(new FatSkeleton(game)); // New enemy type
+                enemies.add(new FatSkeleton()); // New enemy type
             }
         }
         if (wave == 1) {
             for (int i = 0; i < 10; i++) {
-                enemies.add(new Skeleton(game));
-                enemies.add(new FatSkeleton(game)); // New enemy type
+                enemies.add(new Skeleton());
+                enemies.add(new FatSkeleton()); // New enemy type
             }
 
         } else if (wave == 2) {
@@ -207,7 +207,7 @@ public class WaveManager implements Runnable {
                 enemies.add(new Skeleton());
             }
 
-            enemies.add(new FatSkeleton(game)); // New enemy type
+            enemies.add(new FatSkeleton()); // New enemy type
 
             for (int i = 0; i < numberOfNormalEnemies; i++) {
                 enemies.add(new Skeleton());

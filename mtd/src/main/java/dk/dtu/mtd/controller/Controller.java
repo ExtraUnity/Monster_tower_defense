@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.LinkedList;
 import dk.dtu.mtd.model.Client;
+import dk.dtu.mtd.model.game.Tower;
 import dk.dtu.mtd.shared.EnemyType;
 import dk.dtu.mtd.view.GameGui;
 import dk.dtu.mtd.view.GameWaveGui;
