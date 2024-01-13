@@ -15,7 +15,7 @@ public class BasicTower extends Tower {
         damage = 5;
         size = 100;
         fireRate = 100;
-        towerCost = 125;
+        towerCost = 100;
         upgradeCost = 50;
     }
 
