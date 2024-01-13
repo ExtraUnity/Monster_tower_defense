@@ -119,7 +119,7 @@ class GUIMonitior implements Runnable {
                     Platform.runLater(new Runnable() {
                         @Override
                         public void run() {
-                            GameGui.updateGameGui(hp1, hp2);
+                            GameGui.gameTop.updateHealth(hp1, hp2);
                         }
                     });
                     // ("gui", "chat", (LinkedList<String>) chat log , playerId)
@@ -145,7 +145,7 @@ class GUIMonitior implements Runnable {
                     });
 
                     // ("gui", "sendEnemies", String enemy info , playerId)
-                }else if (update[1].toString().equals("waveNumber")) {
+                } else if (update[1].toString().equals("waveNumber")) {
                     // make apropriate gui calls to display wave
                     int waveNumber = (Integer) update[2];
 
@@ -154,7 +154,16 @@ class GUIMonitior implements Runnable {
                     });
 
                     // ("gui", "sendEnemies", String enemy info , playerId)
-                } else if (update[1].toString().equals("sendEnemies")) {
+                } else if (update[1].toString().equals("sides")) {
+                    // make apropriate gui calls to display wave
+                    String side = (String) update[2];
+
+                    Platform.runLater(() -> {
+                        GameGui.gameTop.youOpponent(side);
+                    });
+
+                    // ("gui", "sendEnemies", String enemy info , playerId)
+                }else if (update[1].toString().equals("sendEnemies")) {
                     String types = (String) update[2];
                     int waveId = (int) client.gameSpace.get(new ActualField("gui"),
                             new ActualField("sendEnemiesWaveId"),

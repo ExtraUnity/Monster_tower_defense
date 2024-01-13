@@ -64,7 +64,7 @@ public class Gui extends Application {
 
     public static void game() {
         root.getChildren().remove(0);
-        game = new GameGui("150", "150");
+        game = new GameGui();
         root.getChildren().add(game);
     }
 

@@ -41,6 +41,14 @@ public class Game implements Runnable {
         towerManager = new TowerManager(this);
         new Thread(towerManager).start();
         updateReward();
+
+        try {
+            gameSpace.put("gui", "sides", "left", player1.id);
+            gameSpace.put("gui", "sides", "right", player2.id);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
     public void closeGame() {
@@ -113,8 +121,8 @@ public class Game implements Runnable {
         try {
             Thread.sleep(5000L);
             System.out.println("Ending game!");
-            
-            gameSpace.put("gameClosed",player1.id);
+
+            gameSpace.put("gameClosed", player1.id);
             gameSpace.put("gameClosed", player2.id);
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -204,7 +212,7 @@ public class Game implements Runnable {
                 e.printStackTrace();
             }
         } else if (request[1].toString().equals("resign")) {
-            //This should be reverse but it works.
+            // This should be reverse but it works.
             if ((int) request[2] == player1.id) {
                 player2.hasLost = true;
             } else {

@@ -38,14 +38,14 @@ public class GameGui extends StackPane {
     public static double gameAreaHeight;
     public static double gameAreaWidth;
 
-    public GameGui(String health1, String health2) {
-        gameAreaHeight = Screen.getPrimary().getBounds().getHeight() - 200;
+    public GameGui() {
+        gameAreaHeight = Screen.getPrimary().getBounds().getHeight() - 250;
         gameAreaWidth = (gameAreaHeight / 9) * 16;
 
         root = new StackPane();
         layout = new VBox();
         gameArea = new StackPane();
-        gameTop = new GameTopGui(health1, health2, 0);
+        gameTop = new GameTopGui("150", "150", 0, "left");
         gameChat = new GameChat();
 
         interactionLayer = new InteractionLayer(gameAreaWidth, gameAreaHeight);
@@ -101,16 +101,6 @@ public class GameGui extends StackPane {
         root.getChildren().add(loserDisplay);
     }
 
-    public static void updateGameGui(String newHealth1, String newHealth2) {
-        gameTop.layout.getChildren().remove(gameTop.healthPlayer1);
-        gameTop.layout.getChildren().remove(gameTop.healthPlayer2);
-
-        gameTop.healthPlayer1 = new Text("" + newHealth1);
-        gameTop.healthPlayer2 = new Text("" + newHealth2);
-
-        gameTop.layout.getChildren().add(0, gameTop.healthPlayer1);
-        gameTop.layout.getChildren().add(2, gameTop.healthPlayer2);
-    }
 
     public ImageView gameAreaBackground(double width, double height) {
         return new ImageView(new Image("dk/dtu/mtd/assets/GameArea.png", width, height, false, true));
