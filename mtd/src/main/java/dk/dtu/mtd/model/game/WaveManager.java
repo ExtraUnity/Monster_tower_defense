@@ -35,6 +35,7 @@ public class WaveManager implements Runnable {
     @Override
     public void run() {
         while (playing) {
+            System.out.println("Summoning wave " + waveRound);
             player1Done.set(false);
             player2Done.set(false);
             game.updateWave();
@@ -186,14 +187,8 @@ public class WaveManager implements Runnable {
                 enemies.add(new FatSkeleton()); // New enemy type
             }
         }
-        if (wave == 1) {
-            for (int i = 0; i < 10; i++) {
-                enemies.add(new Skeleton());
-                enemies.add(new FatSkeleton()); // New enemy type
-            }
-
-        } else if (wave == 2) {
-            int numberOfNormalEnemies = 6;
+        if (wave == 2) {
+            int numberOfNormalEnemies = 3;
 
             for (int i = 0; i < numberOfNormalEnemies; i++) {
                 enemies.add(new Skeleton());
