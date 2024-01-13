@@ -31,7 +31,6 @@ public class Controller {
     }
 
     public static void joinGame() {
-        // TODO: somewhere along here the previous game crashes.
         client.requestGame();
         client.joinGame();
         guiThread = new Thread(guiMonitior);
@@ -44,6 +43,9 @@ public class Controller {
     }
 
     public static void exitGame() {
+        if (guiMonitior != null && guiMonitior.playing) {
+
+        }
         guiMonitior.playing = false;
         Gui.closeGame();
         client.exitGame();
@@ -53,6 +55,7 @@ public class Controller {
         // exit the application
         guiMonitior.playing = false;
         System.out.println("Exiting");
+
         client.exit();
         System.out.println("Exited");
     }
@@ -163,7 +166,7 @@ class GUIMonitior implements Runnable {
                     });
 
                     // ("gui", "sendEnemies", String enemy info , playerId)
-                }else if (update[1].toString().equals("sendEnemies")) {
+                } else if (update[1].toString().equals("sendEnemies")) {
                     String types = (String) update[2];
                     int waveId = (int) client.gameSpace.get(new ActualField("gui"),
                             new ActualField("sendEnemiesWaveId"),
@@ -243,8 +246,8 @@ class GUIMonitior implements Runnable {
                             GameGui.displayLose();
                         }
                     });
-                } else if (update[1].toString().equals("waveEnded")){
-                    int waveId =  (int) update[2];
+                } else if (update[1].toString().equals("waveEnded")) {
+                    int waveId = (int) update[2];
                     Platform.runLater(new Runnable() {
                         @Override
                         public void run() {
