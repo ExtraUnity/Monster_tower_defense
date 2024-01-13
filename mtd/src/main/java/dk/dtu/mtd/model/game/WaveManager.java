@@ -43,6 +43,7 @@ public class WaveManager implements Runnable {
             // after each wave both players are given 25 coins
             game.player1.addReward(25);
             game.player2.addReward(25);
+            game.updateReward();
             waveRound++;
             try {
                 Thread.sleep(1000L);
