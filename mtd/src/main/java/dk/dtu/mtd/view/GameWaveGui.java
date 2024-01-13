@@ -56,7 +56,7 @@ public class GameWaveGui extends StackPane {
                 enemyArray.get(i).yCoord = (gameAreaHeight * ((Double.valueOf(coord[1])) / 1080)) - 50;
             }
         } catch (Exception e) {
-            System.out.println(coordinates.size() + " " + enemyArray.size());
+            System.out.println("Could not update enemies");
         }
 
     }

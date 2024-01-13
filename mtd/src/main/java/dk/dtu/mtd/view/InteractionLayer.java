@@ -69,7 +69,7 @@ public class InteractionLayer extends Pane {
                     hoverImage.setImage(new Image("dk/dtu/mtd/assets/BasicTower.png"));
                     hoverCircle.setRadius((width * 300) / 1920);
                 } else if (dragboard.hasString() && dragboard.getString() == "aoeTower") {
-                    hoverImage.setImage(new Image("dk/dtu/mtd/assets/dartMonkey.png"));
+                    hoverImage.setImage(new Image("dk/dtu/mtd/assets/AOEtower.png"));
                     hoverCircle.setRadius((width * 200) / 1920);
                 }
             }
