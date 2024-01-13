@@ -7,6 +7,7 @@ import javafx.scene.input.DragEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
 
 public class TowerGui extends ImageView {
 
@@ -27,27 +28,13 @@ public class TowerGui extends ImageView {
         if (type.equals("basicTower")) {
             this.setImage(new Image("dk/dtu/mtd/assets/BasicTower.png"));
         } else if (type.equals("aoeTower")) {
-            this.setImage(new Image("dk/dtu/mtd/assets/dartMonkey.png"));
+            this.setImage(new Image("dk/dtu/mtd/assets/AOEtower.png"));
         } else {
             this.setImage(new Image("dk/dtu/mtd/assets/skelly.gif"));
-        }
-
+        }        
+        
         this.setId("" + towerId);
 
-        this.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                GameGui.towerClicked(towerId, playerId);
-                event.consume();
-            }
-       });
-
-       this.setOnDragOver(new EventHandler<DragEvent>() {
-        @Override
-        public void handle(DragEvent event) {
-            event.acceptTransferModes(TransferMode.NONE);
-        }
-    });
 
     }
 
