@@ -1,7 +1,5 @@
 package dk.dtu.mtd.model.game;
 
-import org.jspace.ActualField;
-
 public abstract class Enemy {
     protected int health;
     protected int speed;

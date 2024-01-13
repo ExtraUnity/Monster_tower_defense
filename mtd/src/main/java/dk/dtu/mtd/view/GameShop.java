@@ -17,7 +17,7 @@ public class GameShop extends StackPane {
 
     public GameShop() {
         stackPane = new StackPane();
-        shop = new HBox();
+        shop = new HBox(20);
         towerShop = new TowerShop();
         enemyShop = new EnemyShop();
         setMaxHeight(100);

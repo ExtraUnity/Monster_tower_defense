@@ -86,7 +86,6 @@ public class Gui extends Application {
         try {
             ownIP = (InetAddress.getLocalHost().getHostAddress()).trim();
         } catch (UnknownHostException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 

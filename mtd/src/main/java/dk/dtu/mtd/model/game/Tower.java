@@ -2,8 +2,6 @@ package dk.dtu.mtd.model.game;
 
 import java.util.List;
 
-import com.google.gson.Gson;
-
 public abstract class Tower {
 
     String type;
