@@ -31,7 +31,7 @@ public class GameGui extends StackPane {
 
     static InteractionLayer interactionLayer;
     static Pane towerLayer;
-    static GameTopGui gameTop;
+    public static GameTopGui gameTop;
     public static GameBottomGui bottom;
     static GameChat gameChat;
 

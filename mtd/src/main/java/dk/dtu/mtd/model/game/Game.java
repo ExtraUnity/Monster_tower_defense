@@ -40,6 +40,7 @@ public class Game implements Runnable {
 
         towerManager = new TowerManager(this);
         new Thread(towerManager).start();
+        updateReward();
     }
 
     public void closeGame() {
@@ -60,6 +61,15 @@ public class Game implements Runnable {
         try {
             gameSpace.put("gui", "reward", player1.getRewards(), player1.id);
             gameSpace.put("gui", "reward", player2.getRewards(), player2.id);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void updateWave() {
+        try {
+            gameSpace.put("gui", "waveNumber", waveManager.getCurrentWaveNumber(), player1.id);
+            gameSpace.put("gui", "waveNumber", waveManager.getCurrentWaveNumber(), player2.id);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -107,7 +117,6 @@ public class Game implements Runnable {
             gameSpace.put("gameClosed",player1.id);
             gameSpace.put("gameClosed", player2.id);
         } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 

@@ -11,7 +11,6 @@ import dk.dtu.mtd.shared.EnemyType;
 
 public class WaveManager implements Runnable {
 
-    private int currentWaveNumber;
     private int totalWaves; // Total number of waves
     private int currentWaveId;
     public Wave waveLeft;
@@ -38,7 +37,9 @@ public class WaveManager implements Runnable {
         while (playing) {
             player1Done.set(false);
             player2Done.set(false);
+            game.updateWave();
             spawnWave(waveRound);
+
 
             waveRound++;
             try {
@@ -214,11 +215,11 @@ public class WaveManager implements Runnable {
 
     // Getters and setters
     public int getCurrentWaveNumber() {
-        return currentWaveNumber;
+        return waveRound;
     }
 
     public void setCurrentWaveNumber(int currentWaveNumber) {
-        this.currentWaveNumber = currentWaveNumber;
+        this.waveRound = currentWaveNumber;
     }
 
     public int getTotalWaves() {

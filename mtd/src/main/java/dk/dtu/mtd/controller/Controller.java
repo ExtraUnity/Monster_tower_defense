@@ -145,6 +145,15 @@ class GUIMonitior implements Runnable {
                     });
 
                     // ("gui", "sendEnemies", String enemy info , playerId)
+                }else if (update[1].toString().equals("waveNumber")) {
+                    // make apropriate gui calls to display wave
+                    int waveNumber = (Integer) update[2];
+
+                    Platform.runLater(() -> {
+                        GameGui.gameTop.updateWaveNumber(waveNumber);
+                    });
+
+                    // ("gui", "sendEnemies", String enemy info , playerId)
                 } else if (update[1].toString().equals("sendEnemies")) {
                     String types = (String) update[2];
                     int waveId = (int) client.gameSpace.get(new ActualField("gui"),

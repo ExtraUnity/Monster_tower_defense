@@ -27,11 +27,6 @@ public class GameTopGui extends HBox {
         healthPlayer2 = new Text("" + health2);
         waveNumber = new Text("Wave " + wave);
 
-        // temporary
-        Button counter = new Button("-10 for opponent");
-        counter.setOnAction(e -> {
-            Controller.damageEnemyToPlayer(10);
-        });
 
         Button exitGameButton = new Button("exit");
         exitGameButton.setOnAction(e -> {
@@ -39,6 +34,12 @@ public class GameTopGui extends HBox {
         });
 
         layout.getChildren().addAll(healthPlayer1, waveNumber, healthPlayer2);
-        getChildren().addAll(counter, layout, exitGameButton);
+        getChildren().addAll(layout, exitGameButton);
+    }
+
+    public void updateWaveNumber(int waveNumber2) {
+        layout.getChildren().remove(waveNumber);
+        waveNumber = new Text("Wave " + waveNumber2);
+        layout.getChildren().add(1, waveNumber);
     }
 }
