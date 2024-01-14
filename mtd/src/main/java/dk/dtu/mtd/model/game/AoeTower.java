@@ -16,7 +16,7 @@ public class AoeTower extends Tower {
         damage = 3;
         size = 100;
         fireRate = 50;
-        towerCost = 175;
+        towerCost = 300;
         upgradeCost = 50;
     }
 

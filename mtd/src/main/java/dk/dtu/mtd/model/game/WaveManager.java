@@ -233,7 +233,7 @@ class Wave {
     ArrayList<Enemy> enemies;
     Space space;
     final int START_X;
-    final int START_Y = 100;
+    final int START_Y = 20;
     int playerId;
     int waveId;
     Game game;
