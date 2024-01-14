@@ -84,13 +84,16 @@ public class Client {
     }
 
 
-    public void upgradeTower(int towerId) {
+    public int upgradeTower(int towerId) {
         try {
             gameSpace.put("request", "upgradeTower", id);
             gameSpace.put("towerId", towerId);
+            int newPrice = (int) gameSpace.get(new ActualField("towerUpgradeSucces"), new FormalField(Integer.class) , new ActualField(towerId))[1];
+            return newPrice;
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        return -1;
     }
 
     public void resign() {

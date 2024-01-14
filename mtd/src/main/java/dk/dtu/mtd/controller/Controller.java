@@ -85,7 +85,8 @@ public class Controller {
     }
 
     public static void upgradeTower(int towerId) {
-        client.upgradeTower(towerId);
+        int newPrice = client.upgradeTower(towerId);
+        GameGui.updateUpgradePrice(towerId, newPrice);
     }
 
     public static int getPlayerId() {

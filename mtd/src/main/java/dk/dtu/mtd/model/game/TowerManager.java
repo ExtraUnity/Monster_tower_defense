@@ -99,6 +99,7 @@ public class TowerManager implements Runnable {
                         game.player2.spendRewards(tower.getUpgradeCost());
                         tower.upgradeTower();
                     }
+                    game.gameSpace.put("towerUpgradeSucces", tower.getUpgradeCost(), towerId);
                     break;
                 }
             }
