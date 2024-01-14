@@ -3,7 +3,6 @@ package dk.dtu.mtd.model.game;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.LinkedList;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.jspace.ActualField;
 import org.jspace.Space;
@@ -20,8 +19,6 @@ public class WaveManager implements Runnable {
     public ArrayList<Enemy> rightEnemies;
     public boolean playing;
     int waveRound;
-    volatile AtomicBoolean player1Done = new AtomicBoolean(false);
-    volatile AtomicBoolean player2Done = new AtomicBoolean(false);
     Game game;
 
     public WaveManager(Game game) {
@@ -37,8 +34,6 @@ public class WaveManager implements Runnable {
     public void run() {
         while (playing) {
             System.out.println("Summoning wave " + waveRound);
-            player1Done.set(false);
-            player2Done.set(false);
             game.updateWave();
             spawnWave(waveRound);
             // after each wave both players are given 25 coins
@@ -199,15 +194,6 @@ public class WaveManager implements Runnable {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        /*
-        while (!(player1Done.get() && player2Done.get())) {
-            try {
-                Thread.sleep(1L);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-         */
     }
 
     ArrayList<Enemy> waveGenerator(int wave) {
