@@ -26,6 +26,11 @@ public class GameTicker implements Runnable {
                 previousTime = System.nanoTime() / 1_000_000L;
             }
         }
+        try {
+            game.gameSpace.put("gameTickerClosed");
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
         System.out.println("Game Ticker" + game.id + " closing");
     }

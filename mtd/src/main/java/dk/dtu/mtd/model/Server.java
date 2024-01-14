@@ -38,6 +38,7 @@ public class Server {
     public void launch() {
         while (true) {
             try {
+                System.out.println("Ready to handle request");
                 handleRequest(lobby.get(new ActualField("request"), new FormalField(String.class),
                         new FormalField(Integer.class)));
                 if (gameQueue.size() >= 2) {
@@ -89,9 +90,10 @@ public class Server {
         System.out.println("Closing game " + gameID);
         for (int i = 0; i < gameList.size(); i++) {
             if (("" + gameList.get(i).id).equals(gameID)) {
-                gameList.get(i).closeGame();
+                //gameList.get(i).closeGame();
                 server.remove("game" + gameID);
-                break;
+                System.out.println("Game was closed");
+                return;
             }
         }
     }

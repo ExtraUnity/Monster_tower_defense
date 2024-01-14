@@ -5,6 +5,7 @@ import java.util.InputMismatchException;
 import java.util.LinkedList;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import org.jspace.ActualField;
 import org.jspace.Space;
 
 import dk.dtu.mtd.shared.EnemyType;
@@ -51,7 +52,13 @@ public class WaveManager implements Runnable {
                 System.out.println("Wavemanger failed to sleep after round:" + (waveRound - 1));
             }
         }
+        try {
+            game.gameSpace.put("waveManagerClosed");
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         System.out.println("Wavemaneger " + game.id + " closing");
+
     }
 
     String messageGenerator(Wave wave) {
@@ -150,7 +157,13 @@ public class WaveManager implements Runnable {
                     e.printStackTrace();
                 }
                 waveLeft.run();
-                player1Done.set(true);
+
+                try {
+                    game.gameSpace.put("waveDoneToken");
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                //player1Done.set(true);
             }
 
         });// new Thread(new Wave(new ArrayList<Enemy>(), space, Game.player1.id));
@@ -166,12 +179,27 @@ public class WaveManager implements Runnable {
                     e.printStackTrace();
                 }
                 waveRight.run();
-                player2Done.set(true);
+                //player2Done.set(true);
+
+                try {
+                    game.gameSpace.put("waveDoneToken");
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
 
         });// new Thread(new Wave(new ArrayList<Enemy>(), space, Game.player2.id));
         player1Wave.start();
         player2Wave.start();
+
+        try {
+            game.gameSpace.get(new ActualField("waveDoneToken"));
+            game.gameSpace.get(new ActualField("waveDoneToken"));
+            System.out.println("Got both tokens");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        /*
         while (!(player1Done.get() && player2Done.get())) {
             try {
                 Thread.sleep(1L);
@@ -179,6 +207,7 @@ public class WaveManager implements Runnable {
                 e.printStackTrace();
             }
         }
+         */
     }
 
     ArrayList<Enemy> waveGenerator(int wave) {

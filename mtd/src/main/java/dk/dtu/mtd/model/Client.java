@@ -106,7 +106,7 @@ public class Client {
 
     public void exitGame() {
         try {
-            // Exit a game
+            // Exit a game and return to main meny
             resign();
             gameSpace.close();
         } catch (Exception e) {
@@ -115,6 +115,7 @@ public class Client {
     }
 
     public void exit() {
+        // Exit the application
         try {
             if (lobby != null) {
                 exitGame();
@@ -164,12 +165,17 @@ class GameMonitor implements Runnable {
             System.out.println("Other player left the game");
             Controller.exitGame();
 
+        } catch (InterruptedException e) {
+            System.out.println("The game has been closed");
+        }
+        try {
+            
             lobby.put("request", "closeGame", gameId);
             lobby.get(new ActualField("closedGame"), new ActualField(gameId));
             gameId = -1;
 
-        } catch (InterruptedException e) {
-            System.out.println("The game has been closed");
+        } catch (Exception e) {
+            System.out.println("Lobby not found");
         }
     }
 }

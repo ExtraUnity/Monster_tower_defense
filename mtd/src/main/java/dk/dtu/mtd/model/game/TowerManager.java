@@ -30,6 +30,11 @@ public class TowerManager implements Runnable {
                 }
             }
         }
+        try {
+            game.gameSpace.put("towerManagerClosed");
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         System.out.println("Towermanger " + game.id + " closing");
     }
 

@@ -52,11 +52,21 @@ public class Game implements Runnable {
     }
 
     public void closeGame() {
+        waveManager.playing = false;
         gameTicker.playing = false;
         towerManager.playing = false;
-        waveManager.player1Done.set(true);
-        waveManager.player2Done.set(true);
-        waveManager.playing = false;
+        // waveManager.player1Done.set(true);
+        // waveManager.player2Done.set(true);
+        try {
+            gameSpace.put("waveDoneToken");
+            gameSpace.put("waveDoneToken");
+            gameSpace.get(new ActualField("gameTickerClosed"));
+            gameSpace.get(new ActualField("waveManagerClosed"));
+            gameSpace.get(new ActualField("towerManagerClosed"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         playing = false;
         try {
             gameSpace.put("request", "displayFinish", 0);
