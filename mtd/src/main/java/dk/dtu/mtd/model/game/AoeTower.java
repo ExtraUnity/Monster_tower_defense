@@ -13,10 +13,10 @@ public class AoeTower extends Tower {
         this.lastShot = -1;
         this.towerId = towerId;
         radius = 200;
-        damage = 3;
+        damage = 1;
         size = 100;
-        fireRate = 50;
-        towerCost = 300;
+        fireRate = 70;
+        towerCost = 350;
         upgradeCost = 50;
     }
 
