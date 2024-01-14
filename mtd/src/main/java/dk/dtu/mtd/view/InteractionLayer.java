@@ -11,7 +11,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Circle;
-import javafx.scene.text.Text;
 
 public class InteractionLayer extends Pane {
     private ImageView hoverImage;

@@ -33,6 +33,7 @@ public class WaveManager implements Runnable {
     @Override
     public void run() {
         while (playing) {
+            // this is where the regular waves are controlled:
             System.out.println("Summoning wave " + waveRound);
             game.updateWave();
             spawnWave(waveRound);
