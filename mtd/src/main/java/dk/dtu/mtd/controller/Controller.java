@@ -31,7 +31,6 @@ public class Controller {
     }
 
     public static void joinGame() {
-        // TODO: somewhere along here the previous game crashes.
         client.requestGame();
         client.joinGame();
         guiThread = new Thread(guiMonitior);
@@ -44,6 +43,9 @@ public class Controller {
     }
 
     public static void exitGame() {
+        if (guiMonitior != null && guiMonitior.playing) {
+
+        }
         guiMonitior.playing = false;
         Gui.closeGame();
         client.exitGame();
@@ -53,6 +55,7 @@ public class Controller {
         // exit the application
         guiMonitior.playing = false;
         System.out.println("Exiting");
+
         client.exit();
         System.out.println("Exited");
     }
@@ -119,7 +122,7 @@ class GUIMonitior implements Runnable {
                     Platform.runLater(new Runnable() {
                         @Override
                         public void run() {
-                            GameGui.updateGameGui(hp1, hp2);
+                            GameGui.gameTop.updateHealth(hp1, hp2);
                         }
                     });
                     // ("gui", "chat", (LinkedList<String>) chat log , playerId)
@@ -142,6 +145,24 @@ class GUIMonitior implements Runnable {
                     Platform.runLater(() -> {
                         GameGui.gameWaveGuiLeft.initEnemies(enemyTypes);
                         GameGui.gameWaveGuiRight.initEnemies(enemyTypes);
+                    });
+
+                    // ("gui", "sendEnemies", String enemy info , playerId)
+                } else if (update[1].toString().equals("waveNumber")) {
+                    // make apropriate gui calls to display wave
+                    int waveNumber = (Integer) update[2];
+
+                    Platform.runLater(() -> {
+                        GameGui.gameTop.updateWaveNumber(waveNumber);
+                    });
+
+                    // ("gui", "sendEnemies", String enemy info , playerId)
+                } else if (update[1].toString().equals("sides")) {
+                    // make apropriate gui calls to display wave
+                    String side = (String) update[2];
+
+                    Platform.runLater(() -> {
+                        GameGui.gameTop.youOpponent(side);
                     });
 
                     // ("gui", "sendEnemies", String enemy info , playerId)
@@ -225,8 +246,8 @@ class GUIMonitior implements Runnable {
                             GameGui.displayLose();
                         }
                     });
-                } else if (update[1].toString().equals("waveEnded")){
-                    int waveId =  (int) update[2];
+                } else if (update[1].toString().equals("waveEnded")) {
+                    int waveId = (int) update[2];
                     Platform.runLater(new Runnable() {
                         @Override
                         public void run() {

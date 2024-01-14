@@ -4,6 +4,8 @@ import javafx.geometry.Pos;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Screen;
 
 public class GameBottomGui extends BorderPane {
@@ -13,26 +15,31 @@ public class GameBottomGui extends BorderPane {
     public GameBottomGui() {
         this.shop = new GameShop();
         ImageView chatButton = chatButton();
+        Rectangle square = new Rectangle(50,50);
+        square.setFill(Color.TRANSPARENT);
 
-        BorderPane.setAlignment(chatButton, Pos.CENTER_RIGHT);
-        setMinWidth(Screen.getPrimary().getBounds().getWidth());
-        setMaxHeight(100);
         setCenter(shop);
         setRight(chatButton);
+        setLeft(square);
+
+        GameBottomGui.setAlignment(chatButton, Pos.CENTER_RIGHT);
+        GameBottomGui.setAlignment(shop, Pos.CENTER);
+        setMinWidth(Screen.getPrimary().getBounds().getWidth());
+        setMaxHeight(100);
+
     }
 
     public void updateGameBottomGui(String newReward) {
         shop.updateRewardBox(newReward);
     }
 
-    // TODO: create better placement for chat window!!!
     public ImageView chatButton() {
         ImageView chatButton = new ImageView(new Image("dk/dtu/mtd/assets/chatButton.jpg", 50, 50, true, false));
         chatButton.setOnMouseClicked(e -> {
-            if (GameGui.gameTop.getChildren().contains(GameGui.gameChat)) {
-                GameGui.gameTop.getChildren().remove(GameGui.gameChat);
+            if (GameGui.interactionLayer.getChildren().contains(GameGui.gameChat)) {
+                GameGui.interactionLayer.getChildren().remove(GameGui.gameChat);
             } else {
-                GameGui.gameTop.getChildren().add(GameGui.gameChat);
+                GameGui.interactionLayer.getChildren().add(GameGui.gameChat);
             }
         });
 

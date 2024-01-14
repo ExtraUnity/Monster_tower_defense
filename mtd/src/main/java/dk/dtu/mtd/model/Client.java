@@ -97,13 +97,14 @@ public class Client {
         try {
             gameSpace.put("request","resign", id);
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            System.out.println("Gamespace is already closed");
         }
     }
 
     public void exitGame() {
         try {
             // Exit a game
+            resign();
             gameSpace.close();
         } catch (Exception e) {
             System.out.println("Not able to close a game");

@@ -22,7 +22,7 @@ public class InteractionLayer extends Pane {
         setMaxSize(width, height);
         hoverImage = new ImageView(new Image("dk/dtu/mtd/assets/skelly.gif"));
         hoverCircle = new Circle(0, 0, ((300 * width) / 1920));
-        upgradeButton = new Button();
+        upgradeButton = new Button("Upgrade");
         lastSelected = -1;
 
         this.getChildren().add(hoverImage);
@@ -69,7 +69,7 @@ public class InteractionLayer extends Pane {
                     hoverImage.setImage(new Image("dk/dtu/mtd/assets/BasicTower.png"));
                     hoverCircle.setRadius((width * 300) / 1920);
                 } else if (dragboard.hasString() && dragboard.getString() == "aoeTower") {
-                    hoverImage.setImage(new Image("dk/dtu/mtd/assets/dartMonkey.png"));
+                    hoverImage.setImage(new Image("dk/dtu/mtd/assets/AOEtower.png"));
                     hoverCircle.setRadius((width * 200) / 1920);
                 }
             }
@@ -103,8 +103,7 @@ public class InteractionLayer extends Pane {
             @Override
             public void handle(MouseEvent event) {
                 if (lastSelected != -1) {
-                    // TODO: this might be incorrect
-                    TowerGui lastTower = (TowerGui) GameGui.interactionLayer.lookup("#" + lastSelected);
+                    TowerGui lastTower = (TowerGui) GameGui.towerLayer.lookup("#" + lastSelected);
                     lastTower.setCircleVisible(false);
                     upgradeButton.setVisible(false);
                     lastSelected = -1;
@@ -126,12 +125,14 @@ public class InteractionLayer extends Pane {
         } else if (lastSelected == -1) {
             lastSelected = towerId;
             upgradeButton.setVisible(true);
+            upgradeButton.relocate(tower.getX() + (upgradeButton.getWidth()/2), tower.getY() + 110);
             tower.setCircleVisible(true);
         } else {
             TowerGui lastTower = (TowerGui) GameGui.towerLayer.lookup("#" + lastSelected);
             lastTower.setCircleVisible(false);
             lastSelected = towerId;
             tower.setCircleVisible(true);
+            upgradeButton.relocate(tower.getX() + (upgradeButton.getWidth()/2) , tower.getY() + 110);
         }
     }
 }

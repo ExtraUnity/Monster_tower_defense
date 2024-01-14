@@ -6,7 +6,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.LinkedList;
 
 public class GameWaveGui extends StackPane {
@@ -28,7 +27,7 @@ public class GameWaveGui extends StackPane {
     public void initEnemies(String enemyTypes) {
         wavePane = new Pane();
         enemyArray = new ArrayList<>();
-        // Splttting the input:
+        // Spltting the input:
         String[] pairs = enemyTypes.split(",");
         if (pairs[0].equals("")) {
             System.out.println("Recived empty wave");
@@ -57,7 +56,7 @@ public class GameWaveGui extends StackPane {
                 enemyArray.get(i).yCoord = (gameAreaHeight * ((Double.valueOf(coord[1])) / 1080)) - 50;
             }
         } catch (Exception e) {
-            System.out.println(coordinates.size() + " " + enemyArray.size());
+            System.out.println("Could not update enemies");
         }
 
     }

@@ -7,6 +7,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
 public class GameShop extends StackPane {
@@ -17,7 +18,7 @@ public class GameShop extends StackPane {
 
     public GameShop() {
         stackPane = new StackPane();
-        shop = new HBox();
+        shop = new HBox(20);
         towerShop = new TowerShop();
         enemyShop = new EnemyShop();
         setMaxHeight(100);
@@ -32,16 +33,17 @@ public class GameShop extends StackPane {
     }
 
     void rewardBox() {
-        Circle coin1 = new Circle(35, Color.GOLD);
-        Circle coin2 = new Circle(30, Color.BROWN);
-        Circle coin3 = new Circle(25, Color.GOLD);
+        Circle coin1 = new Circle(35, Color.TRANSPARENT);
         Text reward = new Text("100");
-        stackPane.getChildren().addAll(coin1, coin2, coin3, reward);
+        stackPane.getChildren().addAll(coin1, reward);
         stackPane.setAlignment(Pos.CENTER);
     }
 
     void updateRewardBox(String newReward) {
-        stackPane.getChildren().remove(3);
-        stackPane.getChildren().add(new Text(newReward));
+        Text reward = new Text(newReward);
+        reward.setFont(new Font(20));
+        reward.setFill(Color.BROWN);
+        stackPane.getChildren().remove(1);
+        stackPane.getChildren().add(reward);
     }
 }
