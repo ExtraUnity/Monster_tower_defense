@@ -11,11 +11,13 @@ public class TowerManager implements Runnable {
     public volatile boolean playing;
 
     Game game;
+    Path  path;
 
     public TowerManager(Game game) {
         this.towerList = new ArrayList<Tower>();
         this.playing = true;
         this.game = game;
+        this.path = new Path();
     }
 
     @Override
@@ -40,9 +42,8 @@ public class TowerManager implements Runnable {
                 return false;
             }
         }
-        if (game.player1.id == playerId && 
-            (newTower.x > 920 || newTower.x < 25 || newTower.y > 1090 || newTower.y < 80 || // Play Area
-                (newTower.x > 610 && newTower.x < 770 && newTower.y > 0 && newTower.y < 540) )) {
+        if (game.player1.id == playerId && (path.isOnPath(newTower.getX(), newTower.getY()) ||
+            (newTower.x > 920 || newTower.x < 25 || newTower.y > 1090 || newTower.y < 80 ))) {
             return false;
         } else if (game.player2.id == playerId && newTower.x < 960) {
             return false;

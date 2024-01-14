@@ -54,7 +54,6 @@ public class TowerGui extends ImageView {
         @Override
         public void handle(DragEvent event) {
             GameGui.legalPlacmentHover(false);
-            System.out.println("test");
         }
         });
 
@@ -62,7 +61,6 @@ public class TowerGui extends ImageView {
             @Override
             public void handle(DragEvent event) {
                 GameGui.legalPlacmentHover(true);
-                System.out.println("exit");
             }
         });
 
@@ -70,7 +68,6 @@ public class TowerGui extends ImageView {
             @Override
             public void handle(DragEvent event) {
                 GameGui.legalPlacmentHover(false);
-                System.out.println("test");
             }
         });
 
@@ -78,7 +75,6 @@ public class TowerGui extends ImageView {
             @Override
             public void handle(DragEvent event) {
                  GameGui.legalPlacmentHover(true);
-                 System.out.println("exit");
             }
         });
 
