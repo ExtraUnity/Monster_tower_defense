@@ -26,15 +26,20 @@ public class AoeTower extends Tower {
             this.lastShot = game.gameTicker.gameTick;
         }
         int deltaTick = game.gameTicker.gameTick - lastShot;
+        boolean hasHit = false;
 
         if (deltaTick > fireRate) {
             for (int i = 0; i < enemies.size(); i++) {
                 if (inRange(enemies.get(i)) && !enemies.get(i).isDead()) {
                     enemies.get(i).takeDamage(damage, playerId, game);
+                    hasHit = true;
                     lastShot = game.gameTicker.gameTick;
                     deltaTick = 0;
                 }
             }
+        }
+        if(hasHit) {
+            hasShot(game);
         }
     }
     

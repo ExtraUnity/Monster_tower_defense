@@ -232,6 +232,16 @@ class GUIMonitior implements Runnable {
                         }
 
                     });
+                } else if (update[1].toString().equals("towerShoot")) {
+                    int[] coordinates = (int[]) update[2];
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            GameGui.towerShoot(coordinates[0], coordinates[1], coordinates[2]);
+                        }
+                        
+                    });
+
                 } else if (update[1].toString().equals("playerLost")) {
                     Platform.runLater(new Runnable() {
                         @Override
