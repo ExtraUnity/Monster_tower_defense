@@ -134,6 +134,9 @@ public class WaveManager implements Runnable {
         leftEnemies.addAll(leftSide);
         rightEnemies.addAll(rightSide);
 
+        setWaveSpawnRate(waveLeft);
+        setWaveSpawnRate(waveRight);
+
         String enemyTypes = messageGenerator(waveLeft);
 
         // left side
@@ -210,6 +213,18 @@ public class WaveManager implements Runnable {
         return enemies;
     }
 
+    public void setWaveSpawnRate(Wave wave) {
+        if (waveRound == 1) {
+            wave.setSpawnRate(150);
+        } else if (waveRound % 5 == 0) {
+            wave.setSpawnRate(75);
+        } else if (waveRound == 7) {
+            wave.setSpawnRate(25);
+        } else {
+            wave.setSpawnRate(100);
+        }
+    }
+
     // Getters and setters
     public int getCurrentWaveNumber() {
         return waveRound;
@@ -237,6 +252,7 @@ class Wave {
     int playerId;
     int waveId;
     Game game;
+    int spawnRate = 150; // In ticks
 
     public Wave(ArrayList<Enemy> enemies, Space space, int startX, int playerId, int waveId, Game game) {
         this.enemies = enemies;
@@ -247,9 +263,12 @@ class Wave {
         this.game = game;
     }
 
+    public void setSpawnRate(int newSpawnRate) {
+        this.spawnRate = newSpawnRate;
+    }
+
     public void run() {
         int spawned = 0;
-        int spawnRate = 150; // In ticks
         int lastSpawnTick = game.gameTicker.gameTick;
         int deltaTick = 0;
         while (true) {
