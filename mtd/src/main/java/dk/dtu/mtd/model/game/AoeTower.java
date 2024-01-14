@@ -21,6 +21,17 @@ public class AoeTower extends Tower {
     }
 
     @Override
+    public void upgradeTower() {
+        super.towerLevel++;
+        upgradeCost += 10;
+        if (fireRate > 10){
+            fireRate--;
+        } else {
+            damage++;
+        }
+    }
+
+    @Override
     public void shoot(List<Enemy> enemies, Game game) {
         if(this.lastShot == -1) {
             this.lastShot = game.gameTicker.gameTick;
