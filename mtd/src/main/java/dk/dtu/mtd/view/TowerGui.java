@@ -29,7 +29,8 @@ public class TowerGui extends ImageView {
         circle.setMouseTransparent(true);
 
         square = new Rectangle(x - size / 2, y - size / 2, size, size);
-        //square.setMouseTransparent(true);
+        square.setOpacity(0);;
+
 
         if (type.equals("basicTower")) {
             this.setImage(new Image("dk/dtu/mtd/assets/BasicTower.png"));
@@ -49,6 +50,22 @@ public class TowerGui extends ImageView {
             }
        });
 
+       this.setOnDragEntered(new EventHandler<DragEvent>() {
+        @Override
+        public void handle(DragEvent event) {
+            GameGui.legalPlacmentHover(false);
+            System.out.println("test");
+        }
+        });
+
+        this.setOnDragExited(new EventHandler<DragEvent>() {
+            @Override
+            public void handle(DragEvent event) {
+                GameGui.legalPlacmentHover(true);
+                System.out.println("exit");
+            }
+        });
+
         square.setOnDragEntered(new EventHandler<DragEvent>() {
             @Override
             public void handle(DragEvent event) {
@@ -61,6 +78,7 @@ public class TowerGui extends ImageView {
             @Override
             public void handle(DragEvent event) {
                  GameGui.legalPlacmentHover(true);
+                 System.out.println("exit");
             }
         });
 
