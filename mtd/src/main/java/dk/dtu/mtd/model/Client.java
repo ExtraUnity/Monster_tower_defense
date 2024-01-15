@@ -194,6 +194,7 @@ public class Client {
             // Exit a game and return to main meny
             resign();
             gameSpace.close();
+            chatThread.interrupt();
         } catch (Exception e) {
             System.out.println("Not able to close a game");
         }
