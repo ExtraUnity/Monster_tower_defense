@@ -25,11 +25,17 @@ public abstract class Tower {
         return radius * radius > (enemy.x - x) * (enemy.x - x) + (enemy.y - y) * (enemy.y - y);
 
     }
-    public abstract void shoot(List<Enemy> enemies, Game game);
 
-    public boolean legal() {
-        return true;
+    public void hasShot(Game game) {
+        try {
+            game.gameSpace.put("gui", "towerShoot", new int[]{x,y,size}, game.player1.id);
+            game.gameSpace.put("gui", "towerShoot", new int[]{x,y,size}, game.player2.id);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
+
+    public abstract void shoot(List<Enemy> enemies, Game game);
 
     public int getX() {
         return x;
