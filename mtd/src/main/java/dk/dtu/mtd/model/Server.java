@@ -77,8 +77,8 @@ public class Server {
         server.add(("game" + IDgame), newGame.gameSpace);
         new Thread(newGame).start();
         try {
-            lobby.put("game", playerID1, newGame.id);
-            lobby.put("game", playerID2, newGame.id);
+            lobby.put("game", playerID1, newGame.id, "host");
+            lobby.put("game", playerID2, newGame.id, "guest");
         } catch (Exception e) {
             e.printStackTrace();
         }

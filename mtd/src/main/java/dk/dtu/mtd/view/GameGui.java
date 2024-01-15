@@ -174,8 +174,8 @@ public class GameGui extends StackPane {
         return backgoundView;
     }
 
-    public static void updateGameGui(LinkedList<String> newChat) {
-        gameChat.chatList = newChat;
+    public static void updateGameGui(String msg) {
+        gameChat.chatList.add(msg);
         gameChat.displayChat();
     }
 
