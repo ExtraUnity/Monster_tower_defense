@@ -31,8 +31,14 @@ public class Controller {
     }
 
     public static void joinGame() {
-        client.requestGame();
-        client.joinGame();
+        String type = client.requestGame();
+
+        client.joinGame(type);
+        if(type.equals("host")) {
+            client.hostChat();
+        } else {
+            client.joinChat();
+        }
         guiThread = new Thread(guiMonitior);
         guiMonitior.playing = true;
         guiThread.start();
