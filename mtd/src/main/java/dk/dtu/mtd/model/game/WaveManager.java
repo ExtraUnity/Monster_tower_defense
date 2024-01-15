@@ -292,8 +292,9 @@ class Wave {
             try {
                 if (spawned < enemies.size() && deltaTick >= spawnRate) {
                     // spawn enemy
-                    enemies.get(spawned).setX(START_X);
                     enemies.get(spawned).setY(START_Y);
+                    enemies.get(spawned).setX(START_X);
+                    
                     lastSpawnTick = game.gameTicker.gameTick;
                     spawned++;
                 }
