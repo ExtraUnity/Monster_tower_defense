@@ -16,7 +16,7 @@ public abstract class Tower {
     
     public void upgradeTower() {
         towerLevel++;
-        damage++;
+        sellPrice += upgradeCost / 2;
         upgradeCost += 10;
         System.out.println("tower level is " + towerLevel);
     }
