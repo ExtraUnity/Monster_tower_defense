@@ -61,8 +61,6 @@ public class Game implements Runnable {
         waveManager.playing = false;
         gameTicker.playing = false;
         towerManager.playing = false;
-        // waveManager.player1Done.set(true);
-        // waveManager.player2Done.set(true);
         try {
             gameSpace.put("waveDoneToken");
             gameSpace.put("waveDoneToken");
@@ -152,6 +150,7 @@ public class Game implements Runnable {
 
         while (playing) {
             try {
+                // recive and handle all incoming tuples marced with "request".
                 // Tuple contens: ("request" , 'type of request' , 'player ID')
                 handleGameRequest(gameSpace.get(new ActualField("request"),
                         new FormalField(String.class), new FormalField(Integer.class)));
@@ -181,7 +180,8 @@ public class Game implements Runnable {
             }
         } else if (request[1].toString().equals("damage")) {
             // Reciving a damage request
-            int damage = (int) gameSpace.get(new ActualField("data"), new ActualField("damage"), new FormalField(Integer.class))[2];
+            int damage = (int) gameSpace.get(new ActualField("data"), new ActualField("damage"),
+                    new FormalField(Integer.class))[2];
             if ((int) request[2] == player1.id) {
                 player2.setHealth(player2.getHealth() - damage);
             } else {
@@ -212,6 +212,7 @@ public class Game implements Runnable {
 
         } else if (request[1].toString().equals("sellTower")) {
             towerManager.removeTower((int) request[2]);
+            
         } else if (request[1].toString().equals("chat")) {
 
             String msg = (String) gameSpace.get(new ActualField("data"), new ActualField("chat"),
@@ -253,6 +254,7 @@ public class Game implements Runnable {
             }
             int recieverId = senderId == player1.id ? player2.id : player1.id;
             waveManager.sendEnemies(type, recieverId);
+
         } else if (request[1].toString().equals("resign")) {
             if ((int) request[2] == player1.id) {
                 player1.hasLost = true;
