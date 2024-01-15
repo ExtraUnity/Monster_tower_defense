@@ -24,6 +24,7 @@ import javafx.scene.shape.Circle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
+import javafx.stage.Screen;
 
 public class InteractionLayer extends Pane {
     private ImageView hoverImage;
@@ -122,6 +123,11 @@ public class InteractionLayer extends Pane {
         this.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
+
+                double gameAreaHeight = Screen.getPrimary().getBounds().getHeight() - 250;
+                double gameAreaWidth = (gameAreaHeight / 9) * 16;
+
+                System.out.println(1920 * event.getX() / gameAreaWidth  + " " + 1080 * event.getY() / gameAreaHeight);
                 if (lastSelected != -1) {
                     TowerGui lastTower = (TowerGui) GameGui.towerLayer.lookup("#" + lastSelected);
                     lastTower.setCircleVisible(false);

@@ -93,6 +93,8 @@ public class GameGui extends StackPane {
             Rectangle pathSquare =  new Rectangle(cordX, cordY, sizeX, sizeY);
             interactionLayer.getChildren().add(pathSquare);
 
+            pathSquare.setOpacity(0);
+
             pathSquare.setOnDragEntered(new EventHandler<DragEvent>() {
                 @Override
                 public void handle(DragEvent event) {

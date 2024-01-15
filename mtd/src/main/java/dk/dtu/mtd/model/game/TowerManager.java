@@ -51,9 +51,10 @@ public class TowerManager implements Runnable {
             }
         }
         if (game.player1.id == playerId && (path.isOnPath(newTower.getX(), newTower.getY()) ||
-            (newTower.x > 920 || newTower.x < 25 || newTower.y > 1090 || newTower.y < 80 ))) {
+            (newTower.x > 920 || newTower.x < 25 || newTower.y > 1050 || newTower.y < 30 ))) {
             return false;
-        } else if (game.player2.id == playerId && newTower.x < 960) {
+        } else if (game.player2.id == playerId && (path.isOnPath(newTower.getX(), newTower.getY()) ||
+            (newTower.x > 1890 || newTower.x < 1000 || newTower.y > 1050 || newTower.y < 30 ))) {
             return false;
         }
 
