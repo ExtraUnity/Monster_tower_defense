@@ -17,6 +17,7 @@ public class BasicTower extends Tower {
         fireRate = 100;
         towerCost = 100;
         upgradeCost = 50;
+        sellPrice = 50;
     }
 
     public void shoot(List<Enemy> enemies, Game game) {
