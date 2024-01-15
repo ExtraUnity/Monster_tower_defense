@@ -33,8 +33,11 @@ public class Player {
     }
 
     public void lose(Game game) {
-        this.hasLost = true;
-        game.closeGame();
+        try {
+            game.gameSpace.put("request","resign", id);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     public void setRewards(int newReward) {
