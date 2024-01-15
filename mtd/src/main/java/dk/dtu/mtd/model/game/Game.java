@@ -18,6 +18,7 @@ public class Game implements Runnable {
     private Space lobby;
     public WaveManager waveManager;
     public TowerManager towerManager;
+    public Path path;
     private volatile boolean playing;
 
     public Game(int id, int playerID1, int playerID2, Space lobby) {
@@ -26,10 +27,13 @@ public class Game implements Runnable {
         player1 = new Player(playerID1, 150, 150);
         player2 = new Player(playerID2, 150, 150);
         gameSpace = new SequentialSpace();
+        path = new Path();
         playing = true;
         LinkedList<String> chat = new LinkedList<String>();
         try {
             gameSpace.put("chatList", chat);
+            gameSpace.put("gui", "pathList", path.player1Path, player1.id);
+            gameSpace.put("gui", "pathList", path.player2Path, player2.id);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -40,7 +44,7 @@ public class Game implements Runnable {
         waveManager = new WaveManager(this);
         new Thread(waveManager).start();
 
-        towerManager = new TowerManager(this);
+        towerManager = new TowerManager(this, path);
         new Thread(towerManager).start();
         updateReward();
 
@@ -225,20 +229,32 @@ public class Game implements Runnable {
                     new FormalField(EnemyType.class));
             int senderId = (int) request[2];
             EnemyType type = (EnemyType) res[2];
+            Player sendingPlayer = senderId == player1.id ? player1 : player2;
+            Enemy enemy;
+            switch (type) {
+                case SKELETON:
+                    enemy = new Skeleton();
+                    break;
+                case FAT_SKELETON:
+                    enemy = new FatSkeleton();
+                default:
+                    enemy = new Skeleton();
+                    break;
+            }
+            if (sendingPlayer.getRewards() < enemy.cost) {
+                return;
+            } else {
+                sendingPlayer.spendRewards(enemy.cost);
+                updateReward();
+                //TODO: Implement increase income
+            }
             int recieverId = senderId == player1.id ? player2.id : player1.id;
             waveManager.sendEnemies(type, recieverId);
-        } else if (request[1].toString().equals("displayFinish")) {
-            try {
-                displayWinner();
-            } catch (UnexpectedException e) {
-                e.printStackTrace();
-            }
         } else if (request[1].toString().equals("resign")) {
-            // This should be reverse but it works.
             if ((int) request[2] == player1.id) {
-                player2.hasLost = true;
-            } else {
                 player1.hasLost = true;
+            } else {
+                player2.hasLost = true;
             }
             try {
                 displayWinner();

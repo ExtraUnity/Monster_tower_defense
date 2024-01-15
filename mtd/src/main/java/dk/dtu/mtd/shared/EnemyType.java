@@ -1,5 +1,6 @@
 package dk.dtu.mtd.shared;
 
 public enum EnemyType {
-    SKELETON
+    SKELETON,
+    FAT_SKELETON
 }

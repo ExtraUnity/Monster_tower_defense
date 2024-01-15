@@ -25,6 +25,7 @@ import javafx.scene.shape.Circle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
+import javafx.stage.Screen;
 
 public class InteractionLayer extends Pane {
     private ImageView hoverImage;
@@ -50,10 +51,11 @@ public class InteractionLayer extends Pane {
         hoverImage.setFitHeight(100);
         hoverImage.setFitWidth(100);
         hoverImage.setVisible(false);
+        hoverImage.setMouseTransparent(true);
 
         hoverCircle.setOpacity(0.2);
         hoverCircle.setVisible(false);
-
+        hoverCircle.setMouseTransparent(true);
 
 
         // Finalizing the placement of a tower
@@ -118,10 +120,15 @@ public class InteractionLayer extends Pane {
             }
         });
 
-        // I don't even know
+        // When backgroudn click deselect old tower
         this.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
+
+                double gameAreaHeight = Screen.getPrimary().getBounds().getHeight() - 250;
+                double gameAreaWidth = (gameAreaHeight / 9) * 16;
+
+                System.out.println(1920 * event.getX() / gameAreaWidth  + " " + 1080 * event.getY() / gameAreaHeight);
                 if (lastSelected != -1) {
                     TowerGui lastTower = (TowerGui) GameGui.towerLayer.lookup("#" + lastSelected);
                     lastTower.setCircleVisible(false);
@@ -160,6 +167,16 @@ public class InteractionLayer extends Pane {
             
             //upgradeButton.relocate(tower.x - (upgradeButton.getWidth()/2), tower.y + 50);
             towerSelectedGui.relocate(tower.x + 50, tower.y - 50);
+        }
+    }
+
+    public void legalPlacmentHover(boolean canPlace) {
+        if (canPlace) {
+            hoverCircle.setFill(Color.BLACK);
+            hoverCircle.setOpacity(0.2);
+        } else {
+            hoverCircle.setFill(Color.RED);
+            hoverCircle.setOpacity(0.4);
         }
     }
 }
@@ -249,6 +266,4 @@ class TowerSelectedGui extends StackPane {
     public void updateStats(String newStats){
         stats.setText(newStats);
     }
-
-
 }

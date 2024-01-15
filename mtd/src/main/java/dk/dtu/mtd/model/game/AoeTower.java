@@ -23,8 +23,7 @@ public class AoeTower extends Tower {
 
     @Override
     public void upgradeTower() {
-        super.towerLevel++;
-        upgradeCost += 10;
+        super.upgradeTower();   
         if (fireRate > 10){
             fireRate--;
         } else {
