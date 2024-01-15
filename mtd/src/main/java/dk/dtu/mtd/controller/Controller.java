@@ -142,18 +142,6 @@ class GUIMonitior implements Runnable {
                         }
                     });
                     // ("gui", "chat", (LinkedList<String>) chat log , playerId)
-                } else if (update[1].toString().equals("chat")) {
-                    LinkedList<String> chat = (LinkedList<String>) update[2];
-                    Platform.runLater(new Runnable() {
-
-                        @Override
-                        public void run() {
-                            //GameGui.updateGameGui(chat);
-                        }
-
-                    });
-
-                    // ("gui", "chat", (...) wave info , playerId)
                 } else if (update[1].toString().equals("wave")) {
                     // make apropriate gui calls to display wave
                     String enemyTypes = (String) update[2];

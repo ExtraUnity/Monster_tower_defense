@@ -206,20 +206,6 @@ public class Game implements Runnable {
 
         } else if (request[1].toString().equals("sellTower")) {
             towerManager.removeTower((int) request[2]);
-        } else if (request[1].toString().equals("chat")) {
-
-            String msg = (String) gameSpace.get(new ActualField("data"), new ActualField("chat"),
-                    new FormalField(String.class))[2];
-
-            String player = String.valueOf((int) request[2]);
-            Object[] res = gameSpace.get(new ActualField("chatList"), new FormalField(LinkedList.class));
-            LinkedList<String> chat = (LinkedList<String>) res[1];
-            chat.add("Player " + player + ": " + msg);
-            gameSpace.put("chatList", chat);
-            // One for each player
-            gameSpace.put("gui", "chat", chat, player1.id);
-            gameSpace.put("gui", "chat", chat, player2.id);
-
         } else if (request[1].toString().equals("sendEnemies")) {
 
             Object[] res = gameSpace.get(new ActualField("data"), new ActualField("sendEnemies"),
