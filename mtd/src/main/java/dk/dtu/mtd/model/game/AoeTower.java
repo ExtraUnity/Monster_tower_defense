@@ -18,6 +18,7 @@ public class AoeTower extends Tower {
         fireRate = 70;
         towerCost = 350;
         upgradeCost = 50;
+        sellPrice = 175;
     }
 
     @Override

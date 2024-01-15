@@ -96,6 +96,18 @@ public class Client {
         return -1;
     }
 
+    public void sellTower(int towerId) {
+        try {
+            gameSpace.put("request", "sellTower", id);
+            gameSpace.put("towerId", towerId);
+            int opponentId = (int) gameSpace.get(new ActualField("towerSellSuccess"), new ActualField(id), new FormalField(Integer.class), new ActualField(towerId))[2];
+            gameSpace.put("gui", "removeTower", towerId, opponentId);
+            Controller.removeTower(towerId);
+        } catch(InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void resign() {
         try {
             gameSpace.put("request","resign", id);
@@ -138,6 +150,7 @@ public class Client {
             e.printStackTrace();
         }
     }
+
 
 }
 

@@ -102,7 +102,14 @@ public class GameGui extends StackPane {
 
     public static void updateUpgradePrice(int towerId, int newPrice){
         TowerGui tower = (TowerGui) towerLayer.lookup("#" + towerId);
-        tower.updateUpgradePrice("" + newPrice);
+        tower.updateUpgradePrice(newPrice);
+        InteractionLayer.towerSelectedGui.updateUpgradePrice(newPrice);
+    }
+
+    public static void removeTower(int towerId) {
+        TowerGui tower = (TowerGui) towerLayer.lookup("#" + towerId);
+        towerLayer.getChildren().remove(tower);
+        InteractionLayer.towerSelectedGui.setVisible(false);
     }
 
 
