@@ -15,12 +15,14 @@ public class Game implements Runnable {
     public Player player1;
     public Player player2;
     public Space gameSpace;
+    private Space lobby;
     public WaveManager waveManager;
     public TowerManager towerManager;
     private volatile boolean playing;
 
-    public Game(int id, int playerID1, int playerID2) {
+    public Game(int id, int playerID1, int playerID2, Space lobby) {
         this.id = id;
+        this.lobby = lobby;
         player1 = new Player(playerID1, 150, 150);
         player2 = new Player(playerID2, 150, 150);
         gameSpace = new SequentialSpace();
@@ -52,11 +54,21 @@ public class Game implements Runnable {
     }
 
     public void closeGame() {
+        waveManager.playing = false;
         gameTicker.playing = false;
         towerManager.playing = false;
-        waveManager.player1Done.set(true);
-        waveManager.player2Done.set(true);
-        waveManager.playing = false;
+        // waveManager.player1Done.set(true);
+        // waveManager.player2Done.set(true);
+        try {
+            gameSpace.put("waveDoneToken");
+            gameSpace.put("waveDoneToken");
+            gameSpace.get(new ActualField("gameTickerClosed"));
+            gameSpace.get(new ActualField("waveManagerClosed"));
+            gameSpace.get(new ActualField("towerManagerClosed"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         playing = false;
         try {
             gameSpace.put("request", "displayFinish", 0);
@@ -95,6 +107,11 @@ public class Game implements Runnable {
                 System.out.println("Game has failed on server side");
             }
         }
+        try {
+            lobby.put("request", "closeGame", id);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         System.out.println("Game " + id + " ending it's run loop");
     }
 
@@ -121,7 +138,7 @@ public class Game implements Runnable {
         try {
             Thread.sleep(5000L);
             System.out.println("Ending game!");
-
+            closeGame();
             gameSpace.put("gameClosed", player1.id);
             gameSpace.put("gameClosed", player2.id);
         } catch (InterruptedException e) {

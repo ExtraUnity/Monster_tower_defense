@@ -100,6 +100,11 @@ public class GameGui extends StackPane {
         root.getChildren().add(loserDisplay);
     }
 
+    public static void updateUpgradePrice(int towerId, int newPrice){
+        TowerGui tower = (TowerGui) towerLayer.lookup("#" + towerId);
+        tower.updateUpgradePrice("" + newPrice);
+    }
+
 
     public ImageView gameAreaBackground(double width, double height) {
         return new ImageView(new Image("dk/dtu/mtd/assets/GameArea.png", width, height, false, true));
@@ -128,9 +133,8 @@ public class GameGui extends StackPane {
     public static void newTower(String type, int size, int radius, int towerId, int playerId, int x, int y) {
         TowerGui tower = new TowerGui(type, size, (int) ((gameAreaWidth * radius) / 1920), towerId, playerId,
                 (int) ((gameAreaWidth * x) / 1920), (int) ((gameAreaHeight * y) / 1080));
-        towerLayer.getChildren().add(0, tower.getCircle());
         towerLayer.getChildren().add(tower);
-
+        
         Rectangle clickArea = new Rectangle(100, 100);
 
         clickArea.setX(((gameAreaWidth * (x - (size / 2))) / 1920));
@@ -154,7 +158,7 @@ public class GameGui extends StackPane {
             }
         });
 
-        interactionLayer.getChildren().add(clickArea);
+        interactionLayer.getChildren().add(0,clickArea);
     }
 
     public static void returnToLobbyPrompt() {

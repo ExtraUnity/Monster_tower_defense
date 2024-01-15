@@ -42,6 +42,7 @@ public class InteractionLayer extends Pane {
             Controller.upgradeTower(lastSelected);
         });
 
+        // Finalizing the placement of a tower
         this.setOnDragDropped(new EventHandler<DragEvent>() {
             @Override
             public void handle(DragEvent event) {
@@ -60,22 +61,25 @@ public class InteractionLayer extends Pane {
             }
         });
 
+        // Placing a tower
         this.setOnDragEntered(new EventHandler<DragEvent>() {
-
             @Override
             public void handle(DragEvent event) {
                 Dragboard dragboard = event.getDragboard();
                 if (dragboard.hasString() && dragboard.getString() == "basicTower") {
                     hoverImage.setImage(new Image("dk/dtu/mtd/assets/BasicTower.png"));
+                    // range cirkle
                     hoverCircle.setRadius((width * 300) / 1920);
                 } else if (dragboard.hasString() && dragboard.getString() == "aoeTower") {
                     hoverImage.setImage(new Image("dk/dtu/mtd/assets/AOEtower.png"));
+                    // range cirkle
                     hoverCircle.setRadius((width * 200) / 1920);
                 }
             }
 
         });
 
+        // 
         this.setOnDragOver(new EventHandler<DragEvent>() {
             @Override
             public void handle(DragEvent event) {
@@ -86,19 +90,21 @@ public class InteractionLayer extends Pane {
                 hoverCircle.setVisible(true);
                 hoverCircle.setCenterX(event.getX());
                 hoverCircle.setCenterY(event.getY());
+
                 event.consume();
             }
         });
 
+        // Make hover images invisible
         this.setOnDragExited(new EventHandler<DragEvent>() {
             @Override
             public void handle(DragEvent event) {
                 hoverImage.setVisible(false);
-                ;
                 hoverCircle.setVisible(false);
             }
         });
 
+        // I don't even know
         this.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
@@ -125,14 +131,16 @@ public class InteractionLayer extends Pane {
         } else if (lastSelected == -1) {
             lastSelected = towerId;
             upgradeButton.setVisible(true);
-            upgradeButton.relocate(tower.getX() + (upgradeButton.getWidth()/2), tower.getY() + 110);
+            upgradeButton.relocate(tower.x - (upgradeButton.getWidth()/2), tower.y + 50);
+
             tower.setCircleVisible(true);
         } else {
             TowerGui lastTower = (TowerGui) GameGui.towerLayer.lookup("#" + lastSelected);
             lastTower.setCircleVisible(false);
             lastSelected = towerId;
             tower.setCircleVisible(true);
-            upgradeButton.relocate(tower.getX() + (upgradeButton.getWidth()/2) , tower.getY() + 110);
+            
+            upgradeButton.relocate(tower.x - (upgradeButton.getWidth()/2), tower.y + 50);
         }
     }
 }

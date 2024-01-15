@@ -30,6 +30,11 @@ public class TowerManager implements Runnable {
                 }
             }
         }
+        try {
+            game.gameSpace.put("towerManagerClosed");
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         System.out.println("Towermanger " + game.id + " closing");
     }
 
@@ -99,6 +104,7 @@ public class TowerManager implements Runnable {
                         game.player2.spendRewards(tower.getUpgradeCost());
                         tower.upgradeTower();
                     }
+                    game.gameSpace.put("towerUpgradeSucces", tower.getUpgradeCost(), towerId);
                     break;
                 }
             }
