@@ -96,6 +96,15 @@ public class Client {
         return -1;
     }
 
+    public void sellTower(int towerId) {
+        try {
+            gameSpace.put("request", "sellTower", id);
+            gameSpace.put("towerId", towerId);
+        } catch(InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void resign() {
         try {
             gameSpace.put("request","resign", id);
@@ -138,6 +147,7 @@ public class Client {
             e.printStackTrace();
         }
     }
+
 
 }
 

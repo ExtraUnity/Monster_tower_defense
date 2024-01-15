@@ -90,6 +90,11 @@ public class Controller {
         GameGui.updateUpgradePrice(towerId, newPrice);
     }
 
+    public static void sellTower(int towerId) {
+        client.sellTower(towerId);
+        GameGui.removeTower(towerId);
+    }
+
     public static int getPlayerId() {
         return client.id;
     }
