@@ -31,8 +31,7 @@ public class Path {
 
         for (String section:player1Path) {
             String[] cordinates = section.trim().split("\\s+");
-            if (Integer.valueOf(cordinates[0]) < x && Integer.valueOf(cordinates[1]) < y && Integer.valueOf(cordinates[2]) > x && Integer.valueOf(cordinates[3]) > y) {
-                System.out.println("not here");
+            if (Integer.valueOf(cordinates[0]) < x && Integer.valueOf(cordinates[1]) < y && Integer.valueOf(cordinates[0]) + Integer.valueOf(cordinates[2]) > x && Integer.valueOf(cordinates[1]) + Integer.valueOf(cordinates[3]) > y) {
                 return true;
             }
         }

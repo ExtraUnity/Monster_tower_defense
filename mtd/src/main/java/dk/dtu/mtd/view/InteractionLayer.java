@@ -49,10 +49,11 @@ public class InteractionLayer extends Pane {
         hoverImage.setFitHeight(100);
         hoverImage.setFitWidth(100);
         hoverImage.setVisible(false);
+        hoverImage.setMouseTransparent(true);
 
         hoverCircle.setOpacity(0.2);
         hoverCircle.setVisible(false);
-
+        hoverCircle.setMouseTransparent(true);
 
 
         // Finalizing the placement of a tower
@@ -117,7 +118,7 @@ public class InteractionLayer extends Pane {
             }
         });
 
-        // I don't even know
+        // When backgroudn click deselect old tower
         this.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
@@ -156,6 +157,16 @@ public class InteractionLayer extends Pane {
             tower.setCircleVisible(true);
             
             //upgradeButton.relocate(tower.x - (upgradeButton.getWidth()/2), tower.y + 50);
+        }
+    }
+
+    public void legalPlacmentHover(boolean canPlace) {
+        if (canPlace) {
+            hoverCircle.setFill(Color.BLACK);
+            hoverCircle.setOpacity(0.2);
+        } else {
+            hoverCircle.setFill(Color.RED);
+            hoverCircle.setOpacity(0.4);
         }
     }
 }
@@ -232,6 +243,5 @@ class TowerSelectedGui extends StackPane {
     public void updateUpgradePrice(int newPrice){
         upgradePrice.setText(String.valueOf(newPrice));
     }
-
 
 }

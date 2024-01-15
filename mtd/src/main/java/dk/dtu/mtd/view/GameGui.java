@@ -82,9 +82,6 @@ public class GameGui extends StackPane {
     }
 
     public static void addPath (LinkedList<String> pathSections) {
-
-        System.out.println("gameGui" + pathSections.get(0).toString());
-
         for (int i = 0 ; i < pathSections.size() ; i++ ) {
             String[] coordinates = pathSections.get(i).split("\\s+");
 
@@ -94,7 +91,22 @@ public class GameGui extends StackPane {
             double sizeY = (gameAreaHeight * Integer.valueOf(coordinates[3])) / 1080;
 
             Rectangle pathSquare =  new Rectangle(cordX, cordY, sizeX, sizeY);
-            towerLayer.getChildren().add(pathSquare);
+            interactionLayer.getChildren().add(pathSquare);
+
+            pathSquare.setOnDragEntered(new EventHandler<DragEvent>() {
+                @Override
+                public void handle(DragEvent event) {
+                    interactionLayer.legalPlacmentHover(false);
+                }
+            });
+
+            pathSquare.setOnDragExited(new EventHandler<DragEvent>() {
+                @Override
+                public void handle(DragEvent event) {
+                    interactionLayer.legalPlacmentHover(true);
+                }
+            });
+            
         }
     }
 
@@ -178,10 +190,17 @@ public class GameGui extends StackPane {
             }
         });
 
-        clickArea.setOnDragOver(new EventHandler<DragEvent>() {
+        clickArea.setOnDragEntered(new EventHandler<DragEvent>() {
             @Override
             public void handle(DragEvent event) {
-                event.acceptTransferModes(TransferMode.NONE);
+                interactionLayer.legalPlacmentHover(false);
+            }
+        });
+
+        clickArea.setOnDragExited(new EventHandler<DragEvent>() {
+            @Override
+            public void handle(DragEvent event) {
+                interactionLayer.legalPlacmentHover(true);
             }
         });
 
