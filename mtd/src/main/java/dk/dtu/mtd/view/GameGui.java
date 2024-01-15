@@ -1,6 +1,5 @@
 package dk.dtu.mtd.view;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 
 import javafx.animation.PauseTransition;
@@ -20,9 +19,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Text;
 import javafx.stage.Screen;
 import javafx.util.Duration;
 

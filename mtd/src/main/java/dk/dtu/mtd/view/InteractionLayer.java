@@ -1,7 +1,5 @@
 package dk.dtu.mtd.view;
 
-import javax.swing.GroupLayout.Alignment;
-
 import dk.dtu.mtd.controller.Controller;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
