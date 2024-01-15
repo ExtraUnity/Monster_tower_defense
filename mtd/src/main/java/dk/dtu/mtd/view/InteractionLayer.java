@@ -16,6 +16,7 @@ import javafx.scene.input.TransferMode;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -150,19 +151,22 @@ public class InteractionLayer extends Pane {
             lastSelected = -1;
         } else if (lastSelected == -1) {
             lastSelected = towerId;
-            towerSelectedGui.updateGui(tower.name, tower.upgradePrice, tower.sellPrice, tower.damageUpgrade, towerId);
+            towerSelectedGui.updateGui(tower.name, tower.stats,tower.upgradePrice, tower.sellPrice, tower.damageUpgrade, towerId);
             towerSelectedGui.setVisible(true);
             //upgradeButton.relocate(tower.x - (upgradeButton.getWidth()/2), tower.y + 50);
+            towerSelectedGui.relocate(tower.x + 50, tower.y - 50);
 
             tower.setCircleVisible(true);
         } else {
             TowerGui lastTower = (TowerGui) GameGui.towerLayer.lookup("#" + lastSelected);
             lastTower.setCircleVisible(false);
             lastSelected = towerId;
-            towerSelectedGui.updateGui(tower.name, tower.upgradePrice, tower.sellPrice, tower.damageUpgrade, towerId);
+            towerSelectedGui.updateGui(tower.name, tower.stats,  tower.upgradePrice, tower.sellPrice, tower.damageUpgrade, towerId);
+            
             tower.setCircleVisible(true);
             
             //upgradeButton.relocate(tower.x - (upgradeButton.getWidth()/2), tower.y + 50);
+            towerSelectedGui.relocate(tower.x + 50, tower.y - 50);
         }
     }
 
@@ -180,14 +184,15 @@ public class InteractionLayer extends Pane {
 class TowerSelectedGui extends StackPane {
     static VBox layout;
     static Text name;
+    static Text stats;
     static Text upgradePrice;
-    static VBox upgradeArea;
+    static HBox upgradeArea;
     static int sellPrice;
     static int damageBonus;
     static Button upgradeButton;
     static Button sellButton;
 
-    public void updateGui(String name, int upgradePrice, int sellPrice, int damageBonus, int towerSelected) {
+    public void updateGui(String name, String stats, int upgradePrice, int sellPrice, int damageBonus, int towerSelected) {
         String nameString;
         switch (name) {
             case "basicTower":
@@ -204,6 +209,8 @@ class TowerSelectedGui extends StackPane {
         TowerSelectedGui.sellPrice = sellPrice;
         TowerSelectedGui.damageBonus = damageBonus;
         TowerSelectedGui.upgradePrice.setText(String.valueOf(upgradePrice));
+        TowerSelectedGui.stats.setText(stats);
+
         upgradeButton.setOnAction(e -> {
             Controller.upgradeTower(towerSelected);
         });
@@ -215,31 +222,37 @@ class TowerSelectedGui extends StackPane {
 
     public TowerSelectedGui() {
         super();
-        layout = new VBox();
-        upgradeArea = new VBox();
-        this.setMinSize(400, 400);
+
+        layout = new VBox(10);
+        upgradeArea = new HBox(5);
+
+        this.setMinSize(130 , 140);
         this.setBackground(background());
-        upgradeButton = new Button("Upgrade");
-        upgradeButton.setVisible(true);
+
         sellButton = new Button("Sell Tower");
-        sellButton.setVisible(true);
+        stats = new Text();
+
+        upgradeButton = new Button("Upgrade");
         upgradePrice = new Text();
         upgradePrice.setFont(new Font(25));
         upgradePrice.setStroke(Color.WHITE);
-        upgradePrice.setVisible(true);
-        upgradeArea.getChildren().addAll(upgradePrice, upgradeButton);
+
+        upgradeArea.setAlignment(Pos.CENTER);
+        upgradeArea.getChildren().addAll(upgradeButton, upgradePrice);
+
         name = new Text();
         name.setFont(new Font(25));
         name.setStroke(Color.WHITE);
-        name.setVisible(true);
-        this.setAlignment(Pos.CENTER);
+
+        layout.setAlignment(Pos.CENTER);
+
         name.setTextAlignment(TextAlignment.CENTER);
-        layout.getChildren().addAll(name, upgradeArea, sellButton);
+        layout.getChildren().addAll(name, stats, upgradeArea, sellButton);
         this.getChildren().add(layout);
     }
 
     private Background background() {
-        return new Background(new BackgroundFill(Color.valueOf("#ffffff"), new CornerRadii(10), new Insets(0)));
+        return new Background(new BackgroundFill(Color.valueOf("#ffffff"), new CornerRadii(5), new Insets(0)));
     }
 
     public Text getUpgradePrice() {
@@ -250,4 +263,7 @@ class TowerSelectedGui extends StackPane {
         upgradePrice.setText(String.valueOf(newPrice));
     }
 
+    public void updateStats(String newStats){
+        stats.setText(newStats);
+    }
 }

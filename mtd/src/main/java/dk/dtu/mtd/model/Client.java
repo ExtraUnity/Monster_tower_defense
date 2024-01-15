@@ -96,6 +96,18 @@ public class Client {
         return -1;
     }
 
+    public String getTowerStats(int towerId) {
+        try {
+            gameSpace.put("request", "getTowerStats", id);
+            gameSpace.put("towerId", towerId);
+            String newStats = (String) gameSpace.get(new ActualField("towerStats"), new FormalField(String.class) , new ActualField(towerId))[1];
+            return newStats;
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return "-1";
+    }
+
     public void sellTower(int towerId) {
         try {
             gameSpace.put("request", "sellTower", id);
