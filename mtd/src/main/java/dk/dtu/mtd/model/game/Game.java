@@ -225,11 +225,10 @@ public class Game implements Runnable {
             int recieverId = senderId == player1.id ? player2.id : player1.id;
             waveManager.sendEnemies(type, recieverId);
         } else if (request[1].toString().equals("resign")) {
-            // This should be reverse but it works.
             if ((int) request[2] == player1.id) {
-                player2.hasLost = true;
-            } else {
                 player1.hasLost = true;
+            } else {
+                player2.hasLost = true;
             }
             try {
                 displayWinner();
