@@ -76,4 +76,8 @@ public abstract class Tower {
     public int getSellPrice() {
         return sellPrice;
     }
+
+    public String getStatsAsString() {
+        return "Damage: " + damage + " FireRate: " + fireRate + "SellValue : " + sellPrice;
+    }
 }

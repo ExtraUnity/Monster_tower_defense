@@ -200,7 +200,10 @@ public class Game implements Runnable {
         } else if (request[1].toString().equals("upgradeTower")) {
             towerManager.upgradeTower((int) request[2]); // request[2] = towerId
 
-        } else if (request[1].toString().equals("sellTower")) {
+        } else if (request[1].toString().equals("getTowerStats")) {
+            towerManager.getTowerStats((int) request[2]); // request[2] = towerId
+
+        }else if (request[1].toString().equals("sellTower")) {
             towerManager.removeTower((int) request[2]);
         } else if (request[1].toString().equals("chat")) {
 

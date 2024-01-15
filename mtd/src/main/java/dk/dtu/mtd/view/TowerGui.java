@@ -5,10 +5,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
-import javafx.scene.text.Font;
-import javafx.scene.text.Text;
 
 public class TowerGui extends StackPane {
     ImageView towerImage = new ImageView();
@@ -22,6 +19,7 @@ public class TowerGui extends StackPane {
     int radius;
     int size;
     String name;
+    String stats;
     
 
     public TowerGui(String type, int size, int radius, int towerId, int playerId, int x, int y) {
@@ -35,9 +33,11 @@ public class TowerGui extends StackPane {
         switch(type) {
             case "basicTower":
                 this.upgradePrice = 50;
+                this.stats = "Damage: 5 \nAttackSpeed: 0.5 shots/sec\n SellPrice: 50";
                 break;
             case "aoeTower":
                 this.upgradePrice = 50;
+                this.stats = "Damage: 1 \nAttackSpeed: "+ Math.round(5/7.0 * 100D) / 100D + " shots/sec\n SellPrice: 50";
                 break;
         }
 
@@ -80,6 +80,10 @@ public class TowerGui extends StackPane {
 
     public void updateUpgradePrice(int price) {
         this.upgradePrice = price;
+    }
+
+    public void updateStatsAsString(String newStats) {
+        this.stats = newStats;
     }
 
 

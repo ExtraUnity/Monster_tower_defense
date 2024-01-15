@@ -117,6 +117,22 @@ public class TowerManager implements Runnable {
         }
     }
 
+    public void getTowerStats(int playerId) {
+        try {
+            int towerId = (int) game.gameSpace.get(new ActualField("towerId"), new FormalField(Integer.class))[1];
+
+            for (Tower tower : towerList) {
+                if (tower.getTowerId() == towerId) {
+                    game.gameSpace.put("towerStats", tower.getStatsAsString(), towerId);
+                    break;
+                }
+            }
+            game.updateReward();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void removeTower(int playerId) {
         try {
             int towerId = (int) game.gameSpace.get(new ActualField("towerId"), new FormalField(Integer.class))[1];
@@ -144,5 +160,6 @@ public class TowerManager implements Runnable {
             e.printStackTrace();
         }
     }
+
 
 }
