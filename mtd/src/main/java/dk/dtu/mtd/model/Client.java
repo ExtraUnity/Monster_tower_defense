@@ -84,11 +84,26 @@ public class Client {
     }
 
 
-    public void upgradeTower(int towerId) {
+    public int upgradeTower(int towerId) {
         try {
             gameSpace.put("request", "upgradeTower", id);
             gameSpace.put("towerId", towerId);
+            int newPrice = (int) gameSpace.get(new ActualField("towerUpgradeSucces"), new FormalField(Integer.class) , new ActualField(towerId))[1];
+            return newPrice;
         } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
+
+    public void sellTower(int towerId) {
+        try {
+            gameSpace.put("request", "sellTower", id);
+            gameSpace.put("towerId", towerId);
+            int opponentId = (int) gameSpace.get(new ActualField("towerSellSuccess"), new ActualField(id), new FormalField(Integer.class), new ActualField(towerId))[2];
+            gameSpace.put("gui", "removeTower", towerId, opponentId);
+            Controller.removeTower(towerId);
+        } catch(InterruptedException e) {
             e.printStackTrace();
         }
     }
@@ -103,7 +118,7 @@ public class Client {
 
     public void exitGame() {
         try {
-            // Exit a game
+            // Exit a game and return to main meny
             resign();
             gameSpace.close();
         } catch (Exception e) {
@@ -112,6 +127,7 @@ public class Client {
     }
 
     public void exit() {
+        // Exit the application
         try {
             if (lobby != null) {
                 exitGame();
@@ -134,6 +150,7 @@ public class Client {
             e.printStackTrace();
         }
     }
+
 
 }
 
@@ -161,12 +178,17 @@ class GameMonitor implements Runnable {
             System.out.println("Other player left the game");
             Controller.exitGame();
 
+        } catch (InterruptedException e) {
+            System.out.println("The game has been closed");
+        }
+        try {
+            
             lobby.put("request", "closeGame", gameId);
             lobby.get(new ActualField("closedGame"), new ActualField(gameId));
             gameId = -1;
 
-        } catch (InterruptedException e) {
-            System.out.println("The game has been closed");
+        } catch (Exception e) {
+            System.out.println("Lobby not found");
         }
     }
 }

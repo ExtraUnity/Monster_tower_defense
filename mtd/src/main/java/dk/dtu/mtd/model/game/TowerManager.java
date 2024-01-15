@@ -21,14 +21,22 @@ public class TowerManager implements Runnable {
     @Override
     public void run() {
         while (playing) {
-
-            for (int i = 0; i < towerList.size(); i++) {
-                if (towerList.get(i).playerId == game.player1.id) {
-                    towerList.get(i).shoot(game.waveManager.leftEnemies, game);
-                } else {
-                    towerList.get(i).shoot(game.waveManager.rightEnemies, game);
+            try {
+                for (int i = 0; i < towerList.size(); i++) {
+                    if (towerList.get(i).playerId == game.player1.id) {
+                        towerList.get(i).shoot(game.waveManager.leftEnemies, game);
+                    } else {
+                        towerList.get(i).shoot(game.waveManager.rightEnemies, game);
+                    }
                 }
+            } catch (Exception e) {
+
             }
+        }
+        try {
+            game.gameSpace.put("towerManagerClosed");
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
         System.out.println("Towermanger " + game.id + " closing");
     }
@@ -40,17 +48,17 @@ public class TowerManager implements Runnable {
                 return false;
             }
         }
-        if (game.player1.id == playerId && 
-            (newTower.x > 920 || newTower.x < 25 || newTower.y > 1090 || newTower.y < 80 || // Play Area
-                (newTower.x > 610 && newTower.x < 770 && newTower.y > 0 && newTower.y < 540) )) {
+        if (game.player1.id == playerId &&
+                (newTower.x > 920 || newTower.x < 25 || newTower.y > 1090 || newTower.y < 80 || // Play Area
+                        (newTower.x > 610 && newTower.x < 770 && newTower.y > 0 && newTower.y < 540))) {
             return false;
         } else if (game.player2.id == playerId && newTower.x < 960) {
             return false;
         }
 
-        if (game.player1.id == playerId && game.player1.getRewards() <= newTower.getTowerCost()) {
+        if (game.player1.id == playerId && game.player1.getRewards() < newTower.getTowerCost()) {
             return false;
-        } else if (game.player2.id == playerId && game.player2.getRewards() <= newTower.getTowerCost()) {
+        } else if (game.player2.id == playerId && game.player2.getRewards() < newTower.getTowerCost()) {
             return false;
         }
         return true;
@@ -73,8 +81,8 @@ public class TowerManager implements Runnable {
 
             if (legalTowerPlacement(tower, playerId)) {
                 towerList.add(tower);
-                 game.gameSpace.put("gui", "newTower", tower, game.player1.id);
-                 game.gameSpace.put("gui", "newTower", tower, game.player2.id);
+                game.gameSpace.put("gui", "newTower", tower, game.player1.id);
+                game.gameSpace.put("gui", "newTower", tower, game.player2.id);
                 if (game.player1.id == playerId) {
                     game.player1.spendRewards(tower.getTowerCost());
                 } else {
@@ -99,11 +107,40 @@ public class TowerManager implements Runnable {
                         game.player2.spendRewards(tower.getUpgradeCost());
                         tower.upgradeTower();
                     }
+                    game.gameSpace.put("towerUpgradeSucces", tower.getUpgradeCost(), towerId);
                     break;
                 }
             }
             game.updateReward();
         } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void removeTower(int playerId) {
+        try {
+            int towerId = (int) game.gameSpace.get(new ActualField("towerId"), new FormalField(Integer.class))[1];
+            for (int i = 0; i < towerList.size(); i++) {
+                Tower tower = towerList.get(i);
+                if (tower.getTowerId() == towerId) {
+                    if (playerId == game.player1.id) {
+                        game.player1.addReward(tower.getSellPrice());
+                    } else if (playerId == game.player2.id) {
+                        game.player2.addReward(tower.getSellPrice());
+                    }
+                    towerList.remove(tower);
+                    if(playerId == game.player1.id ) {
+                        game.gameSpace.put("towerSellSuccess",  game.player1.id, game.player2.id, towerId);
+                    } else {
+                        game.gameSpace.put("towerSellSuccess",  game.player2.id, game.player1.id, towerId);
+                    }
+                    
+                    break;
+                }
+            }
+            game.updateReward();
+        } catch (InterruptedException e) {
+            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }

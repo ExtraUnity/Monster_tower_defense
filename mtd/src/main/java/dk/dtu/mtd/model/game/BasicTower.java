@@ -12,11 +12,12 @@ public class BasicTower extends Tower {
         this.lastShot = -1;
         this.towerId = towerId;
         radius = 300;
-        damage = 10;
+        damage = 5;
         size = 100;
         fireRate = 100;
-        towerCost = 15;
-        upgradeCost = 5;
+        towerCost = 100;
+        upgradeCost = 50;
+        sellPrice = 50;
     }
 
     public void shoot(List<Enemy> enemies, Game game) {

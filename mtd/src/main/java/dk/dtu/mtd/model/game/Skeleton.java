@@ -7,7 +7,7 @@ public class Skeleton extends Enemy{
         //TODO Auto-generated constructor stub
     }
 
-     @Override
+    @Override
     public void attack() {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'attack'");

@@ -43,9 +43,7 @@ public class Controller {
     }
 
     public static void exitGame() {
-        if (guiMonitior != null && guiMonitior.playing) {
-
-        }
+        // exit the game
         guiMonitior.playing = false;
         Gui.closeGame();
         client.exitGame();
@@ -53,8 +51,11 @@ public class Controller {
 
     public static void exit() {
         // exit the application
-        guiMonitior.playing = false;
-        System.out.println("Exiting");
+
+        //if a game is running close the game
+        if (guiMonitior != null && guiMonitior.playing) {
+            exitGame();
+        }
 
         client.exit();
         System.out.println("Exited");
@@ -85,7 +86,16 @@ public class Controller {
     }
 
     public static void upgradeTower(int towerId) {
-        client.upgradeTower(towerId);
+        int newPrice = client.upgradeTower(towerId);
+        GameGui.updateUpgradePrice(towerId, newPrice);
+    }
+
+    public static void sellTower(int towerId) {
+        client.sellTower(towerId);
+    }
+
+    public static void removeTower(int towerId) {
+        GameGui.removeTower(towerId);
     }
 
     public static int getPlayerId() {
@@ -238,6 +248,18 @@ class GUIMonitior implements Runnable {
                         @Override
                         public void run() {
                             GameGui.towerShoot(coordinates[0], coordinates[1], coordinates[2]);
+                        }
+                        
+                    });
+
+                } else if (update[1].toString().equals("removeTower")) {
+                    int towerId = (int) update[2];
+
+                    Platform.runLater(new Runnable() {
+
+                        @Override
+                        public void run() {
+                            GameGui.removeTower(towerId);
                         }
                         
                     });

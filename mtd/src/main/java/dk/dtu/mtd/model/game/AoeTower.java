@@ -13,11 +13,23 @@ public class AoeTower extends Tower {
         this.lastShot = -1;
         this.towerId = towerId;
         radius = 200;
-        damage = 3;
+        damage = 1;
         size = 100;
         fireRate = 70;
-        towerCost = 15;
-        upgradeCost = 5;
+        towerCost = 350;
+        upgradeCost = 50;
+        sellPrice = 175;
+    }
+
+    @Override
+    public void upgradeTower() {
+        super.towerLevel++;
+        upgradeCost += 10;
+        if (fireRate > 10){
+            fireRate--;
+        } else {
+            damage++;
+        }
     }
 
     @Override
