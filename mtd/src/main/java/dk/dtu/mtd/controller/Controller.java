@@ -92,6 +92,9 @@ public class Controller {
 
     public static void sellTower(int towerId) {
         client.sellTower(towerId);
+    }
+
+    public static void removeTower(int towerId) {
         GameGui.removeTower(towerId);
     }
 
@@ -238,6 +241,17 @@ class GUIMonitior implements Runnable {
                                     tower.getX(), tower.getY());
                         }
 
+                    });
+                } else if (update[1].toString().equals("removeTower")) {
+                    int towerId = (int) update[2];
+
+                    Platform.runLater(new Runnable() {
+
+                        @Override
+                        public void run() {
+                            GameGui.removeTower(towerId);
+                        }
+                        
                     });
                 } else if (update[1].toString().equals("playerLost")) {
                     Platform.runLater(new Runnable() {

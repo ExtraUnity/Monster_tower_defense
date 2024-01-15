@@ -9,6 +9,7 @@ import org.jspace.RemoteSpace;
 
 import dk.dtu.mtd.controller.Controller;
 import dk.dtu.mtd.shared.EnemyType;
+import dk.dtu.mtd.view.GameGui;
 
 public class Client {
     public RemoteSpace lobby;
@@ -100,6 +101,9 @@ public class Client {
         try {
             gameSpace.put("request", "sellTower", id);
             gameSpace.put("towerId", towerId);
+            int opponentId = (int) gameSpace.get(new ActualField("towerSellSuccess"), new ActualField(id), new FormalField(Integer.class), new ActualField(towerId))[2];
+            gameSpace.put("gui", "removeTower", towerId, opponentId);
+            Controller.removeTower(towerId);
         } catch(InterruptedException e) {
             e.printStackTrace();
         }

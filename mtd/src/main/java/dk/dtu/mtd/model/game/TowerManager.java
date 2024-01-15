@@ -56,9 +56,9 @@ public class TowerManager implements Runnable {
             return false;
         }
 
-        if (game.player1.id == playerId && game.player1.getRewards() <= newTower.getTowerCost()) {
+        if (game.player1.id == playerId && game.player1.getRewards() < newTower.getTowerCost()) {
             return false;
-        } else if (game.player2.id == playerId && game.player2.getRewards() <= newTower.getTowerCost()) {
+        } else if (game.player2.id == playerId && game.player2.getRewards() < newTower.getTowerCost()) {
             return false;
         }
         return true;
@@ -129,7 +129,12 @@ public class TowerManager implements Runnable {
                         game.player2.addReward(tower.getSellPrice());
                     }
                     towerList.remove(tower);
-                    game.gameSpace.put("towerSellSucces", tower.getSellPrice(), towerId);
+                    if(playerId == game.player1.id ) {
+                        game.gameSpace.put("towerSellSuccess",  game.player1.id, game.player2.id, towerId);
+                    } else {
+                        game.gameSpace.put("towerSellSuccess",  game.player2.id, game.player1.id, towerId);
+                    }
+                    
                     break;
                 }
             }
