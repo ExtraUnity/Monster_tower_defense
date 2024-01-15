@@ -6,9 +6,9 @@ public abstract class Tower {
 
     String type;
 
-    int radius, x, y, size, damage, upgradeCost, towerCost, fireRate, playerId, towerId;
+    int radius, x, y, size, damage, upgradeCost, towerCost, fireRate, playerId, towerId, sellPrice;
     int lastShot;
-    GameTicker gameTicker;
+    //GameTicker gameTicker;
 
     int towerLevel = 0;
 
@@ -23,9 +23,9 @@ public abstract class Tower {
 
     public Boolean inRange(Enemy enemy) {
         return radius * radius > (enemy.x - x) * (enemy.x - x) + (enemy.y - y) * (enemy.y - y);
-    }
 
-    public abstract void shoot(List<Enemy> enemies);
+    }
+    public abstract void shoot(List<Enemy> enemies, Game game);
 
     public boolean legal() {
         return true;
@@ -65,5 +65,9 @@ public abstract class Tower {
     
     public int getUpgradeCost() {
         return upgradeCost;
+    }
+
+    public int getSellPrice() {
+        return sellPrice;
     }
 }

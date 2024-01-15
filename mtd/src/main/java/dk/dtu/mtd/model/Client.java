@@ -40,7 +40,6 @@ public class Client {
                     new FormalField(Integer.class))[2];
         } catch (Exception e) {
             e.printStackTrace();
-            System.out.println("requesting a failed");
         }
     }
 
@@ -72,37 +71,55 @@ public class Client {
         } catch (InterruptedException e) {
             System.out.println("This is a problem");
         }
-        //System.out.println("hello good sir!");
     }
 
     public void sendEnemies(EnemyType type) {
         try {
-            System.out.println("hello to you good sir!");
             gameSpace.put("request", "sendEnemies", id);
             gameSpace.put("data", "sendEnemies", type);
         } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         
     }
 
 
-    public void upgradeTower(int towerId) {
+    public int upgradeTower(int towerId) {
         try {
             gameSpace.put("request", "upgradeTower", id);
             gameSpace.put("towerId", towerId);
+            int newPrice = (int) gameSpace.get(new ActualField("towerUpgradeSucces"), new FormalField(Integer.class) , new ActualField(towerId))[1];
+            return newPrice;
         } catch (InterruptedException e) {
             e.printStackTrace();
+        }
+        return -1;
+    }
+
+    public void sellTower(int towerId) {
+        try {
+            gameSpace.put("request", "sellTower", id);
+            gameSpace.put("towerId", towerId);
+            int opponentId = (int) gameSpace.get(new ActualField("towerSellSuccess"), new ActualField(id), new FormalField(Integer.class), new ActualField(towerId))[2];
+            gameSpace.put("gui", "removeTower", towerId, opponentId);
+            Controller.removeTower(towerId);
+        } catch(InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void resign() {
+        try {
+            gameSpace.put("request","resign", id);
+        } catch (InterruptedException e) {
+            System.out.println("Gamespace is already closed");
         }
     }
 
     public void exitGame() {
         try {
-            // Exit a game
-            System.out.println("exiting game");
-            gameSpace.put("request", "exit", id);
-            gameSpace.get(new ActualField("exit"), new ActualField(id));
+            // Exit a game and return to main meny
+            resign();
             gameSpace.close();
         } catch (Exception e) {
             System.out.println("Not able to close a game");
@@ -110,6 +127,7 @@ public class Client {
     }
 
     public void exit() {
+        // Exit the application
         try {
             if (lobby != null) {
                 exitGame();
@@ -128,11 +146,11 @@ public class Client {
         try {
             gameSpace.put("request", "chat", id);
             gameSpace.put("data", "chat", msg);
-            System.out.println("Client sent message request");
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
     }
+
 
 }
 
@@ -160,12 +178,17 @@ class GameMonitor implements Runnable {
             System.out.println("Other player left the game");
             Controller.exitGame();
 
+        } catch (InterruptedException e) {
+            System.out.println("The game has been closed");
+        }
+        try {
+            
             lobby.put("request", "closeGame", gameId);
             lobby.get(new ActualField("closedGame"), new ActualField(gameId));
             gameId = -1;
 
-        } catch (InterruptedException e) {
-            System.out.println("The game has been closed");
+        } catch (Exception e) {
+            System.out.println("Lobby not found");
         }
     }
 }

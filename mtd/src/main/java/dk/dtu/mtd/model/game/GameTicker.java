@@ -21,11 +21,15 @@ public class GameTicker implements Runnable {
         while(playing) {
             deltaTime = System.nanoTime() / 1_000_000L - previousTime;
             if(deltaTime > msPerTick) {
-                //System.out.println(this.toString() + " currently at game tick " + gameTick);
                 gameTick++;
                 deltaTime = 0;
                 previousTime = System.nanoTime() / 1_000_000L;
             }
+        }
+        try {
+            game.gameSpace.put("gameTickerClosed");
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
 
         System.out.println("Game Ticker" + game.id + " closing");

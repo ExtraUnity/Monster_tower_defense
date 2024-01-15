@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.LinkedList;
 import dk.dtu.mtd.model.Client;
+import dk.dtu.mtd.model.game.Tower;
 import dk.dtu.mtd.shared.EnemyType;
 import dk.dtu.mtd.view.GameGui;
 import dk.dtu.mtd.view.GameWaveGui;
@@ -30,7 +31,6 @@ public class Controller {
     }
 
     public static void joinGame() {
-        // TODO: somewhere along here the previous game crashes.
         client.requestGame();
         client.joinGame();
         guiThread = new Thread(guiMonitior);
@@ -43,6 +43,7 @@ public class Controller {
     }
 
     public static void exitGame() {
+        // exit the game
         guiMonitior.playing = false;
         Gui.closeGame();
         client.exitGame();
@@ -50,8 +51,18 @@ public class Controller {
 
     public static void exit() {
         // exit the application
-        guiMonitior.playing = false;
+
+        //if a game is running close the game
+        if (guiMonitior != null && guiMonitior.playing) {
+            exitGame();
+        }
+
         client.exit();
+        System.out.println("Exited");
+    }
+
+    public static void resign() {
+        client.resign();
     }
 
     public static void damage() {
@@ -67,7 +78,6 @@ public class Controller {
     }
 
     public static void sendMessage(String msg) {
-        System.out.println("Controller handling message");
         client.sendMessage(msg);
     }
 
@@ -76,7 +86,16 @@ public class Controller {
     }
 
     public static void upgradeTower(int towerId) {
-        client.upgradeTower(towerId);
+        int newPrice = client.upgradeTower(towerId);
+        GameGui.updateUpgradePrice(towerId, newPrice);
+    }
+
+    public static void sellTower(int towerId) {
+        client.sellTower(towerId);
+    }
+
+    public static void removeTower(int towerId) {
+        GameGui.removeTower(towerId);
     }
 
     public static int getPlayerId() {
@@ -107,20 +126,18 @@ class GUIMonitior implements Runnable {
 
                 // ("gui", "damage", (int) new hp , playerId)
                 if (update[1].toString().equals("damage")) {
-                    // System.out.println("updating GUI");
                     String[] hp = ((String) update[2]).split(" ");
                     final String hp1 = hp[0];
                     final String hp2 = hp[1];
                     Platform.runLater(new Runnable() {
                         @Override
                         public void run() {
-                            GameGui.updateGameGui(hp1, hp2);
+                            GameGui.gameTop.updateHealth(hp1, hp2);
                         }
                     });
                     // ("gui", "chat", (LinkedList<String>) chat log , playerId)
                 } else if (update[1].toString().equals("chat")) {
                     LinkedList<String> chat = (LinkedList<String>) update[2];
-                    System.out.println("Gui recieved request to update");
                     Platform.runLater(new Runnable() {
 
                         @Override
@@ -138,6 +155,24 @@ class GUIMonitior implements Runnable {
                     Platform.runLater(() -> {
                         GameGui.gameWaveGuiLeft.initEnemies(enemyTypes);
                         GameGui.gameWaveGuiRight.initEnemies(enemyTypes);
+                    });
+
+                    // ("gui", "sendEnemies", String enemy info , playerId)
+                } else if (update[1].toString().equals("waveNumber")) {
+                    // make apropriate gui calls to display wave
+                    int waveNumber = (Integer) update[2];
+
+                    Platform.runLater(() -> {
+                        GameGui.gameTop.updateWaveNumber(waveNumber);
+                    });
+
+                    // ("gui", "sendEnemies", String enemy info , playerId)
+                } else if (update[1].toString().equals("sides")) {
+                    // make apropriate gui calls to display wave
+                    String side = (String) update[2];
+
+                    Platform.runLater(() -> {
+                        GameGui.gameTop.youOpponent(side);
                     });
 
                     // ("gui", "sendEnemies", String enemy info , playerId)
@@ -196,17 +231,66 @@ class GUIMonitior implements Runnable {
                     });
 
                 } else if (update[1].toString().equals("newTower")) {
-                    // String type, int size, int radius, int towerId, int playerId, int x, int y
-                    String[] towerInfo = ((String) update[2]).split(" ");
+                    Tower tower = (Tower) update[2];
 
                     Platform.runLater(new Runnable() {
                         @Override
                         public void run() {
-                            GameGui.newTower(towerInfo[0], Integer.valueOf(towerInfo[1]), Integer.valueOf(towerInfo[2]),
-                                    Integer.valueOf(towerInfo[3]), Integer.valueOf(towerInfo[4]),
-                                    Integer.valueOf(towerInfo[5]), Integer.valueOf(towerInfo[6]));
+                            GameGui.newTower(tower.getType(), tower.getSize(), tower.getRadius(),
+                                    tower.getTowerId(), tower.getPlayerId(),
+                                    tower.getX(), tower.getY());
                         }
 
+                    });
+                } else if (update[1].toString().equals("removeTower")) {
+                    int towerId = (int) update[2];
+
+                    Platform.runLater(new Runnable() {
+
+                        @Override
+                        public void run() {
+                            GameGui.removeTower(towerId);
+                        }
+                        
+                    });
+                } else if (update[1].toString().equals("playerLost")) {
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            GameGui.displayWin();
+                        }
+                    });
+                } else if (update[1].toString().equals("playerWon")) {
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            GameGui.displayLose();
+                        }
+                    });
+                } else if (update[1].toString().equals("waveEnded")) {
+                    int waveId = (int) update[2];
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            for (int i = 0; i < GameGui.gameArea.getChildren().size(); i++) {
+                                Node n = GameGui.gameArea.getChildren().get(i);
+                                if (n instanceof GameWaveGui) {
+                                    GameWaveGui gui = (GameWaveGui) n;
+                                    if (gui.waveGuiId == waveId) {
+                                        gui.removeWave();
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    });
+                } else if (update[1].toString().equals("reward")) {
+                    int reward = (int) update[2];
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            GameGui.bottom.updateGameBottomGui("" + reward);
+                        }
                     });
 
                 } else if (update[1].toString().equals("pathList")) {
@@ -225,6 +309,7 @@ class GUIMonitior implements Runnable {
                 counter++;
 
                 if (counter == 100) {
+                    // These prints are to let the player know they have been disconected
                     System.out.println("GuiMonitor failing, assuming disconnected");
                     System.out.println("Returning to main menu");
                     Platform.runLater(new Runnable() {

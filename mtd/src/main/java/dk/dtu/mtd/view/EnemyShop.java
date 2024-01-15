@@ -1,7 +1,5 @@
 package dk.dtu.mtd.view;
 
-import java.util.ArrayList;
-
 import dk.dtu.mtd.controller.Controller;
 import dk.dtu.mtd.shared.EnemyType;
 import javafx.event.EventHandler;
@@ -15,24 +13,19 @@ public class EnemyShop extends HBox {
 
     public EnemyShop() {
         setMaxHeight(100);
-        ArrayList<ImageView> items = new ArrayList<ImageView>();
+        setMinWidth(300);
 
-        final ImageView skellyEnemy = new ImageView(new Image("dk/dtu/mtd/assets/skelly.gif", 70, 0, true, true));
+        final ImageView skellyEnemy = new ImageView(new Image("dk/dtu/mtd/assets/skellyIcon.png", 70, 0, true, true));
         this.getChildren().add(skellyEnemy);
         skellyEnemy.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                
+                System.out.println("Requesting enemies");
                 Controller.sendEnemies(EnemyType.SKELETON);
 
                 event.consume();
             }
         });
-        items.add(new ImageView(new Image("dk/dtu/mtd/assets/skelly.gif", 70, 0, true, true)));
-        items.add(new ImageView(new Image("dk/dtu/mtd/assets/skelly.gif", 70, 0, true, true)));
-        items.add(new ImageView(new Image("dk/dtu/mtd/assets/skelly.gif", 70, 0, true, true)));
-        items.add(new ImageView(new Image("dk/dtu/mtd/assets/skelly.gif", 70, 0, true, true)));
-        this.getChildren().addAll(items);
-        setAlignment(Pos.CENTER_LEFT);
+        setAlignment(Pos.CENTER);
     }
 }

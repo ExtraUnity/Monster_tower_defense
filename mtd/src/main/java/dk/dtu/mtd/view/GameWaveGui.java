@@ -19,36 +19,34 @@ public class GameWaveGui extends StackPane {
     public GameWaveGui(int id, double gameAreaWidth, double gameAreaHeight) {
         wavePane = new Pane();
         wavePane.setMinSize(gameAreaWidth, gameAreaHeight);
-        this.getChildren().add(wavePane);
         this.waveGuiId = id;
         this.gameAreaHeight = gameAreaHeight;
         this.gameAreaWidth = gameAreaWidth;
-        System.out.println(this.gameAreaHeight + " " + this.gameAreaWidth);
     }
 
     public void initEnemies(String enemyTypes) {
+        wavePane = new Pane();
         enemyArray = new ArrayList<>();
-
-        // Splttting the input:
+        // Spltting the input:
         String[] pairs = enemyTypes.split(",");
-        if(pairs.length < 2){
+        if (pairs[0].equals("")) {
+            System.out.println("Recived empty wave");
             return;
         }
         for (String pair : pairs) { // For each pair
             String[] keyValue = pair.split(" ");
-            System.out.println(pair);
 
             int numberOfEnemies = Integer.valueOf(keyValue[1]);
             String type = keyValue[0];
-        
+
             for (int i = 0; i < numberOfEnemies; i++) {
                 EnemyImage newEnemy = new EnemyImage(type);
                 enemyArray.add(newEnemy);
                 wavePane.getChildren().add(newEnemy);
             }
-        }        
+        }
+        this.getChildren().add(wavePane);
     }
-
 
     public void updateEnemies(LinkedList<String> coordinates) {
         try {
@@ -58,9 +56,16 @@ public class GameWaveGui extends StackPane {
                 enemyArray.get(i).yCoord = (gameAreaHeight * ((Double.valueOf(coord[1])) / 1080)) - 50;
             }
         } catch (Exception e) {
-            System.out.println(coordinates.size() + " " + enemyArray.size());
+            System.out.println("Could not update enemies");
         }
 
+    }
+
+    public void removeWave() {
+        getChildren().remove(wavePane);
+        if (!GameGui.gameWaveGuiLeft.equals(this) && !GameGui.gameWaveGuiRight.equals(this)) {
+            GameGui.gameArea.getChildren().remove(this);
+        }
     }
 
 }
@@ -71,7 +76,7 @@ class EnemyImage extends ImageView {
     public double yCoord = 900;
     Image image;
 
-    EnemyImage(String type) { //Pass in the image path, width and height
+    EnemyImage(String type) { // Pass in the image path, width and height
 
         if (type.equals("Skeleton")) {
             this.image = new Image("dk/dtu/mtd/assets/skelly.gif", 150, 0, true, false);
@@ -82,7 +87,7 @@ class EnemyImage extends ImageView {
         } else if (type.equals("bossEnemy")) {
             this.image = new Image("dk/dtu/mtd/assets/skelly.gif", 100, 0, true, false);
         }
-        
+
         setImage(image);
         setX(xCoord);
         setY(yCoord);

@@ -4,24 +4,24 @@ public abstract class Enemy {
     protected int health;
     protected int speed;
     protected int damage; // Damage the enemy does on the opposing player
-    protected int reward; // Amount of money gained from killing enemy 
+    protected int reward; // Amount of money gained from killing enemy
 
     protected int x, y;
-    Game game;
 
-    public Enemy(int health, int speed, int damage, int reward, Game game) {
+    public Enemy(int health, int speed, int damage, int reward) {
         this.health = health;
         this.speed = speed;
         this.damage = damage;
         this.reward = reward;
-        this.game = game;
+        this.x = -1000;
+        this.y = 500;
     }
 
     // Method to take damage, reducing health
-    public void takeDamage(int amount, int playerId) {
+    public void takeDamage(int amount, int playerId, Game game) {
         health -= amount;
         if (isDead()) {
-            die(playerId);
+            die(playerId, game);
         }
     }
 
@@ -29,13 +29,15 @@ public abstract class Enemy {
         return health <= 0;
     }
 
-
-    protected void die(int playerId) {
-        transferRewardToPlayer(playerId);
+    protected void die(int playerId, Game game) {
+        transferRewardToPlayer(playerId, game);
         performDeathAnimation();
     }
 
-    public void eliminateFromRoster(){
+    // remove an enemy that is not neccesarely dead.
+    public void eliminateFromRoster() {
+        this.x = 3000;
+        this.y = 3000;
         health = -1;
     }
 
@@ -45,25 +47,28 @@ public abstract class Enemy {
     }
 
     // Method to define the movement of the enemy
-    //THIS IS CURSED DON'T HATE ME
+    // THIS IS CURSED DON'T HATE ME
     public void move() {
+        if (this.x < 0) {
+            System.out.println("This enemy not spawned");
+            return;
+        }
         int distToCenterX = Math.abs(this.x - 960);
-        if(this.y < 580 && distToCenterX < 310) { //First stretch moving downwards
+        if (this.y < 580 && distToCenterX < 310) { // First stretch moving downwards
             this.y += this.speed;
 
-        } else if(distToCenterX < 520) { //Second stretch, moving to the side
+        } else if (distToCenterX < 520) { // Second stretch, moving to the side
             this.x += this.x > 960 ? this.speed : -this.speed;
-            
-        } else if(distToCenterX < 560 && this.y > 390) {
+
+        } else if (distToCenterX < 560 && this.y > 390) {
             this.y -= this.speed;
 
-        } else if(distToCenterX < 740) {
+        } else if (distToCenterX < 740) {
             this.x += this.x > 960 ? this.speed : -this.speed;
-            
+
         } else {
             this.y += this.speed;
         }
-
 
     }
 
@@ -104,23 +109,24 @@ public abstract class Enemy {
     }
 
     // Method to transfer damage to the tower
-    protected void transferDamageToPlayer(int playerId) {
+    protected void transferDamageToPlayer(int playerId, Game game) {
         if(playerId == game.player1.id) {
-            game.player1.takeDamage(this.damage);
+            game.player1.takeDamage(this.damage, game);
         } else {
-            game.player2.takeDamage(this.damage);
+            game.player2.takeDamage(this.damage, game);
         }
     }
 
     // Method to transfer reward to the player
-    protected void transferRewardToPlayer(int playerId) {
-        if(playerId == game.player1.id) {
+    protected void transferRewardToPlayer(int playerId, Game game) {
+        //System.out.println("Transering reward " + reward + " to player with id " + playerId);
+        if (playerId == game.player1.id) {
             game.player1.addReward(reward);
-            //System.out.println("player 1 has " + game.player1.getRewards() + " reward");
         } else {
             game.player2.addReward(reward);
-            //System.out.println("player 2 has " + game.player2.getRewards() + " reward");
         }
+        game.updateReward();
+
     }
 
     // Abstract method for death animation

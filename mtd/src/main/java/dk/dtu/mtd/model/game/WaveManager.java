@@ -3,15 +3,14 @@ package dk.dtu.mtd.model.game;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.LinkedList;
-import java.util.concurrent.atomic.AtomicBoolean;
 
+import org.jspace.ActualField;
 import org.jspace.Space;
 
 import dk.dtu.mtd.shared.EnemyType;
 
 public class WaveManager implements Runnable {
 
-    private int currentWaveNumber;
     private int totalWaves; // Total number of waves
     private int currentWaveId;
     public Wave waveLeft;
@@ -20,8 +19,6 @@ public class WaveManager implements Runnable {
     public ArrayList<Enemy> rightEnemies;
     public boolean playing;
     int waveRound;
-    volatile AtomicBoolean player1Done = new AtomicBoolean(false);
-    volatile AtomicBoolean player2Done = new AtomicBoolean(false);
     Game game;
 
     public WaveManager(Game game) {
@@ -36,30 +33,38 @@ public class WaveManager implements Runnable {
     @Override
     public void run() {
         while (playing) {
-            System.out.println("Ready for wave " + waveRound);
-            player1Done.set(false);
-            player2Done.set(false);
+            // this is where the regular waves are controlled:
+            System.out.println("Summoning wave " + waveRound);
+            game.updateWave();
             spawnWave(waveRound);
-
+            // after each wave both players are given 25 coins
+            game.player1.addReward(25);
+            game.player2.addReward(25);
+            game.updateReward();
             waveRound++;
             try {
-                System.out.println("Sleeping for 1000 ms");
                 Thread.sleep(1000L);
             } catch (InterruptedException e) {
                 System.out.println("Wavemanger failed to sleep after round:" + (waveRound - 1));
             }
         }
-        System.out.println("Wavemaneger closing");
+        try {
+            game.gameSpace.put("waveManagerClosed");
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        System.out.println("Wavemaneger " + game.id + " closing");
+
     }
 
     String messageGenerator(Wave wave) {
         StringBuilder message = new StringBuilder();
         String lastType = null;
         int count = 0;
-    
+
         for (Enemy enemy : wave.enemies) {
             String currentType = enemy.getClass().getSimpleName(); // Get the class name as enemy type
-    
+
             if (lastType != null && !lastType.equals(currentType)) {
                 // Append the count and type of the previous enemy batch
                 if (message.length() > 0) {
@@ -68,23 +73,20 @@ public class WaveManager implements Runnable {
                 message.append(lastType).append(" ").append(count);
                 count = 0; // Reset count for the new enemy type
             }
-    
+
             lastType = currentType;
             count++;
         }
-    
+
         // Append the last batch of enemies
         if (lastType != null) {
             if (message.length() > 0) {
-                message.append(" ");
+                message.append(",");
             }
             message.append(lastType).append(" ").append(count);
         }
-    
-        System.out.println(message.toString()); // This line is for debugging
         return message.toString();
     }
-
 
     void sendEnemies(EnemyType type, int playerId) {
 
@@ -92,7 +94,7 @@ public class WaveManager implements Runnable {
         switch (type) {
             case SKELETON:
                 for (int i = 0; i < 6; i++) {
-                    enemies.add(new Skeleton(game));
+                    enemies.add(new Skeleton());
                 }
                 break;
 
@@ -113,8 +115,7 @@ public class WaveManager implements Runnable {
             @Override
             public void run() {
                 try {
-                    System.out.println(
-                            "I should now send enemies to player " + playerId + ". This is wave " + attackWave.waveId);
+                    System.out.println("Sending enemies to player " + playerId + ". This is wave " + attackWave.waveId);
                     game.gameSpace.put("gui", "sendEnemies", messageGenerator(attackWave), game.player1.id);
                     game.gameSpace.put("gui", "sendEnemiesWaveId", attackWave.waveId, game.player1.id);
                     game.gameSpace.put("gui", "sendEnemies", messageGenerator(attackWave), game.player2.id);
@@ -135,7 +136,10 @@ public class WaveManager implements Runnable {
         waveRight = new Wave(rightSide, game.gameSpace, 1920 - 680, game.player2.id, 1, game);
         leftEnemies.addAll(leftSide);
         rightEnemies.addAll(rightSide);
-        
+
+        setWaveSpawnRate(waveLeft);
+        setWaveSpawnRate(waveRight);
+
         String enemyTypes = messageGenerator(waveLeft);
 
         // left side
@@ -149,7 +153,13 @@ public class WaveManager implements Runnable {
                     e.printStackTrace();
                 }
                 waveLeft.run();
-                player1Done.set(true);
+
+                try {
+                    game.gameSpace.put("waveDoneToken");
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                //player1Done.set(true);
             }
 
         });// new Thread(new Wave(new ArrayList<Enemy>(), space, Game.player1.id));
@@ -165,22 +175,26 @@ public class WaveManager implements Runnable {
                     e.printStackTrace();
                 }
                 waveRight.run();
-                player2Done.set(true);
+                //player2Done.set(true);
+
+                try {
+                    game.gameSpace.put("waveDoneToken");
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
 
         });// new Thread(new Wave(new ArrayList<Enemy>(), space, Game.player2.id));
         player1Wave.start();
         player2Wave.start();
-        while (!(player1Done.get() && player2Done.get())) {
-            try {
-                Thread.sleep(1L);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+
+        try {
+            game.gameSpace.get(new ActualField("waveDoneToken"));
+            game.gameSpace.get(new ActualField("waveDoneToken"));
+            System.out.println("Got both tokens");
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-
-        System.out.println("Spawning wave " + waveNumber);
-
     }
 
     ArrayList<Enemy> waveGenerator(int wave) {
@@ -189,41 +203,51 @@ public class WaveManager implements Runnable {
             throw new InputMismatchException("Wave cannot be non-positive");
         }
         // every 5th wave will have an additional set of fat skeletons
-        if (wave % 5 == 0){
+        if (wave % 5 == 0) {
             for (int i = 0; i < wave; i++) {
-                enemies.add(new FatSkeleton(game)); //New enemy type
+                enemies.add(new FatSkeleton()); // New enemy type
             }
         }
-        if (wave == 1) {
-            for (int i = 0; i < 10; i++) {
-                enemies.add(new Skeleton(game));
-                enemies.add(new FatSkeleton(game)); //New enemy type
-            }
-
-        } else if (wave == 2) {
-            int numberOfNormalEnemies = 6;
+        if (wave == 2) {
+            int numberOfNormalEnemies = 3;
 
             for (int i = 0; i < numberOfNormalEnemies; i++) {
-                enemies.add(new Skeleton(game));
-            }
-            
-            enemies.add(new FatSkeleton(game)); //New enemy type
-            
-            for (int i = 0; i < numberOfNormalEnemies; i++) {
-                enemies.add(new Skeleton(game));
+                enemies.add(new Skeleton());
             }
 
+            enemies.add(new FatSkeleton()); // New enemy type
+
+            for (int i = 0; i < numberOfNormalEnemies; i++) {
+                enemies.add(new Skeleton());
+            }
+
+        } else {
+            for (int i = 0; i < wave; i++) {
+                enemies.add(new Skeleton());
+            }
         }
         return enemies;
     }
 
+    public void setWaveSpawnRate(Wave wave) {
+        if (waveRound == 1) {
+            wave.setSpawnRate(150);
+        } else if (waveRound % 5 == 0) {
+            wave.setSpawnRate(75);
+        } else if (waveRound == 7) {
+            wave.setSpawnRate(25);
+        } else {
+            wave.setSpawnRate(100);
+        }
+    }
+
     // Getters and setters
     public int getCurrentWaveNumber() {
-        return currentWaveNumber;
+        return waveRound;
     }
 
     public void setCurrentWaveNumber(int currentWaveNumber) {
-        this.currentWaveNumber = currentWaveNumber;
+        this.waveRound = currentWaveNumber;
     }
 
     public int getTotalWaves() {
@@ -240,10 +264,11 @@ class Wave {
     ArrayList<Enemy> enemies;
     Space space;
     final int START_X;
-    final int START_Y = 0;
+    final int START_Y = 20;
     int playerId;
     int waveId;
     Game game;
+    int spawnRate = 150; // In ticks
 
     public Wave(ArrayList<Enemy> enemies, Space space, int startX, int playerId, int waveId, Game game) {
         this.enemies = enemies;
@@ -254,9 +279,12 @@ class Wave {
         this.game = game;
     }
 
+    public void setSpawnRate(int newSpawnRate) {
+        this.spawnRate = newSpawnRate;
+    }
+
     public void run() {
         int spawned = 0;
-        int spawnRate = 150; // In ticks
         int lastSpawnTick = game.gameTicker.gameTick;
         int deltaTick = 0;
         while (true) {
@@ -274,11 +302,12 @@ class Wave {
                     enemies.get(i).move();
                     if (enemies.get(i).reachedFinish() && !enemies.get(i).isDead()) {
                         enemies.get(i).setY(3000);
-                        enemies.get(i).transferDamageToPlayer(playerId);
+                        enemies.get(i).transferDamageToPlayer(playerId, game);
 
                         String newHp = "" + game.player1.getHealth() + " " + game.player2.getHealth();
                         space.put("gui", "damage", newHp, game.player1.id);
                         space.put("gui", "damage", newHp, game.player2.id);
+                        enemies.get(i).eliminateFromRoster();
                     }
                 }
                 LinkedList<String> coordinates = new LinkedList<String>();
@@ -287,7 +316,7 @@ class Wave {
                             : "" + enemies.get(i).getX() + " " + enemies.get(i).getY();
                     coordinates.add(xy);
                 }
-                coordinates.add(""+waveId);
+                coordinates.add("" + waveId);
 
                 if (game.player1.id == playerId) {
                     space.put("gui", "enemyUpdateLeft", coordinates, game.player1.id);
@@ -305,6 +334,13 @@ class Wave {
             }
 
             if (isComplete()) {
+                try {
+                    space.put("gui", "waveEnded", waveId, game.player1.id);
+                    space.put("gui", "waveEnded", waveId, game.player2.id);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
                 break;
             }
 
@@ -319,7 +355,6 @@ class Wave {
                 return false;
             }
         }
-        System.out.println("The wave is complete!" + playerId);
         return true;
     }
 

@@ -38,6 +38,7 @@ public class Server {
     public void launch() {
         while (true) {
             try {
+                System.out.println("Ready to handle request");
                 handleRequest(lobby.get(new ActualField("request"), new FormalField(String.class),
                         new FormalField(Integer.class)));
                 if (gameQueue.size() >= 2) {
@@ -70,7 +71,7 @@ public class Server {
     }
 
     void createGame(int playerID1, int playerID2) {
-        Game newGame = new Game(IDgame, playerID1, playerID2);
+        Game newGame = new Game(IDgame, playerID1, playerID2, lobby);
         gameList.add(newGame);
         System.out.println("Creating game...");
         server.add(("game" + IDgame), newGame.gameSpace);
@@ -89,11 +90,12 @@ public class Server {
         System.out.println("Closing game " + gameID);
         for (int i = 0; i < gameList.size(); i++) {
             if (("" + gameList.get(i).id).equals(gameID)) {
-                gameList.get(i).closeGame();
-                break;
+                //gameList.get(i).closeGame();
+                server.remove("game" + gameID);
+                System.out.println("Game was closed");
+                return;
             }
         }
-        server.remove("game" + gameID);
     }
 
     public static void main(String[] args) {
