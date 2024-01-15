@@ -3,6 +3,7 @@ package dk.dtu.mtd.model;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.LinkedList;
 
 import org.jspace.ActualField;
 import org.jspace.FormalField;
@@ -21,6 +22,7 @@ public class Client {
     public RemoteSpace joinChat;
     public SpaceRepository hostServer;
     public Space hostChat;
+    private static Thread chatThread;
     GameMonitor gameMonitor;
     ChatController chatController;
     public int id;
@@ -87,6 +89,8 @@ public class Client {
             
             //Init chat controller
             chatController = new ChatController(this, hostId, joinChat);
+            chatThread = new Thread(chatController);
+            chatThread.start();
             System.out.println("Connected to chat!");
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
@@ -113,9 +117,11 @@ public class Client {
             
             // Give acknowledgement of connection and give id
             hostChat.put("connectionStatus", "joinGot", id);
-
+            
             //Init chat controller
             chatController = new ChatController(this, guestId, hostChat);
+            chatThread = new Thread(chatController);
+            chatThread.start();
             System.out.println("Guest joined chat");
         } catch (Exception e) {
             e.printStackTrace();

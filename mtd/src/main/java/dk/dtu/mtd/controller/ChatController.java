@@ -1,7 +1,5 @@
 package dk.dtu.mtd.controller;
 
-import java.util.LinkedList;
-
 import org.jspace.ActualField;
 import org.jspace.FormalField;
 import org.jspace.RemoteSpace;
@@ -30,28 +28,20 @@ public class ChatController implements Runnable {
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public void run() {
         while (true) {
             try {
                 String msg;
-                LinkedList<String> chat;
                 if (hostSpace == null) {
                     msg = (String) joinSpace.get(new ActualField("chat"), new ActualField(client.id), new FormalField(String.class))[2];
-                    chat = (LinkedList<String>) joinSpace.get(new ActualField("chatList"), new FormalField(LinkedList.class))[1];
-                    chat.add(msg);
-                    joinSpace.put("chatList", chat);
                 } else {
                     msg = (String) hostSpace.get(new ActualField("chat"), new ActualField(client.id), new FormalField(String.class))[2];
-                    chat = (LinkedList<String>) hostSpace.get(new ActualField("chatList"), new FormalField(LinkedList.class))[1];
-                    chat.add(msg);
-                    hostSpace.put("chatList", chat);
                 }
                     Platform.runLater(new Runnable() {
 
                         @Override
                         public void run() {
-                            GameGui.updateGameGui(chat);
+                            GameGui.updateGameGui(msg);
                         }
 
                     });
@@ -63,6 +53,7 @@ public class ChatController implements Runnable {
 
     public void sendMessage(String msg) {
         try {
+            msg = "Player " + client.id + ": " + msg;
             if (hostSpace == null) {
                 joinSpace.put("chat", contactId, msg);
                 joinSpace.put("chat", client.id, msg);
@@ -71,7 +62,7 @@ public class ChatController implements Runnable {
                 hostSpace.put("chat", client.id, msg);
             }
         } catch (InterruptedException e) {
-
+            e.printStackTrace();
         }
     }
 
