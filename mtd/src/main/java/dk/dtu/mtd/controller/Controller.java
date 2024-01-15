@@ -209,6 +209,17 @@ class GUIMonitior implements Runnable {
 
                     });
 
+                } else if (update[1].toString().equals("pathList")) {
+                    LinkedList<String> pathSections = (LinkedList<String>) update[2];
+
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            System.out.println("got path from server");
+                            GameGui.addPath(pathSections);
+                        }
+                    });
+
                 }
             } catch (InterruptedException e) {
                 counter++;

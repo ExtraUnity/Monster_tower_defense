@@ -1,5 +1,6 @@
 package dk.dtu.mtd.view;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 
 import dk.dtu.mtd.controller.Controller;
@@ -23,6 +24,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.stage.Screen;
 
@@ -116,6 +118,23 @@ public class GameGui extends StackPane {
             }
        });
 
+    }
+
+    public static void addPath (LinkedList<String> pathSections) {
+
+        System.out.println("gameGui" + pathSections.get(0).toString());
+
+        for (int i = 0 ; i < pathSections.size() ; i++ ) {
+            String[] coordinates = pathSections.get(i).split("\\s+");
+
+            double cordX = (gameAreaWidth * Integer.valueOf(coordinates[0])) / 1920;
+            double cordY = (gameAreaHeight * Integer.valueOf(coordinates[1])) / 1080;
+            double sizeX = (gameAreaWidth * Integer.valueOf(coordinates[2])) / 1920;
+            double sizeY = (gameAreaHeight * Integer.valueOf(coordinates[3])) / 1080;
+
+            Rectangle pathSquare =  new Rectangle(cordX, cordY, sizeX, sizeY);
+            towerLayer.getChildren().add(pathSquare);
+        }
     }
 
     public static void addNewWaveGui(GameWaveGui newWaveGui) {

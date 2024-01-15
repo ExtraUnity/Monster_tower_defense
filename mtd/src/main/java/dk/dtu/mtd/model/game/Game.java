@@ -16,6 +16,7 @@ public class Game implements Runnable {
     public Space gameSpace;
     public WaveManager waveManager;
     public TowerManager towerManager;
+    public Path path;
     private boolean playing;
 
     public Game(int id, int playerID1, int playerID2) {
@@ -23,10 +24,13 @@ public class Game implements Runnable {
         player1 = new Player(playerID1, 150, 150);
         player2 = new Player(playerID2, 150, 150);
         gameSpace = new SequentialSpace();
+        path = new Path();
         playing = true;
         LinkedList<String> chat = new LinkedList<String>();
         try {
             gameSpace.put("chatList", chat);
+            gameSpace.put("gui", "pathList", path.player1Path, player1.id);
+            gameSpace.put("gui", "pathList", path.player2Path, player2.id);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -37,7 +41,7 @@ public class Game implements Runnable {
         waveManager = new WaveManager(this);
         new Thread(waveManager).start();
 
-        towerManager = new TowerManager(this);
+        towerManager = new TowerManager(this, path);
         new Thread(towerManager).start();
     }
 

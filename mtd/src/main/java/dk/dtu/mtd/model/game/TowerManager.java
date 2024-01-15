@@ -13,11 +13,11 @@ public class TowerManager implements Runnable {
     Game game;
     Path  path;
 
-    public TowerManager(Game game) {
+    public TowerManager(Game game, Path path) {
         this.towerList = new ArrayList<Tower>();
         this.playing = true;
         this.game = game;
-        this.path = new Path();
+        this.path = path;
     }
 
     @Override
