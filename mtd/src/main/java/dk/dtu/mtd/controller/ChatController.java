@@ -32,11 +32,15 @@ public class ChatController implements Runnable {
         while (true) {
             try {
                 String msg;
+
+                //Look for messages
                 if (hostSpace == null) {
                     msg = (String) joinSpace.get(new ActualField("chat"), new ActualField(client.id), new FormalField(String.class))[2];
                 } else {
                     msg = (String) hostSpace.get(new ActualField("chat"), new ActualField(client.id), new FormalField(String.class))[2];
                 }
+
+                //Update gui
                     Platform.runLater(new Runnable() {
 
                         @Override
@@ -54,6 +58,8 @@ public class ChatController implements Runnable {
     public void sendMessage(String msg) {
         try {
             msg = "Player " + client.id + ": " + msg;
+
+            //Send copy to both parties
             if (hostSpace == null) {
                 joinSpace.put("chat", contactId, msg);
                 joinSpace.put("chat", client.id, msg);
