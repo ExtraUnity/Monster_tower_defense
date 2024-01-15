@@ -1,5 +1,6 @@
 package dk.dtu.mtd.view;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 
 import javafx.animation.PauseTransition;
@@ -19,7 +20,9 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Text;
 import javafx.stage.Screen;
 import javafx.util.Duration;
 
@@ -78,6 +81,37 @@ public class GameGui extends StackPane {
         root.minWidth(2000);
         root.minHeight(2000);
 
+    }
+
+    public static void addPath (LinkedList<String> pathSections) {
+        for (int i = 0 ; i < pathSections.size() ; i++ ) {
+            String[] coordinates = pathSections.get(i).split("\\s+");
+
+            double cordX = (gameAreaWidth * Integer.valueOf(coordinates[0])) / 1920;
+            double cordY = (gameAreaHeight * Integer.valueOf(coordinates[1])) / 1080;
+            double sizeX = (gameAreaWidth * Integer.valueOf(coordinates[2])) / 1920;
+            double sizeY = (gameAreaHeight * Integer.valueOf(coordinates[3])) / 1080;
+
+            Rectangle pathSquare =  new Rectangle(cordX, cordY, sizeX, sizeY);
+            interactionLayer.getChildren().add(pathSquare);
+
+            pathSquare.setOpacity(0);
+
+            pathSquare.setOnDragEntered(new EventHandler<DragEvent>() {
+                @Override
+                public void handle(DragEvent event) {
+                    interactionLayer.legalPlacmentHover(false);
+                }
+            });
+
+            pathSquare.setOnDragExited(new EventHandler<DragEvent>() {
+                @Override
+                public void handle(DragEvent event) {
+                    interactionLayer.legalPlacmentHover(true);
+                }
+            });
+            
+        }
     }
 
     public static void addNewWaveGui(GameWaveGui newWaveGui) {
@@ -164,10 +198,17 @@ public class GameGui extends StackPane {
             }
         });
 
-        clickArea.setOnDragOver(new EventHandler<DragEvent>() {
+        clickArea.setOnDragEntered(new EventHandler<DragEvent>() {
             @Override
             public void handle(DragEvent event) {
-                event.acceptTransferModes(TransferMode.NONE);
+                interactionLayer.legalPlacmentHover(false);
+            }
+        });
+
+        clickArea.setOnDragExited(new EventHandler<DragEvent>() {
+            @Override
+            public void handle(DragEvent event) {
+                interactionLayer.legalPlacmentHover(true);
             }
         });
 

@@ -12,11 +12,13 @@ public class TowerManager implements Runnable {
     public volatile int currentTowerId;
 
     Game game;
+    Path  path;
 
-    public TowerManager(Game game) {
+    public TowerManager(Game game, Path path) {
         this.towerList = new ArrayList<Tower>();
         this.playing = true;
         this.game = game;
+        this.path = path;
         this.currentTowerId = 0;
     }
 
@@ -45,16 +47,16 @@ public class TowerManager implements Runnable {
 
     public Boolean legalTowerPlacement(Tower newTower, int playerId) {
         for (Tower tower : towerList) {
-            if (Math.pow(tower.size, 2) + Math.pow(newTower.size, 2) >= Math.pow((tower.getX() - newTower.x), 2)
+            if (Math.pow(tower.size/2, 2) + Math.pow(newTower.size/2, 2) >= Math.pow((tower.getX() - newTower.x), 2)
                     + Math.pow((tower.getY() - newTower.y), 2)) {
                 return false;
             }
         }
-        if (game.player1.id == playerId &&
-                (newTower.x > 920 || newTower.x < 25 || newTower.y > 1090 || newTower.y < 80 || // Play Area
-                        (newTower.x > 610 && newTower.x < 770 && newTower.y > 0 && newTower.y < 540))) {
+        if (game.player1.id == playerId && (path.isOnPath(newTower.getX(), newTower.getY()) ||
+            (newTower.x > 920 || newTower.x < 25 || newTower.y > 1050 || newTower.y < 30 ))) {
             return false;
-        } else if (game.player2.id == playerId && newTower.x < 960) {
+        } else if (game.player2.id == playerId && (path.isOnPath(newTower.getX(), newTower.getY()) ||
+            (newTower.x > 1890 || newTower.x < 1000 || newTower.y > 1050 || newTower.y < 30 ))) {
             return false;
         }
 
