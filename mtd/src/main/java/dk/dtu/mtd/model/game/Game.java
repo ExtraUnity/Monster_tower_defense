@@ -224,12 +224,6 @@ public class Game implements Runnable {
             EnemyType type = (EnemyType) res[2];
             int recieverId = senderId == player1.id ? player2.id : player1.id;
             waveManager.sendEnemies(type, recieverId);
-        } else if (request[1].toString().equals("displayFinish")) {
-            try {
-                displayWinner();
-            } catch (UnexpectedException e) {
-                e.printStackTrace();
-            }
         } else if (request[1].toString().equals("resign")) {
             // This should be reverse but it works.
             if ((int) request[2] == player1.id) {
