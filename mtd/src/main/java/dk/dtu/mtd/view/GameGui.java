@@ -3,6 +3,7 @@ package dk.dtu.mtd.view;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
+import javafx.animation.PauseTransition;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.image.Image;
@@ -23,6 +24,7 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.stage.Screen;
+import javafx.util.Duration;
 
 public class GameGui extends StackPane {
     static StackPane root;
@@ -144,6 +146,10 @@ public class GameGui extends StackPane {
         TowerGui tower = (TowerGui) towerLayer.lookup("#" + towerId);
         towerLayer.getChildren().remove(tower);
         InteractionLayer.towerSelectedGui.setVisible(false);
+        InteractionLayer.lastSelected = -1;
+        Rectangle towerClickBox = (Rectangle) interactionLayer.lookup("#" + towerId);
+        interactionLayer.getChildren().remove(towerClickBox);
+
     }
 
 
@@ -207,6 +213,22 @@ public class GameGui extends StackPane {
         });
 
         interactionLayer.getChildren().add(0,clickArea);
+    }
+
+    public static void towerShoot(int x, int y, int size) {
+        Rectangle animation = new Rectangle(100, 100);
+
+        animation.setX(((gameAreaWidth * (x - (size / 2))) / 1920));
+        animation.setY(((gameAreaHeight * (y - (size /2))) / 1080));
+        animation.setOpacity(0.2);
+        
+        towerLayer.getChildren().add(animation);
+
+        PauseTransition pause = new PauseTransition(Duration.seconds(1));
+        pause.setOnFinished(e -> 
+            towerLayer.getChildren().remove(animation)
+        );
+        pause.play();
     }
 
     public static void returnToLobbyPrompt() {

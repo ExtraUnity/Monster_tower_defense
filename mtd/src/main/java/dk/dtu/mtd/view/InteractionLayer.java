@@ -234,7 +234,7 @@ class TowerSelectedGui extends StackPane {
         name.setVisible(true);
         this.setAlignment(Pos.CENTER);
         name.setTextAlignment(TextAlignment.CENTER);
-        layout.getChildren().addAll(upgradeArea, sellButton, name);
+        layout.getChildren().addAll(name, upgradeArea, sellButton);
         this.getChildren().add(layout);
     }
 

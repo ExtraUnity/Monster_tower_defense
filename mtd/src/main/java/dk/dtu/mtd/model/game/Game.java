@@ -226,6 +226,25 @@ public class Game implements Runnable {
                     new FormalField(EnemyType.class));
             int senderId = (int) request[2];
             EnemyType type = (EnemyType) res[2];
+            Player sendingPlayer = senderId == player1.id ? player1 : player2;
+            Enemy enemy;
+            switch (type) {
+                case SKELETON:
+                    enemy = new Skeleton();
+                    break;
+                case FAT_SKELETON:
+                    enemy = new FatSkeleton();
+                default:
+                    enemy = new Skeleton();
+                    break;
+            }
+            if (sendingPlayer.getRewards() < enemy.cost) {
+                return;
+            } else {
+                sendingPlayer.spendRewards(enemy.cost);
+                updateReward();
+                //TODO: Implement increase income
+            }
             int recieverId = senderId == player1.id ? player2.id : player1.id;
             waveManager.sendEnemies(type, recieverId);
         } else if (request[1].toString().equals("displayFinish")) {
