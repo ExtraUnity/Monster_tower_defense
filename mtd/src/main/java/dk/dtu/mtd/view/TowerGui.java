@@ -14,11 +14,14 @@ public class TowerGui extends StackPane {
     ImageView towerImage = new ImageView();
     Circle circle;
     Pane pane = new Pane();
-    Text upgradePrice;
+    int upgradePrice;
+    int sellPrice;
+    int damageUpgrade;
     int x;
     int y;
     int radius;
     int size;
+    String name;
     
 
     public TowerGui(String type, int size, int radius, int towerId, int playerId, int x, int y) {
@@ -26,9 +29,17 @@ public class TowerGui extends StackPane {
         this.radius = radius;
         this.x = x;
         this.y = y;
+        this.name = type;
         this.relocate(x - radius, y - radius);
-
         this.setAlignment(Pos.CENTER);
+        switch(type) {
+            case "basicTower":
+                this.upgradePrice = 50;
+                break;
+            case "aoeTower":
+                this.upgradePrice = 50;
+                break;
+        }
 
         towerImage.setFitHeight(size);
         towerImage.setFitWidth(size);
@@ -38,14 +49,9 @@ public class TowerGui extends StackPane {
         circle.setVisible(false);
         circle.setMouseTransparent(true);
 
-        upgradePrice = new Text("50");
-        upgradePrice.setFont(new Font(25));
-        upgradePrice.setStroke(Color.WHITE);
-        upgradePrice.setVisible(false);
-        upgradePrice.setX(radius - (size/2));
-        upgradePrice.setY(radius - (size/2));
+        
 
-        pane.getChildren().add(upgradePrice);
+        //pane.getChildren().add(upgradePrice);
 
         this.getChildren().add(circle);
 
@@ -67,23 +73,13 @@ public class TowerGui extends StackPane {
         return circle;
     }
 
-    public Text getUpgradePrice() {
-        return upgradePrice;
-    }
-
-    public void updateUpgradePrice(String newPrice){
-        pane.getChildren().remove(upgradePrice);
-        upgradePrice = new Text(newPrice);
-        upgradePrice.setFont(new Font(25));
-        upgradePrice.setStroke(Color.WHITE);
-        pane.getChildren().add(upgradePrice);
-        upgradePrice.setX(radius - (size/2));
-        upgradePrice.setY(radius - (size/2));
-    }
-
     public void setCircleVisible(boolean visible) {
-        upgradePrice.setVisible(visible);
+        //upgradePrice.setVisible(visible);
         circle.setVisible(visible);
+    }
+
+    public void updateUpgradePrice(int price) {
+        this.upgradePrice = price;
     }
 
 
