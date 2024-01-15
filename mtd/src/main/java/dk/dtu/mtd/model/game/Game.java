@@ -99,6 +99,45 @@ public class Game implements Runnable {
         }
     }
 
+    public void updateDamage(String newHealth) {
+        try {
+            gameSpace.put("gui", "damage", newHealth, player1.id);
+            gameSpace.put("gui", "damage", newHealth, player2.id);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void updateWinner(int id1, int id2) {
+        try {
+            gameSpace.put("gui", "playerLost", "", id1);
+            gameSpace.put("gui", "playerWon", "", id2);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void displayWinner() throws UnexpectedException {
+        if (player1.hasLost) {
+            updateWinner(player1.id, player2.id);
+        } else if (player2.hasLost) {
+            updateWinner(player2.id, player1.id);
+        } else {
+            throw new UnexpectedException("Nobody lost, it was a tie and now we can go be happy.");
+        }
+
+        try {
+            Thread.sleep(5000L);
+            System.out.println("Ending game!");
+            closeGame();
+            gameSpace.put("gameClosed", player1.id);
+            gameSpace.put("gameClosed", player2.id);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+    }
+
     @Override
     public void run() {
 
@@ -111,44 +150,15 @@ public class Game implements Runnable {
                 System.out.println("Game has failed on server side");
             }
         }
+
+        // When the playing loop is finished running the game should be closed from the
+        // lobby:
         try {
             lobby.put("request", "closeGame", id);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
         System.out.println("Game " + id + " ending it's run loop");
-    }
-
-    public void displayWinner() throws UnexpectedException {
-        if (player1.hasLost) {
-            // ("gui", (String) type, (Object) data, playerId)
-            try {
-                gameSpace.put("gui", "playerLost", "", player1.id);
-                gameSpace.put("gui", "playerWon", "", player2.id);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
-        } else if (player2.hasLost) {
-            try {
-                gameSpace.put("gui", "playerLost", "", player2.id);
-                gameSpace.put("gui", "playerWon", "", player1.id);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        } else {
-            throw new UnexpectedException("Nobody lost, it was a tie and now we can go be happy.");
-        }
-        try {
-            Thread.sleep(5000L);
-            System.out.println("Ending game!");
-            closeGame();
-            gameSpace.put("gameClosed", player1.id);
-            gameSpace.put("gameClosed", player2.id);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
     }
 
     @SuppressWarnings("unchecked")
@@ -165,49 +175,38 @@ public class Game implements Runnable {
                 gameSpace.put("gameClosed", player1.id);
             }
         } else if (request[1].toString().equals("damage")) {
+            // Reciving a damage request
             int damage = (int) gameSpace.get(new ActualField("data"), new ActualField("damage"),
                     new FormalField(Integer.class))[2];
             if ((int) request[2] == player1.id) {
-
                 player2.setHealth(player2.getHealth() - damage);
-                // ("damadge", newHealth, playerID)
-                String newHealth = "" + player1.getHealth() + " " + player2.getHealth();
-                gameSpace.put("gui", "damage", newHealth, player1.id);
-                gameSpace.put("gui", "damage", newHealth, player2.id);
             } else {
                 player1.setHealth(player1.getHealth() - damage);
-                String newHealth = "" + player1.getHealth() + " " + player2.getHealth();
-                gameSpace.put("gui", "damage", newHealth, player1.id);
-                gameSpace.put("gui", "damage", newHealth, player2.id);
             }
-        } else if (request[1].toString().equals("reward")) {
-            // TODO: ABSOLUT UNLOVLIG fix it plz!!!!!!!
-            int reward = (int) request[2];
+            String newHealth = "" + player1.getHealth() + " " + player2.getHealth();
+            updateDamage(newHealth);
 
+        } else if (request[1].toString().equals("reward")) {
+            // Reciving a reward request
+            int reward = (int) request[2];
             if ((int) request[2] == player1.id) {
                 player2.setRewards(player2.getRewards() + reward);
-                // ("reward", newRewards, playerID)
-                gameSpace.put("gui", "reward", player1.getRewards(), player1.id);
-                gameSpace.put("gui", "reward", player2.getRewards(), player2.id);
-
                 System.out.println("player2 recived" + reward + "rewards");
             } else {
                 player1.setRewards(player1.getRewards() + reward);
-                gameSpace.put("gui", "reward", player1.getRewards(), player1.id);
-                gameSpace.put("gui", "reward", player2.getRewards(), player2.id);
-
-                System.out.println("player1 recived" + reward + "rewards!");
+                System.out.println("player1 recived" + reward + "rewards");
             }
+            updateReward();
         } else if (request[1].toString().equals("placeTower")) {
             towerManager.placeTower((int) request[2]);
 
         } else if (request[1].toString().equals("upgradeTower")) {
-            towerManager.upgradeTower((int) request[2]); // request[2] = towerId
+            towerManager.upgradeTower((int) request[2]); // request[2] = playerId
 
         } else if (request[1].toString().equals("getTowerStats")) {
-            towerManager.getTowerStats((int) request[2]); // request[2] = towerId
+            towerManager.getTowerStats((int) request[2]); // request[2] = playerId
 
-        }else if (request[1].toString().equals("sellTower")) {
+        } else if (request[1].toString().equals("sellTower")) {
             towerManager.removeTower((int) request[2]);
         } else if (request[1].toString().equals("chat")) {
 
@@ -246,7 +245,7 @@ public class Game implements Runnable {
             } else {
                 sendingPlayer.spendRewards(enemy.cost);
                 updateReward();
-                //TODO: Implement increase income
+                // TODO: Implement increase income
             }
             int recieverId = senderId == player1.id ? player2.id : player1.id;
             waveManager.sendEnemies(type, recieverId);
