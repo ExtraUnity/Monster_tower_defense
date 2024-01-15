@@ -147,7 +147,6 @@ public class Game implements Runnable {
 
     }
 
-    @SuppressWarnings("unchecked")
     void handleGameRequest(Object[] request) throws InterruptedException {
         if (request[1].toString().equals("exit")) {
             // waveManager.playing = false;
@@ -181,7 +180,6 @@ public class Game implements Runnable {
                 gameSpace.put("gui", "damage", newHealth, player2.id);
             }
         } else if (request[1].toString().equals("reward")) {
-            // TODO: ABSOLUT UNLOVLIG fix it plz!!!!!!!
             int reward = (int) request[2];
 
             if ((int) request[2] == player1.id) {
