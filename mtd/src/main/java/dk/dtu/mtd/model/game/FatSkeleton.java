@@ -4,6 +4,7 @@ public class FatSkeleton extends Enemy{
 
     public FatSkeleton() {
         super(40, 1, 4, 20);
+        cost = 100;
         //TODO Auto-generated constructor stub
     }
 

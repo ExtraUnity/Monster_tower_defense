@@ -110,6 +110,10 @@ public class GameGui extends StackPane {
         TowerGui tower = (TowerGui) towerLayer.lookup("#" + towerId);
         towerLayer.getChildren().remove(tower);
         InteractionLayer.towerSelectedGui.setVisible(false);
+        InteractionLayer.lastSelected = -1;
+        Rectangle towerClickBox = (Rectangle) interactionLayer.lookup("#" + towerId);
+        interactionLayer.getChildren().remove(towerClickBox);
+
     }
 
 

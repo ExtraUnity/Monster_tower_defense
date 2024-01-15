@@ -4,6 +4,7 @@ public class Skeleton extends Enemy{
 
     public Skeleton() {
         super(5, 2, 1, 10);
+        cost = 50;
         //TODO Auto-generated constructor stub
     }
 
