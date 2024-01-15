@@ -18,14 +18,14 @@ public class Path {
     public void greenPath() {
         // Player 1's path
         player1Path.add("610 0 160 650"); // First section
-        player1Path.add("390 480 350 180"); // Second section
-        player1Path.add("130 300 370 180"); // Third section
+        player1Path.add("390 440 350 220"); // Second section
+        player1Path.add("130 260 370 220"); // Third section
         player1Path.add("130 310 150 770"); // Fourth section
 
         // Player 2's path
         player2Path.add("1150 0 160 630"); // First section
-        player2Path.add("1160 480 380 180"); // Second section
-        player2Path.add("1400 300 400 180"); // Third section
+        player2Path.add("1160 440 380 220"); // Second section
+        player2Path.add("1400 260 400 220"); // Third section
         player2Path.add("1630 310 170 770"); // Fourth section
     }
 

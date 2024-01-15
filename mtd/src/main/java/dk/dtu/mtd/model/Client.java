@@ -1,19 +1,29 @@
 package dk.dtu.mtd.model;
 
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.UnknownHostException;
 
 import org.jspace.ActualField;
 import org.jspace.FormalField;
 import org.jspace.RemoteSpace;
+import org.jspace.SequentialSpace;
+import org.jspace.Space;
+import org.jspace.SpaceRepository;
 
+import dk.dtu.mtd.controller.ChatController;
 import dk.dtu.mtd.controller.Controller;
 import dk.dtu.mtd.shared.EnemyType;
 
 public class Client {
     public RemoteSpace lobby;
     public RemoteSpace gameSpace;
+    public RemoteSpace joinChat;
+    public SpaceRepository hostServer;
+    public Space hostChat;
+    private static Thread chatThread;
     GameMonitor gameMonitor;
+    ChatController chatController;
     public int id;
     private int gameId = -1;
     String hostIP;
@@ -32,24 +42,86 @@ public class Client {
         System.out.println("Successful connection to lobby");
     }
 
-    public void requestGame() {
+    public String requestGame() {
         try {
             // Look for a game
             lobby.put("request", "game", id);
-            gameId = (int) lobby.get(new ActualField("game"), new ActualField(id),
-                    new FormalField(Integer.class))[2];
+            Object[] res = lobby.get(new ActualField("game"), new ActualField(id),
+                    new FormalField(Integer.class), new FormalField(String.class));
+            gameId = (int) res[2];
+            return (String) res[3];
         } catch (Exception e) {
             e.printStackTrace();
+            return "";
         }
     }
 
-    public void joinGame() {
+    public void joinGame(String type) {
         try {
             // Join game
             gameSpace = new RemoteSpace("tcp://" + hostIP + ":37331/game" + gameId + "?keep");
             gameMonitor = new GameMonitor(this, gameSpace, lobby, id, gameId);
             new Thread(gameMonitor).start();
             System.out.println("Successful connection to game");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void joinChat() {
+        try {
+            // Wait for host success
+            gameSpace.get(new ActualField("connectionStatus"), new ActualField("hostSuccess"));
+
+            // Request hostIP
+            String chatIP = (String) gameSpace.get(new ActualField("connectionStatus"), new ActualField("chatHostIP"),
+                    new FormalField(String.class))[2];
+            System.out.println("Joining chat with ip " + chatIP);
+            // Initialise connection to chat server
+            joinChat = new RemoteSpace("tcp://" + chatIP + ":37333/chat?keep");
+
+            // Give acknowledgement of connection
+            joinChat.put("connectionStatus", "joined", id);
+
+            // Recieve acknowledgement of connection and get host id
+            int hostId = (int) joinChat.get(new ActualField("connectionStatus"), new ActualField("joinGot"), new FormalField(Integer.class))[2];
+            
+            //Init chat controller
+            chatController = new ChatController(this, hostId, joinChat);
+            chatThread = new Thread(chatController);
+            chatThread.start();
+            System.out.println("Connected to chat!");
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void hostChat() {
+        try {
+            // Initialise chat server
+            hostServer = new SpaceRepository();
+            hostChat = new SequentialSpace();
+            hostServer.add("chat", hostChat);
+            String ip = (InetAddress.getLocalHost().getHostAddress()).trim();
+            hostServer.addGate("tcp://" + ip + ":37333/?keep");
+            System.out.println("Chat hosted!");
+            // Tell game that chat is ready to be joined
+            gameSpace.put("request", "hostChat", id);
+
+            // Give connection ip to guest
+            gameSpace.put("connectionStatus", "chatHostIP", ip);
+
+            // Wait for connection from guest and get id
+            int guestId = (int) hostChat.get(new ActualField("connectionStatus"), new ActualField("joined"), new FormalField(Integer.class))[2];
+            
+            // Give acknowledgement of connection and give id
+            hostChat.put("connectionStatus", "joinGot", id);
+            
+            //Init chat controller
+            chatController = new ChatController(this, guestId, hostChat);
+            chatThread = new Thread(chatController);
+            chatThread.start();
+            System.out.println("Guest joined chat");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -80,15 +152,15 @@ public class Client {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        
-    }
 
+    }
 
     public int upgradeTower(int towerId) {
         try {
             gameSpace.put("request", "upgradeTower", id);
             gameSpace.put("towerId", towerId);
-            int newPrice = (int) gameSpace.get(new ActualField("towerUpgradeSucces"), new FormalField(Integer.class) , new ActualField(towerId))[1];
+            int newPrice = (int) gameSpace.get(new ActualField("towerUpgradeSucces"), new FormalField(Integer.class),
+                    new ActualField(towerId))[1];
             return newPrice;
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -112,17 +184,18 @@ public class Client {
         try {
             gameSpace.put("request", "sellTower", id);
             gameSpace.put("towerId", towerId);
-            int opponentId = (int) gameSpace.get(new ActualField("towerSellSuccess"), new ActualField(id), new FormalField(Integer.class), new ActualField(towerId))[2];
+            int opponentId = (int) gameSpace.get(new ActualField("towerSellSuccess"), new ActualField(id),
+                    new FormalField(Integer.class), new ActualField(towerId))[2];
             gameSpace.put("gui", "removeTower", towerId, opponentId);
             Controller.removeTower(towerId);
-        } catch(InterruptedException e) {
+        } catch (InterruptedException e) {
             e.printStackTrace();
         }
     }
 
     public void resign() {
         try {
-            gameSpace.put("request","resign", id);
+            gameSpace.put("request", "resign", id);
         } catch (InterruptedException e) {
             System.out.println("Gamespace is already closed");
         }
@@ -133,6 +206,7 @@ public class Client {
             // Exit a game and return to main meny
             resign();
             gameSpace.close();
+            chatThread.interrupt();
         } catch (Exception e) {
             System.out.println("Not able to close a game");
         }
@@ -155,14 +229,8 @@ public class Client {
     }
 
     public void sendMessage(String msg) {
-        try {
-            gameSpace.put("request", "chat", id);
-            gameSpace.put("data", "chat", msg);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        chatController.sendMessage(msg);
     }
-
 
 }
 
@@ -194,7 +262,7 @@ class GameMonitor implements Runnable {
             System.out.println("The game has been closed");
         }
         try {
-            
+
             lobby.put("request", "closeGame", gameId);
             lobby.get(new ActualField("closedGame"), new ActualField(gameId));
             gameId = -1;
