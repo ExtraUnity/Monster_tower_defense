@@ -20,6 +20,12 @@ public class BasicTower extends Tower {
         sellPrice = 50;
     }
 
+    @Override
+    public void upgradeTower() {
+        super.upgradeTower();
+        damage++;
+    }
+
     public void shoot(List<Enemy> enemies, Game game) {
         if(this.lastShot == -1) {
             this.lastShot = game.gameTicker.gameTick;

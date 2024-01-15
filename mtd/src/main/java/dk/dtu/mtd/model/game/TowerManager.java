@@ -9,6 +9,7 @@ import org.jspace.FormalField;
 public class TowerManager implements Runnable {
     public volatile List<Tower> towerList;
     public volatile boolean playing;
+    public volatile int currentTowerId;
 
     Game game;
 
@@ -16,6 +17,7 @@ public class TowerManager implements Runnable {
         this.towerList = new ArrayList<Tower>();
         this.playing = true;
         this.game = game;
+        this.currentTowerId = 0;
     }
 
     @Override
@@ -70,13 +72,13 @@ public class TowerManager implements Runnable {
             Object[] towerInfo = game.gameSpace.get(new ActualField("towerInfo"), new FormalField(String.class),
                     new FormalField(Integer.class), new FormalField(Integer.class));
             if (towerInfo[1].equals("basicTower")) {
-                tower = new BasicTower((int) towerInfo[2], (int) towerInfo[3], towerList.size(), playerId,
+                tower = new BasicTower((int) towerInfo[2], (int) towerInfo[3], currentTowerId++, playerId,
                         game.gameTicker);
             } else if (towerInfo[1].equals("aoeTower")) {
-                tower = new AoeTower((int) towerInfo[2], (int) towerInfo[3], towerList.size(), playerId,
+                tower = new AoeTower((int) towerInfo[2], (int) towerInfo[3], currentTowerId++, playerId,
                         game.gameTicker);
             } else {
-                tower = new BasicTower(0, 0, towerList.size(), playerId, game.gameTicker);
+                tower = new BasicTower(0, 0, currentTowerId++, playerId, game.gameTicker);
             }
 
             if (legalTowerPlacement(tower, playerId)) {
