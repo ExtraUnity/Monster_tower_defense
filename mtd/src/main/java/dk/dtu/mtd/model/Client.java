@@ -9,7 +9,6 @@ import org.jspace.RemoteSpace;
 
 import dk.dtu.mtd.controller.Controller;
 import dk.dtu.mtd.shared.EnemyType;
-import dk.dtu.mtd.view.GameGui;
 
 public class Client {
     public RemoteSpace lobby;
