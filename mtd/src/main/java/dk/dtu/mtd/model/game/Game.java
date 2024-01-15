@@ -160,6 +160,10 @@ public class Game implements Runnable {
                 gameSpace.put("exit", player2.id);
                 gameSpace.put("gameClosed", player1.id);
             }
+        } else if (request[1].toString().equals("hostChat")) { //Recieve message from chatHost that chat server is ready
+            //Give guest message that chat is now hosted
+            gameSpace.put("connectionStatus", "hostSuccess");
+
         } else if (request[1].toString().equals("damage")) {
             int damage = (int) gameSpace.get(new ActualField("data"), new ActualField("damage"),
                     new FormalField(Integer.class))[2];
