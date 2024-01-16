@@ -3,9 +3,9 @@ package dk.dtu.mtd.model.game;
 public class FatSkeleton extends Enemy{
 
     public FatSkeleton() {
-        super(40, 1, 4, 20);
+        super(40, 2, 10, 20);
         cost = 100;
-        //TODO Auto-generated constructor stub
+        incomeIncrement = 10;
     }
 
      @Override

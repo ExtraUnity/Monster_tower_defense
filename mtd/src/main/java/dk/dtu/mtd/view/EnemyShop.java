@@ -16,7 +16,7 @@ public class EnemyShop extends HBox {
         setMinWidth(300);
 
         final ImageView skellyEnemy = new ImageView(new Image("dk/dtu/mtd/assets/skellyIcon.png", 70, 0, true, true));
-        this.getChildren().add(skellyEnemy);
+        
         skellyEnemy.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
@@ -26,6 +26,21 @@ public class EnemyShop extends HBox {
                 event.consume();
             }
         });
+
+        final ImageView fatSkellyEnemy = new ImageView(new Image("dk/dtu/mtd/assets/SuperMonkey.png", 70, 0, true, true));
+        
+        fatSkellyEnemy.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                System.out.println("Requesting enemies");
+                Controller.sendEnemies(EnemyType.FAT_SKELETON);
+
+                event.consume();
+            }
+        });
+
+
+        this.getChildren().addAll(skellyEnemy, fatSkellyEnemy);
         setAlignment(Pos.CENTER);
     }
 }

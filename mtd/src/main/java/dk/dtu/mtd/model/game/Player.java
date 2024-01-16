@@ -5,12 +5,14 @@ public class Player {
     private int health;
     private int rewards;
     public boolean hasLost;
+    public int income;
 
     public Player(int id, int health, int rewards) {
         this.id = id;
         this.health = health;
         this.rewards = rewards;
         this.hasLost = false;
+        this.income = 25;
     }
 
     public void setHealth(int newHealth) {
@@ -30,6 +32,10 @@ public class Player {
             this.health -= damage;
         }
         
+    }
+
+    public void increaseIncome(int increment) {
+        this.income += increment;
     }
 
     public void lose(Game game) {

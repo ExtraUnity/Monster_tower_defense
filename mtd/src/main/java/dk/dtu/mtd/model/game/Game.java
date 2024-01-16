@@ -135,7 +135,7 @@ public class Game implements Runnable {
 
         try {
             closeGame();
-            //Thread.sleep(5000L);
+            // Thread.sleep(5000L);
             System.out.println("Ending game!");
 
             gameSpace.put("gameClosed", player1.id);
@@ -179,8 +179,9 @@ public class Game implements Runnable {
             } else {
                 updateExit(player2.id, player1.id);
             }
-        } else if (request[1].toString().equals("hostChat")) { //Recieve message from chatHost that chat server is ready
-            //Give guest message that chat is now hosted
+        } else if (request[1].toString().equals("hostChat")) { // Recieve message from chatHost that chat server is
+                                                               // ready
+            // Give guest message that chat is now hosted
             gameSpace.put("connectionStatus", "hostSuccess");
 
         } else if (request[1].toString().equals("damage")) {
@@ -217,7 +218,7 @@ public class Game implements Runnable {
 
         } else if (request[1].toString().equals("sellTower")) {
             towerManager.removeTower((int) request[2]);
-            
+
         } else if (request[1].toString().equals("chat")) {
 
             String msg = (String) gameSpace.get(new ActualField("data"), new ActualField("chat"),
@@ -246,6 +247,7 @@ public class Game implements Runnable {
                     break;
                 case FAT_SKELETON:
                     enemy = new FatSkeleton();
+                    break;
                 default:
                     enemy = new Skeleton();
                     break;
@@ -253,9 +255,12 @@ public class Game implements Runnable {
             if (sendingPlayer.getRewards() < enemy.cost) {
                 return;
             } else {
+                if (enemy instanceof FatSkeleton) {
+                    System.out.println(enemy.cost);
+                }
                 sendingPlayer.spendRewards(enemy.cost);
                 updateReward();
-                // TODO: Implement increase income
+                sendingPlayer.increaseIncome(enemy.incomeIncrement);
             }
             int recieverId = senderId == player1.id ? player2.id : player1.id;
             waveManager.sendEnemies(type, recieverId);
@@ -272,6 +277,12 @@ public class Game implements Runnable {
                 e.printStackTrace();
             }
         }
+    }
+
+    public void addIncome() {
+        player1.addReward(player1.income);
+        player2.addReward(player2.income);
+        updateReward();
     }
 
 }

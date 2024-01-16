@@ -38,9 +38,7 @@ public class WaveManager implements Runnable {
             game.updateWave();
             spawnWave(waveRound);
             // after each wave both players are given 25 coins
-            game.player1.addReward(25);
-            game.player2.addReward(25);
-            game.updateReward();
+            
             waveRound++;
             try {
                 Thread.sleep(1000L);
@@ -95,8 +93,13 @@ public class WaveManager implements Runnable {
             case SKELETON:
                 for (int i = 0; i < 6; i++) {
                     enemies.add(new Skeleton());
+
                 }
                 break;
+            case FAT_SKELETON:
+                for (int i = 0; i < 4; i++) {
+                    enemies.add(new FatSkeleton());
+                }
 
             default:
                 break;
@@ -159,7 +162,7 @@ public class WaveManager implements Runnable {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                //player1Done.set(true);
+                // player1Done.set(true);
             }
 
         });// new Thread(new Wave(new ArrayList<Enemy>(), space, Game.player1.id));
@@ -175,7 +178,7 @@ public class WaveManager implements Runnable {
                     e.printStackTrace();
                 }
                 waveRight.run();
-                //player2Done.set(true);
+                // player2Done.set(true);
 
                 try {
                     game.gameSpace.put("waveDoneToken");
@@ -265,6 +268,7 @@ class Wave {
     Space space;
     final int START_X;
     final int START_Y = 20;
+    
     int playerId;
     int waveId;
     Game game;
@@ -294,7 +298,7 @@ class Wave {
                     // spawn enemy
                     enemies.get(spawned).setY(START_Y);
                     enemies.get(spawned).setX(START_X);
-                    
+
                     lastSpawnTick = game.gameTicker.gameTick;
                     spawned++;
                 }

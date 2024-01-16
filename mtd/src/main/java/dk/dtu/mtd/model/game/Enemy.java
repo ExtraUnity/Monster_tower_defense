@@ -6,6 +6,7 @@ public abstract class Enemy {
     protected int damage; // Damage the enemy does on the opposing player
     protected int reward; // Amount of money gained from killing enemy
     public int cost;
+    public int incomeIncrement;
     protected int x, y;
 
     public Enemy(int health, int speed, int damage, int reward) {

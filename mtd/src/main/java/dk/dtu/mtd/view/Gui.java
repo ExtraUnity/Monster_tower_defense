@@ -73,7 +73,7 @@ public class Gui extends Application {
     public static void closeGame() {
         System.out.println("Im going back to main menu");
 
-        PauseTransition pause = new PauseTransition(Duration.seconds(2));
+        PauseTransition pause = new PauseTransition(Duration.seconds(5));
         pause.setOnFinished(e -> 
         Platform.runLater(() -> {
             root.getChildren().remove(game);

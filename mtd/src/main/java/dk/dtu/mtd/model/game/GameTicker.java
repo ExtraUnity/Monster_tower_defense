@@ -5,6 +5,7 @@ public class GameTicker implements Runnable {
     private long deltaTime;
     private long previousTime;
     private long msPerTick;
+    final int INCOME_TICK_RATE = 500;
     boolean playing;
 
     Game game;
@@ -18,12 +19,19 @@ public class GameTicker implements Runnable {
     }
     @Override
     public void run() {
+        int deltaIncomeTick = 0;
+        int lastIncomeTick = gameTick;
         while(playing) {
             deltaTime = System.nanoTime() / 1_000_000L - previousTime;
             if(deltaTime > msPerTick) {
                 gameTick++;
                 deltaTime = 0;
                 previousTime = System.nanoTime() / 1_000_000L;
+            }
+            deltaIncomeTick = gameTick - lastIncomeTick;
+            if(deltaIncomeTick >= INCOME_TICK_RATE) {
+                lastIncomeTick = gameTick;
+                game.addIncome();
             }
         }
         try {
