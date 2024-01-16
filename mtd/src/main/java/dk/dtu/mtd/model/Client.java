@@ -282,7 +282,7 @@ class GameMonitor implements Runnable {
             Controller.exitGame();
 
         } catch (InterruptedException e) {
-            Controller.exitGame();
+            //Controller.exitGame();
             System.out.println("The game has been closed");
         }
         try {

@@ -5,6 +5,7 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 
 import dk.dtu.mtd.controller.Controller;
+import javafx.animation.PauseTransition;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.geometry.Pos;
@@ -15,6 +16,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 public class Gui extends Application {
 
@@ -70,11 +72,20 @@ public class Gui extends Application {
 
     public static void closeGame() {
         System.out.println("Im going back to main menu");
+
+        PauseTransition pause = new PauseTransition(Duration.seconds(2));
+        pause.setOnFinished(e -> 
+        Platform.runLater(() -> {
+            root.getChildren().remove(game);
+            root.getChildren().add(mainMenu);
+        })
+        );
+        pause.play();
+
         Platform.runLater(() -> {
             root.getChildren().remove(game);
             root.getChildren().add(mainMenu);
         });
-
     }
 
     public static VBox lobbyPrompt() {
