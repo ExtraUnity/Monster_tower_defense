@@ -82,7 +82,7 @@ public class Client {
 
             // Give acknowledgement of connection
             joinChat.put("connectionStatus", "joined", id);
-
+            System.out.println("Joined chat");
             // Recieve acknowledgement of connection and get host id
             int hostId = (int) joinChat.get(new ActualField("connectionStatus"), new ActualField("joinGot"), new FormalField(Integer.class))[2];
             
@@ -104,16 +104,16 @@ public class Client {
             hostServer.add("chat", hostChat);
             String ip = (InetAddress.getLocalHost().getHostAddress()).trim();
             hostServer.addGate("tcp://" + ip + ":37333/?keep");
-            System.out.println("Chat hosted!");
+            System.out.println("Chat hosted with ip " + ip + " !");
             // Tell game that chat is ready to be joined
             gameSpace.put("request", "hostChat", id);
 
             // Give connection ip to guest
             gameSpace.put("connectionStatus", "chatHostIP", ip);
-
+            System.out.println("Waiting for join...");
             // Wait for connection from guest and get id
             int guestId = (int) hostChat.get(new ActualField("connectionStatus"), new ActualField("joined"), new FormalField(Integer.class))[2];
-            
+            System.out.println("Join got");
             // Give acknowledgement of connection and give id
             hostChat.put("connectionStatus", "joinGot", id);
             
@@ -125,6 +125,32 @@ public class Client {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public void resetChats() {
+        if(joinChat != null) {
+            try {
+                joinChat.close();
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
+
+        if(hostServer != null) {
+            String ip;
+            try {
+                ip = (InetAddress.getLocalHost().getHostAddress()).trim();
+                hostServer.closeGate("tcp://" + ip + ":37333/?keep");
+            } catch (UnknownHostException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+            
+        }
+        hostChat = null;
+        chatThread = null;
+        chatController = null;
     }
 
     public void damagePlayer(int damage) {
@@ -231,6 +257,8 @@ public class Client {
     public void sendMessage(String msg) {
         chatController.sendMessage(msg);
     }
+
+
 
 }
 
