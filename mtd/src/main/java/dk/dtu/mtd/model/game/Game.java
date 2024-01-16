@@ -134,9 +134,10 @@ public class Game implements Runnable {
         }
 
         try {
+            closeGame();
             Thread.sleep(5000L);
             System.out.println("Ending game!");
-            closeGame();
+
             gameSpace.put("gameClosed", player1.id);
             gameSpace.put("gameClosed", player2.id);
         } catch (InterruptedException e) {

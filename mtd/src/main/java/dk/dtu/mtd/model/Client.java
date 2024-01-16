@@ -128,6 +128,7 @@ public class Client {
     }
 
     public void resetChats() {
+        System.out.println("Resetting chats");
         if(joinChat != null) {
             try {
                 joinChat.close();
@@ -138,15 +139,8 @@ public class Client {
         }
 
         if(hostServer != null) {
-            String ip;
-            try {
-                ip = (InetAddress.getLocalHost().getHostAddress()).trim();
-                hostServer.closeGate("tcp://" + ip + ":37333/?keep");
-            } catch (UnknownHostException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-            
+                hostServer.remove("chat");
+                hostServer.shutDown();
         }
         hostChat = null;
         chatThread = null;
@@ -240,6 +234,7 @@ public class Client {
 
     public void exit() {
         // Exit the application
+        resetChats();
         try {
             if (lobby != null) {
                 exitGame();
@@ -287,6 +282,7 @@ class GameMonitor implements Runnable {
             Controller.exitGame();
 
         } catch (InterruptedException e) {
+            Controller.exitGame();
             System.out.println("The game has been closed");
         }
         try {
@@ -295,7 +291,7 @@ class GameMonitor implements Runnable {
             lobby.get(new ActualField("closedGame"), new ActualField(gameId));
             gameId = -1;
 
-        } catch (Exception e) {
+        } catch (InterruptedException e) {
             System.out.println("Lobby not found");
         }
     }

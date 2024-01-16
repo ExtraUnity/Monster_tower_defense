@@ -34,7 +34,7 @@ public class Controller {
         String type = client.requestGame();
 
         client.joinGame(type);
-        if(type.equals("host")) {
+        if (type.equals("host")) {
             client.hostChat();
         } else {
             client.joinChat();
@@ -58,7 +58,7 @@ public class Controller {
     public static void exit() {
         // exit the application
 
-        //if a game is running close the game
+        // if a game is running close the game
         if (guiMonitior != null && guiMonitior.playing) {
             exitGame();
         }
@@ -244,7 +244,7 @@ class GUIMonitior implements Runnable {
                         public void run() {
                             GameGui.towerShoot(coordinates[0], coordinates[1], coordinates[2]);
                         }
-                        
+
                     });
 
                 } else if (update[1].toString().equals("removeTower")) {
@@ -256,7 +256,7 @@ class GUIMonitior implements Runnable {
                         public void run() {
                             GameGui.removeTower(towerId);
                         }
-                        
+
                     });
 
                 } else if (update[1].toString().equals("playerLost")) {
@@ -318,12 +318,15 @@ class GUIMonitior implements Runnable {
                     // These prints are to let the player know they have been disconected
                     System.out.println("GuiMonitor failing, assuming disconnected");
                     System.out.println("Returning to main menu");
-                    Platform.runLater(new Runnable() {
-                        @Override
-                        public void run() {
-                            GameGui.returnToLobbyPrompt();
-                        }
-                    });
+                    // Platform.runLater(new Runnable() {
+                    //     @Override
+                    //     public void run() {
+                    //         if (client.lobby == null) {
+                    //             GameGui.returnToLobbyPrompt();
+                    //         }
+
+                    //     }
+                    // });
                     playing = false;
                 }
             }
