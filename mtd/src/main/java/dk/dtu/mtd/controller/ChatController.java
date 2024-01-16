@@ -29,8 +29,9 @@ public class ChatController implements Runnable {
 
     @Override
     public void run() {
-        while (true) {
-            try {
+        try {
+            while (true) {
+
                 String msg;
 
                 // Look for messages
@@ -41,7 +42,6 @@ public class ChatController implements Runnable {
                     msg = (String) hostSpace.get(new ActualField("chat"), new ActualField(client.id),
                             new FormalField(String.class))[2];
                 }
-
                 // Update gui
                 Platform.runLater(new Runnable() {
 
@@ -51,9 +51,10 @@ public class ChatController implements Runnable {
                     }
 
                 });
-            } catch (InterruptedException e) {
-                System.out.println("Chat closed");
+
             }
+        } catch (InterruptedException e) {
+            System.out.println("Chat closed");
         }
     }
 

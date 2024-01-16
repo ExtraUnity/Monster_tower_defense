@@ -34,6 +34,7 @@ public class Controller {
         String type = client.requestGame();
 
         client.joinGame(type);
+        client.resetChats();
         if(type.equals("host")) {
             client.hostChat();
         } else {
