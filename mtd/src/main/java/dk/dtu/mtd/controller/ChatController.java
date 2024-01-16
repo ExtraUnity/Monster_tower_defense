@@ -54,6 +54,7 @@ public class ChatController implements Runnable {
 
             }
         } catch (InterruptedException e) {
+            client.resetChats();
             System.out.println("Chat closed");
         }
     }
