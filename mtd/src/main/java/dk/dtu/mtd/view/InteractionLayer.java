@@ -36,7 +36,7 @@ public class InteractionLayer extends Pane {
         setMaxSize(width, height);
         hoverImage = new ImageView(new Image("dk/dtu/mtd/assets/skelly.gif"));
         hoverCircle = new Circle(0, 0, ((300 * width) / 1920));
-        
+
         towerSelectedGui = new TowerSelectedGui();
         towerSelectedGui.setViewOrder(-1);
         lastSelected = -1;
@@ -55,7 +55,6 @@ public class InteractionLayer extends Pane {
         hoverCircle.setOpacity(0.2);
         hoverCircle.setVisible(false);
         hoverCircle.setMouseTransparent(true);
-
 
         // Finalizing the placement of a tower
         this.setOnDragDropped(new EventHandler<DragEvent>() {
@@ -89,12 +88,16 @@ public class InteractionLayer extends Pane {
                     hoverImage.setImage(new Image("dk/dtu/mtd/assets/AOEtower.png"));
                     // range cirkle
                     hoverCircle.setRadius((width * 200) / 1920);
+                }else if (dragboard.hasString() && dragboard.getString() == "moneyTower") {
+                    hoverImage.setImage(new Image("dk/dtu/mtd/assets/MoneyTower.png"));
+                    // range cirkle
+                    hoverCircle.setRadius((width * 50) / 1920);
                 }
             }
 
         });
 
-        // 
+        //
         this.setOnDragOver(new EventHandler<DragEvent>() {
             @Override
             public void handle(DragEvent event) {
@@ -149,9 +152,10 @@ public class InteractionLayer extends Pane {
             lastSelected = -1;
         } else if (lastSelected == -1) {
             lastSelected = towerId;
-            towerSelectedGui.updateGui(tower.name, tower.stats,tower.upgradePrice, tower.sellPrice, tower.damageUpgrade, towerId);
+            towerSelectedGui.updateGui(tower.name, tower.stats, tower.upgradePrice, tower.sellPrice,
+                    tower.damageUpgrade, towerId);
             towerSelectedGui.setVisible(true);
-            //upgradeButton.relocate(tower.x - (upgradeButton.getWidth()/2), tower.y + 50);
+            // upgradeButton.relocate(tower.x - (upgradeButton.getWidth()/2), tower.y + 50);
             towerSelectedGui.relocate(tower.x + 50, tower.y - 50);
 
             tower.setCircleVisible(true);
@@ -159,11 +163,12 @@ public class InteractionLayer extends Pane {
             TowerGui lastTower = (TowerGui) GameGui.towerLayer.lookup("#" + lastSelected);
             lastTower.setCircleVisible(false);
             lastSelected = towerId;
-            towerSelectedGui.updateGui(tower.name, tower.stats,  tower.upgradePrice, tower.sellPrice, tower.damageUpgrade, towerId);
-            
+            towerSelectedGui.updateGui(tower.name, tower.stats, tower.upgradePrice, tower.sellPrice,
+                    tower.damageUpgrade, towerId);
+
             tower.setCircleVisible(true);
-            
-            //upgradeButton.relocate(tower.x - (upgradeButton.getWidth()/2), tower.y + 50);
+
+            // upgradeButton.relocate(tower.x - (upgradeButton.getWidth()/2), tower.y + 50);
             towerSelectedGui.relocate(tower.x + 50, tower.y - 50);
         }
     }
@@ -190,7 +195,8 @@ class TowerSelectedGui extends StackPane {
     static Button upgradeButton;
     static Button sellButton;
 
-    public void updateGui(String name, String stats, int upgradePrice, int sellPrice, int damageBonus, int towerSelected) {
+    public void updateGui(String name, String stats, int upgradePrice, int sellPrice, int damageBonus,
+            int towerSelected) {
         String nameString;
         switch (name) {
             case "basicTower":
@@ -198,6 +204,9 @@ class TowerSelectedGui extends StackPane {
                 break;
             case "aoeTower":
                 nameString = "AOE Tower";
+                break;
+            case "moneyTower":
+                nameString = "Money Tree";
                 break;
             default:
                 nameString = "No Name";
@@ -224,7 +233,7 @@ class TowerSelectedGui extends StackPane {
         layout = new VBox(10);
         upgradeArea = new HBox(5);
 
-        this.setMinSize(130 , 140);
+        this.setMinSize(130, 140);
         this.setBackground(background());
 
         sellButton = new Button("Sell Tower");
@@ -257,11 +266,11 @@ class TowerSelectedGui extends StackPane {
         return upgradePrice;
     }
 
-    public void updateUpgradePrice(int newPrice){
+    public void updateUpgradePrice(int newPrice) {
         upgradePrice.setText(String.valueOf(newPrice));
     }
 
-    public void updateStats(String newStats){
+    public void updateStats(String newStats) {
         stats.setText(newStats);
     }
 }

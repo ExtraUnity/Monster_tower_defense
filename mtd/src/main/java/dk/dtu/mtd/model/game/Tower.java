@@ -79,7 +79,7 @@ public abstract class Tower {
     }
 
     public String getStatsAsString() {
-        return "Damage: " + damage + " \nAttackSpeed: " + Math.round(50D / (double )fireRate * 100D) / 100D + " hit/sec\n SellPrice: "
+        return "Damage: " + damage + " \nAttackSpeed: " + Math.round(50D / (double)fireRate * 100D) / 100D + " hit/sec\nSellPrice: "
                 + sellPrice;
     }
 }

@@ -79,6 +79,9 @@ public class TowerManager implements Runnable {
             } else if (towerInfo[1].equals("aoeTower")) {
                 tower = new AoeTower((int) towerInfo[2], (int) towerInfo[3], currentTowerId++, playerId,
                         game.gameTicker);
+            } else if (towerInfo[1].equals("moneyTower")) {
+                tower = new MoneyTower((int) towerInfo[2], (int) towerInfo[3], currentTowerId++, playerId,
+                        game.gameTicker);
             } else {
                 tower = new BasicTower(0, 0, currentTowerId++, playerId, game.gameTicker);
             }
@@ -93,7 +96,7 @@ public class TowerManager implements Runnable {
                     game.player2.spendRewards(tower.getTowerCost());
                 }
             }
-            game.updateReward();
+            game.updateReward(playerId);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -115,7 +118,7 @@ public class TowerManager implements Runnable {
                     break;
                 }
             }
-            game.updateReward();
+            game.updateReward(playerId);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -131,7 +134,7 @@ public class TowerManager implements Runnable {
                     break;
                 }
             }
-            game.updateReward();
+            game.updateReward(playerId);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -158,7 +161,7 @@ public class TowerManager implements Runnable {
                     break;
                 }
             }
-            game.updateReward();
+            game.updateReward(playerId);
         } catch (InterruptedException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

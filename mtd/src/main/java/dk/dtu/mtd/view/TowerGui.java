@@ -24,8 +24,6 @@ public class TowerGui extends StackPane {
     String name;
     String stats;
 
-    
-
     public TowerGui(String type, int size, int radius, int towerId, int playerId, int x, int y) {
         this.size = size;
         this.radius = radius;
@@ -34,7 +32,7 @@ public class TowerGui extends StackPane {
         this.name = type;
         this.relocate(x - radius, y - radius);
         this.setAlignment(Pos.CENTER);
-        switch(type) {
+        switch (type) {
             case "basicTower":
                 this.upgradePrice = 50;
                 this.stats = "Damage: 5 \nAttackSpeed: 0.5 shots/sec\n SellPrice: 50";
@@ -44,10 +42,19 @@ public class TowerGui extends StackPane {
                 break;
             case "aoeTower":
                 this.upgradePrice = 50;
-                this.stats = "Damage: 1 \nAttackSpeed: "+ Math.round(5/7.0 * 100D) / 100D + " hit/sec\n SellPrice: 50";
+                this.stats = "Damage: 1 \nAttackSpeed: " + Math.round(5 / 7.0 * 100D) / 100D
+                        + " hit/sec\n SellPrice: 50";
                 this.towerAttack.setImage(new Image("dk/dtu/mtd/assets/AOEtower.gif"));
                 this.towerAttack.setFitHeight(200);
                 this.towerAttack.setFitWidth(200);
+                break;
+            case "moneyTower":
+                this.upgradePrice = 50;
+                this.stats = "Damage: 0 \nAttackSpeed: " + Math.round(5 / 10.0 * 100D) / 100D
+                        + " coins/sec\n SellPrice: 50";
+                this.towerAttack.setImage(new Image("dk/dtu/mtd/assets/MoneyTowerShoot.gif"));
+                this.towerAttack.setFitHeight(100);
+                this.towerAttack.setFitWidth(100);
                 break;
         }
 
@@ -65,13 +72,15 @@ public class TowerGui extends StackPane {
             towerImage.setImage(new Image("dk/dtu/mtd/assets/BasicTower.png"));
         } else if (type.equals("aoeTower")) {
             towerImage.setImage(new Image("dk/dtu/mtd/assets/AOEtower.png"));
+        } else if (type.equals("moneyTower")) {
+            towerImage.setImage(new Image("dk/dtu/mtd/assets/MoneyTower.png"));
         } else {
             towerImage.setImage(new Image("dk/dtu/mtd/assets/skelly.gif"));
-        }      
+        }
 
-        this.getChildren().add(towerImage);  
+        this.getChildren().add(towerImage);
         this.getChildren().add(pane);
-        
+
         this.setId("" + towerId);
     }
 
@@ -91,7 +100,7 @@ public class TowerGui extends StackPane {
         this.stats = newStats;
     }
 
-    public void shoot(){
+    public void shoot() {
         switch (name) {
             case "basicTower":
                 this.towerAttack.setImage(new Image("dk/dtu/mtd/assets/basicTowerShoot.gif"));
@@ -99,18 +108,18 @@ public class TowerGui extends StackPane {
             case "aoeTower":
                 this.towerAttack.setImage(new Image("dk/dtu/mtd/assets/AOEtower.gif"));
                 break;
+            case "moneyTower":
+                this.towerAttack.setImage(new Image("dk/dtu/mtd/assets/MoneyTowerShoot.gif"));
+                break;
         }
-        towerAttack.setX(x - (towerAttack.getFitWidth()/2));
-        towerAttack.setY(y - (towerAttack.getFitHeight()/2));
-        
+        towerAttack.setX(x - (towerAttack.getFitWidth() / 2));
+        towerAttack.setY(y - (towerAttack.getFitHeight() / 2));
+
         this.getChildren().add(towerAttack);
 
         PauseTransition pause = new PauseTransition(Duration.seconds(1));
-        pause.setOnFinished(e -> 
-            this.getChildren().remove(towerAttack)
-        );
+        pause.setOnFinished(e -> this.getChildren().remove(towerAttack));
         pause.play();
     }
-
 
 }
