@@ -79,11 +79,21 @@ class EnemyImage extends ImageView {
     EnemyImage(String type) { // Pass in the image path, width and height
 
         if (type.equals("Skeleton")) {
-            this.image = new Image("dk/dtu/mtd/assets/skelly.gif", 150, 0, true, false);
+            this.image = new Image("dk/dtu/mtd/assets/skelly.gif", 110, 0, true, false);
+            setFitHeight(110);
+            setFitWidth(110);
         } else if (type.equals("FatSkeleton")) {
             this.image = new Image("dk/dtu/mtd/assets/slime.gif", 100, 0, true, false);
+            setFitHeight(100);
+            setFitWidth(100);
         } else if (type.equals("DeerSkull")) {
             this.image = new Image("dk/dtu/mtd/assets/DeerSkull.gif", 100, 0, true, false);
+            setFitHeight(100);
+            setFitWidth(100);
+        } else if (type.equals("Devil")) {
+            this.image = new Image("dk/dtu/mtd/assets/Devil.gif", 80, 0, true, false);
+            setFitHeight(80);
+            setFitWidth(80);
         } else if (type.equals("tankEnemy")) {
             this.image = new Image("dk/dtu/mtd/assets/skelly.gif", 100, 0, true, false);
         } else if (type.equals("bossEnemy")) {
@@ -93,8 +103,7 @@ class EnemyImage extends ImageView {
         setImage(image);
         setX(xCoord);
         setY(yCoord);
-        setFitHeight(100);
-        setFitWidth(100);
+
 
         ImageView param = this;
         AnimationTimer timer = new AnimationTimer() {

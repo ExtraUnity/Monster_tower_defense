@@ -104,6 +104,10 @@ public class WaveManager implements Runnable {
                 for (int i = 0; i < 4; i++) {
                     enemies.add(new DeerSkull());
                 }
+            case DEVIL:
+                for (int i = 0; i < 4; i++) {
+                    enemies.add(new Devil());
+                }
 
             default:
                 break;
@@ -233,9 +237,16 @@ public class WaveManager implements Runnable {
                 enemies.add(new Skeleton());
             }
 
+        } else if (wave == 3) {
+            for (int i = 0; i < 10; i++) {
+                enemies.add(new Devil());
+            }
         } else {
             for (int i = 0; i < wave; i++) {
                 enemies.add(new Skeleton());
+            }
+            for (int i = 0; i < (wave-10); i++) {
+                enemies.add(new Devil());
             }
         }
         return enemies;
@@ -244,6 +255,8 @@ public class WaveManager implements Runnable {
     public void setWaveSpawnRate(Wave wave) {
         if (waveRound == 1) {
             wave.setSpawnRate(150);
+        } else if (waveRound == 3 ) {
+            wave.setSpawnRate(40);
         } else if (waveRound % 5 == 0) {
             wave.setSpawnRate(75);
         } else if (waveRound == 7) {

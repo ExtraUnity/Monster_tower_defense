@@ -4,4 +4,5 @@ public enum EnemyType {
     SKELETON,
     FAT_SKELETON,
     DEER_SKULL,
+    DEVIL,
 }
