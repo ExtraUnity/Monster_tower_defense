@@ -229,17 +229,19 @@ public class Client {
     }
 
     /**
-     * Resigns, closes chat and game space
+     * Resigns, closes chat and game space. Called when a player has closed the application.
      */ 
     public void exitGame() {
         try {
-            // Exit a game and return to main meny
+
             resign();
 
+            //Close chats
             if (chatThread != null) {
                 chatThread.interrupt();
             }
             resetChats();
+
             gameSpace.close();
         } catch (Exception e) {
             e.printStackTrace();
@@ -271,6 +273,9 @@ public class Client {
 
 }
 
+/**
+ * Continuously monitors if the other player has left the game.
+ */
 class GameMonitor implements Runnable {
     Client client;
     RemoteSpace gameSpace;

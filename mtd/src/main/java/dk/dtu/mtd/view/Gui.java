@@ -128,7 +128,7 @@ public class Gui extends Application {
 
     void setupStageMeta(Stage stage) {
         stage.setOnCloseRequest(e -> {
-            Controller.exit();
+            Controller.exitApplication();
         });
         stage.setTitle("Monster Tower Defense");
         stage.setMaximized(true);
