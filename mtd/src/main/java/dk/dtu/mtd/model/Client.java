@@ -84,9 +84,10 @@ public class Client {
             joinChat.put("connectionStatus", "joined", id);
             System.out.println("Joined chat");
             // Recieve acknowledgement of connection and get host id
-            int hostId = (int) joinChat.get(new ActualField("connectionStatus"), new ActualField("joinGot"), new FormalField(Integer.class))[2];
-            
-            //Init chat controller
+            int hostId = (int) joinChat.get(new ActualField("connectionStatus"), new ActualField("joinGot"),
+                    new FormalField(Integer.class))[2];
+
+            // Init chat controller
             chatController = new ChatController(this, hostId, joinChat);
             chatThread = new Thread(chatController);
             chatThread.start();
@@ -112,12 +113,13 @@ public class Client {
             gameSpace.put("connectionStatus", "chatHostIP", ip);
             System.out.println("Waiting for join...");
             // Wait for connection from guest and get id
-            int guestId = (int) hostChat.get(new ActualField("connectionStatus"), new ActualField("joined"), new FormalField(Integer.class))[2];
+            int guestId = (int) hostChat.get(new ActualField("connectionStatus"), new ActualField("joined"),
+                    new FormalField(Integer.class))[2];
             System.out.println("Join got");
             // Give acknowledgement of connection and give id
             hostChat.put("connectionStatus", "joinGot", id);
-            
-            //Init chat controller
+
+            // Init chat controller
             chatController = new ChatController(this, guestId, hostChat);
             chatThread = new Thread(chatController);
             chatThread.start();
@@ -127,9 +129,10 @@ public class Client {
         }
     }
 
+    //Closes the opened chat spaces.
     public void resetChats() {
         System.out.println("Resetting chats");
-        if(joinChat != null) {
+        if (joinChat != null) {
             try {
                 joinChat.close();
             } catch (IOException e) {
@@ -138,9 +141,9 @@ public class Client {
             }
         }
 
-        if(hostServer != null) {
-                hostServer.remove("chat");
-                hostServer.shutDown();
+        if (hostServer != null) {
+            hostServer.remove("chat");
+            hostServer.shutDown();
         }
         hostChat = null;
         chatThread = null;
@@ -192,7 +195,8 @@ public class Client {
         try {
             gameSpace.put("request", "getTowerStats", id);
             gameSpace.put("towerId", towerId);
-            String newStats = (String) gameSpace.get(new ActualField("towerStats"), new FormalField(String.class) , new ActualField(towerId))[1];
+            String newStats = (String) gameSpace.get(new ActualField("towerStats"), new FormalField(String.class),
+                    new ActualField(towerId))[1];
             return newStats;
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -213,6 +217,9 @@ public class Client {
         }
     }
 
+    /**
+     * Resigns the player from the game
+     */
     public void resign() {
         try {
             gameSpace.put("request", "resign", id);
@@ -221,23 +228,34 @@ public class Client {
         }
     }
 
+    /**
+     * Resigns, closes chat and game space. Called when a player has closed the application.
+     */ 
     public void exitGame() {
         try {
-            // Exit a game and return to main meny
+
             resign();
+
+            //Close chats
+            if (chatThread != null) {
+                chatThread.interrupt();
+            }
+            resetChats();
+
             gameSpace.close();
-            chatThread.interrupt();
         } catch (Exception e) {
-            System.out.println("Not able to close a game");
+            e.printStackTrace();
         }
     }
 
-    public void exit() {
-        // Exit the application
-        resetChats();
+    /**
+     * Close the connection to lobby space if opened
+     */
+    public void disconnectLobby() {
+        
         try {
             if (lobby != null) {
-                exitGame();
+                // exitGame();
                 lobby.close();
             }
         } catch (IOException e) {
@@ -253,10 +271,11 @@ public class Client {
         chatController.sendMessage(msg);
     }
 
-
-
 }
 
+/**
+ * Continuously monitors if the other player has left the game.
+ */
 class GameMonitor implements Runnable {
     Client client;
     RemoteSpace gameSpace;
@@ -279,10 +298,10 @@ class GameMonitor implements Runnable {
             gameSpace.get(new ActualField("gameClosed"), new ActualField(playerId));
 
             System.out.println("Other player left the game");
-            Controller.exitGame();
+            Controller.closeGame();
 
         } catch (InterruptedException e) {
-            //Controller.exitGame();
+            // Controller.exitGame();
             System.out.println("The game has been closed");
         }
         try {
