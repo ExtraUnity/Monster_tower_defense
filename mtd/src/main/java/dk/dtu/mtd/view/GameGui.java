@@ -91,6 +91,7 @@ public class GameGui extends StackPane {
 
             Rectangle pathSquare =  new Rectangle(cordX, cordY, sizeX, sizeY);
             interactionLayer.getChildren().add(pathSquare);
+            pathSquare.setViewOrder(1);
 
             pathSquare.setOpacity(0);
 
@@ -181,13 +182,14 @@ public class GameGui extends StackPane {
                 (int) ((gameAreaWidth * x) / 1920), (int) ((gameAreaHeight * y) / 1080));
         towerLayer.getChildren().add(tower);
         
-        Rectangle clickArea = new Rectangle(100, 100);
+        Rectangle clickArea = new Rectangle(size, size);
+        clickArea.setViewOrder(0);
 
-        clickArea.setX(((gameAreaWidth * (x - (size / 2))) / 1920));
-        clickArea.setY(((gameAreaHeight * (y - (size /2))) / 1080));
+        clickArea.setX( (int) ((gameAreaWidth * (x - (size / 2))) / 1920) - 15);
+        clickArea.setY( (int) ((gameAreaHeight * (y - (size / 2))) / 1080) - 15);
 
         clickArea.setId("" + towerId);
-        clickArea.setFill(Color.TRANSPARENT);
+        clickArea.setOpacity(0);
 
         clickArea.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
             @Override
