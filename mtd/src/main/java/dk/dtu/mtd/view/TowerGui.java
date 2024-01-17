@@ -94,11 +94,9 @@ public class TowerGui extends StackPane {
     public void shoot(){
         switch (name) {
             case "basicTower":
-                this.stats = "Damage: 5 \nAttackSpeed: 0.5 shots/sec\n SellPrice: 50";
                 this.towerAttack.setImage(new Image("dk/dtu/mtd/assets/basicTowerShoot.gif"));
                 break;
             case "aoeTower":
-                this.stats = "Damage: 1 \nAttackSpeed: "+ Math.round(5/7.0 * 100D) / 100D + " hit/sec\n SellPrice: 50";
                 this.towerAttack.setImage(new Image("dk/dtu/mtd/assets/AOEtower.gif"));
                 break;
         }
