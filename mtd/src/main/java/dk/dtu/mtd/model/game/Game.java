@@ -240,6 +240,9 @@ public class Game implements Runnable {
                 case DEER_SKULL:
                     enemy = new DeerSkull();
                     break;
+                case DEVIL:
+                    enemy = new Devil();
+                    break;
                 default:
                     enemy = new Skeleton();
                     break;

@@ -52,9 +52,20 @@ public class EnemyShop extends HBox {
             }
         });
 
+        final ImageView devil = new ImageView(new Image("dk/dtu/mtd/assets/DevilIcon.png", 70, 0, true, true));
+        devil.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                System.out.println("Requesting enemies");
+                Controller.sendEnemies(EnemyType.DEVIL);
+
+                event.consume();
+            }
+        });
 
 
-        this.getChildren().addAll(skellyEnemy, fatSkellyEnemy, deerSkull);
+
+        this.getChildren().addAll(skellyEnemy, fatSkellyEnemy, devil, deerSkull);
         setAlignment(Pos.CENTER);
     }
 }
