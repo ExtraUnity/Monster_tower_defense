@@ -73,7 +73,7 @@ public class TowerGui extends StackPane {
         } else if (type.equals("aoeTower")) {
             towerImage.setImage(new Image("dk/dtu/mtd/assets/AOEtower.png"));
         } else if (type.equals("moneyTower")) {
-            towerImage.setImage(new Image("dk/dtu/mtd/assets/SuperMonkey.png"));
+            towerImage.setImage(new Image("dk/dtu/mtd/assets/MoneyTower.png"));
         } else {
             towerImage.setImage(new Image("dk/dtu/mtd/assets/skelly.gif"));
         }

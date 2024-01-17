@@ -43,7 +43,7 @@ public class TowerShop extends HBox {
                 event.consume();
             }
         });
-        final ImageView moneyTree = new ImageView(new Image("dk/dtu/mtd/assets/SuperMonkey.png", 70, 0, true, true));
+        final ImageView moneyTree = new ImageView(new Image("dk/dtu/mtd/assets/MoneyTower.png", 70, 0, true, true));
         this.getChildren().add(moneyTree);
         moneyTree.addEventHandler(MouseEvent.DRAG_DETECTED, new EventHandler<MouseEvent>() {
             @Override

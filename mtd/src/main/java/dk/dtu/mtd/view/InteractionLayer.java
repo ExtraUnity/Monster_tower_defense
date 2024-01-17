@@ -89,7 +89,7 @@ public class InteractionLayer extends Pane {
                     // range cirkle
                     hoverCircle.setRadius((width * 200) / 1920);
                 }else if (dragboard.hasString() && dragboard.getString() == "moneyTower") {
-                    hoverImage.setImage(new Image("dk/dtu/mtd/assets/SuperMonkey.png"));
+                    hoverImage.setImage(new Image("dk/dtu/mtd/assets/MoneyTower.png"));
                     // range cirkle
                     hoverCircle.setRadius((width * 100) / 1920);
                 }
