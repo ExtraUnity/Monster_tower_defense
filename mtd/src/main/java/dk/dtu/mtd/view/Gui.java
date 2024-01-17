@@ -40,6 +40,8 @@ public class Gui extends Application {
     static StackPane root;
     static GameGui game;
     static MainMenuGui mainMenu;
+    static Text loadingText;
+    static VBox prompt;
 
     @Override
     public void start(Stage primaryStage) {
@@ -57,7 +59,11 @@ public class Gui extends Application {
 
     public static void loading() {
         root.getChildren().remove(mainMenu);
-        root.getChildren().add(new Text("Waiting for other player..."));
+        loadingText = new Text("Waiting for other player...");
+        if(root.getChildren().contains(loadingText)) {
+            return;
+        }
+        root.getChildren().add(loadingText);
         Thread t = new Thread(() -> {
             Controller.joinGame();
         });
@@ -84,8 +90,17 @@ public class Gui extends Application {
 
     }
 
+    public static void loadMainMenu() {
+        root.getChildren().remove(prompt);
+        if(root.getChildren().contains(mainMenu)) {
+            return;
+        }
+        mainMenu = new MainMenuGui();
+        root.getChildren().add(mainMenu);
+    }
+
     public static VBox lobbyPrompt() {
-        VBox prompt = new VBox(5);
+        prompt = new VBox(5);
         prompt.setAlignment(Pos.CENTER);
         Text textIp = new Text("Lobby IP:");
 
@@ -108,9 +123,7 @@ public class Gui extends Application {
                     try {
                         Controller.joinLobby(ip);
                         Platform.runLater(() -> {
-                            root.getChildren().remove(prompt);
-                            mainMenu = new MainMenuGui();
-                            root.getChildren().add(mainMenu);
+                            loadMainMenu();
                         });
                     } catch (IOException | InterruptedException e) {
                         System.out.println("Connection to lobby failed.");

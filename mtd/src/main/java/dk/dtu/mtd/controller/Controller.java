@@ -33,6 +33,9 @@ public class Controller {
     public static void joinGame() {
         String type = client.requestGame();
 
+        if(type.equals("")) {
+            return;
+        }
         client.joinGame(type);
         if (type.equals("host")) {
             client.hostChat();
@@ -54,7 +57,10 @@ public class Controller {
     public static void closeGame() {
         // Return GUI to main menu
         guiMonitior.playing = false;
-        guiThread.interrupt();
+
+        if (guiThread != null) {
+            guiThread.interrupt();
+        }
         Gui.closeGame();
 
         // Tell client to close game

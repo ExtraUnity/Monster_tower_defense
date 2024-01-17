@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
+import org.apache.commons.lang3.ObjectUtils.Null;
 import org.jspace.ActualField;
 import org.jspace.FormalField;
 import org.jspace.RemoteSpace;
@@ -129,7 +130,7 @@ public class Client {
         }
     }
 
-    //Closes the opened chat spaces.
+    // Closes the opened chat spaces.
     public void resetChats() {
         System.out.println("Resetting chats");
         if (joinChat != null) {
@@ -223,26 +224,29 @@ public class Client {
     public void resign() {
         try {
             gameSpace.put("request", "resign", id);
-        } catch (InterruptedException e) {
+        } catch (InterruptedException | NullPointerException e) {
             System.out.println("Gamespace is already closed");
         }
     }
 
     /**
-     * Resigns, closes chat and game space. Called when a player has closed the application.
-     */ 
+     * Resigns, closes chat and game space. Called when a player has closed the
+     * application.
+     */
     public void exitGame() {
         try {
 
             resign();
 
-            //Close chats
+            // Close chats
             if (chatThread != null) {
                 chatThread.interrupt();
             }
             resetChats();
 
-            gameSpace.close();
+            if (gameSpace != null) {
+                gameSpace.close();
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -252,7 +256,7 @@ public class Client {
      * Close the connection to lobby space if opened
      */
     public void disconnectLobby() {
-        
+
         try {
             if (lobby != null) {
                 // exitGame();
