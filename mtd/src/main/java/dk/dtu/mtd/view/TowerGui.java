@@ -1,14 +1,17 @@
 package dk.dtu.mtd.view;
 
+import javafx.animation.PauseTransition;
 import javafx.geometry.Pos;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.shape.Circle;
+import javafx.util.Duration;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 
 public class TowerGui extends StackPane {
     ImageView towerImage = new ImageView();
+    ImageView towerAttack = new ImageView();
     Circle circle;
     Pane pane = new Pane();
     int upgradePrice;
@@ -20,6 +23,7 @@ public class TowerGui extends StackPane {
     int size;
     String name;
     String stats;
+
     
 
     public TowerGui(String type, int size, int radius, int towerId, int playerId, int x, int y) {
@@ -34,10 +38,16 @@ public class TowerGui extends StackPane {
             case "basicTower":
                 this.upgradePrice = 50;
                 this.stats = "Damage: 5 \nAttackSpeed: 0.5 shots/sec\n SellPrice: 50";
+                this.towerAttack.setImage(new Image("dk/dtu/mtd/assets/basicTowerShoot.gif"));
+                this.towerAttack.setFitHeight(150);
+                this.towerAttack.setFitWidth(150);
                 break;
             case "aoeTower":
                 this.upgradePrice = 50;
-                this.stats = "Damage: 1 \nAttackSpeed: "+ Math.round(5/7.0 * 100D) / 100D + " shots/sec\n SellPrice: 50";
+                this.stats = "Damage: 1 \nAttackSpeed: "+ Math.round(5/7.0 * 100D) / 100D + " hit/sec\n SellPrice: 50";
+                this.towerAttack.setImage(new Image("dk/dtu/mtd/assets/skellyIcon.png"));
+                this.towerAttack.setFitHeight(100);
+                this.towerAttack.setFitWidth(100);
                 break;
         }
 
@@ -48,10 +58,6 @@ public class TowerGui extends StackPane {
         circle.setOpacity(0.2);
         circle.setVisible(false);
         circle.setMouseTransparent(true);
-
-        
-
-        //pane.getChildren().add(upgradePrice);
 
         this.getChildren().add(circle);
 
@@ -74,7 +80,6 @@ public class TowerGui extends StackPane {
     }
 
     public void setCircleVisible(boolean visible) {
-        //upgradePrice.setVisible(visible);
         circle.setVisible(visible);
     }
 
@@ -84,6 +89,29 @@ public class TowerGui extends StackPane {
 
     public void updateStatsAsString(String newStats) {
         this.stats = newStats;
+    }
+
+    public void shoot(){
+        switch (name) {
+            case "basicTower":
+                this.stats = "Damage: 5 \nAttackSpeed: 0.5 shots/sec\n SellPrice: 50";
+                this.towerAttack.setImage(new Image("dk/dtu/mtd/assets/basicTowerShoot.gif"));
+                break;
+            case "aoeTower":
+                this.stats = "Damage: 1 \nAttackSpeed: "+ Math.round(5/7.0 * 100D) / 100D + " hit/sec\n SellPrice: 50";
+                this.towerAttack.setImage(new Image("dk/dtu/mtd/assets/skellyIcon.png"));
+                break;
+        }
+        towerAttack.setX(x - (towerAttack.getFitWidth()/2));
+        towerAttack.setY(y - (towerAttack.getFitHeight()/2));
+        
+        this.getChildren().add(towerAttack);
+
+        PauseTransition pause = new PauseTransition(Duration.seconds(1));
+        pause.setOnFinished(e -> 
+            this.getChildren().remove(towerAttack)
+        );
+        pause.play();
     }
 
 

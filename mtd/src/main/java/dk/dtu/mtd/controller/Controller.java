@@ -111,7 +111,6 @@ public class Controller {
 
 }
 
-// hmm
 class GUIMonitior implements Runnable {
     int counter = 0;
     Boolean playing = true;
@@ -238,11 +237,11 @@ class GUIMonitior implements Runnable {
 
                     });
                 } else if (update[1].toString().equals("towerShoot")) {
-                    int[] coordinates = (int[]) update[2];
+                    int towerId = (int) update[2];
                     Platform.runLater(new Runnable() {
                         @Override
                         public void run() {
-                            GameGui.towerShoot(coordinates[0], coordinates[1], coordinates[2]);
+                            GameGui.towerShoot(towerId);
                         }
 
                     });

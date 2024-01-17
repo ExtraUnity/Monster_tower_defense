@@ -214,20 +214,9 @@ public class GameGui extends StackPane {
         interactionLayer.getChildren().add(0,clickArea);
     }
 
-    public static void towerShoot(int x, int y, int size) {
-        Rectangle animation = new Rectangle(100, 100);
-
-        animation.setX(((gameAreaWidth * (x - (size / 2))) / 1920));
-        animation.setY(((gameAreaHeight * (y - (size /2))) / 1080));
-        animation.setOpacity(0.2);
-        
-        towerLayer.getChildren().add(animation);
-
-        PauseTransition pause = new PauseTransition(Duration.seconds(1));
-        pause.setOnFinished(e -> 
-            towerLayer.getChildren().remove(animation)
-        );
-        pause.play();
+    public static void towerShoot(int towerId) {
+        TowerGui tower = (TowerGui) towerLayer.lookup("#" + towerId);
+        tower.shoot();
     }
 
     public static void returnToLobbyPrompt() {
