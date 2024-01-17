@@ -38,6 +38,7 @@ public class InteractionLayer extends Pane {
         hoverCircle = new Circle(0, 0, ((300 * width) / 1920));
         
         towerSelectedGui = new TowerSelectedGui();
+        towerSelectedGui.setViewOrder(-1);
         lastSelected = -1;
         towerSelectedGui.setVisible(false);
 
@@ -126,7 +127,6 @@ public class InteractionLayer extends Pane {
                 double gameAreaHeight = Screen.getPrimary().getBounds().getHeight() - 250;
                 double gameAreaWidth = (gameAreaHeight / 9) * 16;
 
-                System.out.println(1920 * event.getX() / gameAreaWidth  + " " + 1080 * event.getY() / gameAreaHeight);
                 if (lastSelected != -1) {
                     TowerGui lastTower = (TowerGui) GameGui.towerLayer.lookup("#" + lastSelected);
                     lastTower.setCircleVisible(false);

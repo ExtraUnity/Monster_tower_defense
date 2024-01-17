@@ -33,7 +33,10 @@ public class Controller {
     public static void joinGame() {
         String type = client.requestGame();
 
-        client.joinGame(type);
+        if(type.equals("")) {
+            return;
+        }
+        client.joinGame();
         if (type.equals("host")) {
             client.hostChat();
         } else {
@@ -48,23 +51,33 @@ public class Controller {
 
     }
 
-    public static void exitGame() {
-        // exit the game
+    /**
+     * Returns gui to main menu and tells client to exit game
+     */
+    public static void closeGame() {
+        // Return GUI to main menu
         guiMonitior.playing = false;
+
+        if (guiThread != null) {
+            guiThread.interrupt();
+        }
         Gui.closeGame();
+
+        // Tell client to close game
         client.exitGame();
     }
 
-    public static void exit() {
-        // exit the application
+    /**
+     * Close game if running and tell client to disconnect from lobby.
+     */
+    public static void exitApplication() {
 
         // if a game is running close the game
         if (guiMonitior != null && guiMonitior.playing) {
-            exitGame();
+            closeGame();
         }
 
-        client.exit();
-        System.out.println("Exited");
+        client.disconnectLobby();
     }
 
     public static void resign() {
@@ -318,13 +331,13 @@ class GUIMonitior implements Runnable {
                     System.out.println("GuiMonitor failing, assuming disconnected");
                     System.out.println("Returning to main menu");
                     // Platform.runLater(new Runnable() {
-                    //     @Override
-                    //     public void run() {
-                    //         if (client.lobby == null) {
-                    //             GameGui.returnToLobbyPrompt();
-                    //         }
+                    // @Override
+                    // public void run() {
+                    // if (client.lobby == null) {
+                    // GameGui.returnToLobbyPrompt();
+                    // }
 
-                    //     }
+                    // }
                     // });
                     playing = false;
                 }
