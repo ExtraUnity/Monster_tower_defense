@@ -36,7 +36,7 @@ public class Controller {
         if(type.equals("")) {
             return;
         }
-        client.joinGame(type);
+        client.joinGame();
         if (type.equals("host")) {
             client.hostChat();
         } else {

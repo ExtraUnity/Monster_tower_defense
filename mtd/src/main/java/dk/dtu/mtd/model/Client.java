@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
-import org.apache.commons.lang3.ObjectUtils.Null;
 import org.jspace.ActualField;
 import org.jspace.FormalField;
 import org.jspace.RemoteSpace;
@@ -33,16 +32,28 @@ public class Client {
 
     }
 
+    /**
+     * Joins the lobby with the specified id.
+     * @param serverIp
+     * @throws UnknownHostException
+     * @throws IOException
+     * @throws InterruptedException
+     */
     public void joinLobby(String serverIp) throws UnknownHostException, IOException, InterruptedException {
         // Join lobby
         this.hostIP = serverIp;
         lobby = new RemoteSpace("tcp://" + hostIP + ":37331/lobby?keep");
-        // Get uniqe id from server
-        lobby.put("request", "id", -1); // Request new id
-        id = (int) lobby.get(new ActualField("id"), new FormalField(Integer.class))[1];
+
+        // Get unique id from server
+        lobby.put("request", "id", -1);
+        id = (int) lobby.get(new ActualField("id"), new FormalField(Integer.class))[1]; // Get new id
         System.out.println("Successful connection to lobby");
     }
 
+    /**
+     * Sends a request to lobby to join a game. Blocks thread until joined.
+     * @return "host" or "guest"
+     */
     public String requestGame() {
         try {
             // Look for a game
@@ -57,7 +68,10 @@ public class Client {
         }
     }
 
-    public void joinGame(String type) {
+    /**
+     * Joins the game given that a gameId has been created.
+     */
+    public void joinGame() {
         try {
             // Join game
             gameSpace = new RemoteSpace("tcp://" + hostIP + ":37331/game" + gameId + "?keep");
@@ -69,6 +83,9 @@ public class Client {
         }
     }
 
+    /**
+     * Join a game chat as a guest. Collect chatIP from gameSpace when host has created chat.
+     */
     public void joinChat() {
         try {
             // Wait for host success
@@ -98,6 +115,10 @@ public class Client {
         }
     }
 
+
+    /**
+     * Hosts a game chat. Waits for guest to join chat.
+     */
     public void hostChat() {
         try {
             // Initialise chat server
@@ -130,27 +151,39 @@ public class Client {
         }
     }
 
-    // Closes the opened chat spaces.
+    /**
+     * Closes the opened chat spaces.
+     */ 
     public void resetChats() {
-        System.out.println("Resetting chats");
+        
+        //Closing guest chat
         if (joinChat != null) {
             try {
                 joinChat.close();
             } catch (IOException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
         }
 
+        //Closing host chat server
         if (hostServer != null) {
             hostServer.remove("chat");
             hostServer.shutDown();
         }
+        
+        //Closing thread
+        if (chatThread != null) {
+            chatThread.interrupt();
+        }
+
         hostChat = null;
-        chatThread = null;
         chatController = null;
     }
 
+    /**
+     * Request to damage to player.
+     * @param damage
+     */
     public void damagePlayer(int damage) {
         try {
             gameSpace.put("request", "damage", id); // Send request to damage
@@ -160,6 +193,12 @@ public class Client {
         }
     }
 
+    /**
+     * Requests placement of new tower.
+     * @param type
+     * @param x
+     * @param y
+     */
     public void placeTower(String type, int x, int y) {
         try {
             gameSpace.put("request", "placeTower", id);
@@ -169,6 +208,10 @@ public class Client {
         }
     }
 
+    /**
+     * Try to send a wave of enemies to opponent.
+     * @param type
+     */
     public void sendEnemies(EnemyType type) {
         try {
             gameSpace.put("request", "sendEnemies", id);
@@ -179,6 +222,11 @@ public class Client {
 
     }
 
+    /**
+     * Requests to upgrade a tower.
+     * @param towerId
+     * @return newUpgradePrice
+     */
     public int upgradeTower(int towerId) {
         try {
             gameSpace.put("request", "upgradeTower", id);
@@ -192,6 +240,11 @@ public class Client {
         return -1;
     }
 
+    /**
+     * Requests tower stats of towerId from game.
+     * @param towerId
+     * @return stats
+     */
     public String getTowerStats(int towerId) {
         try {
             gameSpace.put("request", "getTowerStats", id);
@@ -205,6 +258,11 @@ public class Client {
         return "-1";
     }
 
+
+    /**
+     * Sells the selected tower.
+     * @param towerId
+     */
     public void sellTower(int towerId) {
         try {
             gameSpace.put("request", "sellTower", id);
@@ -238,10 +296,7 @@ public class Client {
 
             resign();
 
-            // Close chats
-            if (chatThread != null) {
-                chatThread.interrupt();
-            }
+            
             resetChats();
 
             if (gameSpace != null) {
@@ -271,6 +326,10 @@ public class Client {
         return gameId;
     }
 
+    /**
+     * Send a message to opponent via the game chat.
+     * @param msg
+     */
     public void sendMessage(String msg) {
         chatController.sendMessage(msg);
     }
@@ -299,17 +358,18 @@ class GameMonitor implements Runnable {
     @Override
     public void run() {
         try {
+            //Close game if opponent quit.
             gameSpace.get(new ActualField("gameClosed"), new ActualField(playerId));
 
             System.out.println("Other player left the game");
             Controller.closeGame();
 
         } catch (InterruptedException e) {
-            // Controller.exitGame();
+
             System.out.println("The game has been closed");
         }
         try {
-
+            //Request lobby to remove game from server.
             lobby.put("request", "closeGame", gameId);
             lobby.get(new ActualField("closedGame"), new ActualField(gameId));
             gameId = -1;
