@@ -8,12 +8,13 @@ public abstract class Tower {
 
     int radius, x, y, size, damage, upgradeCost, towerCost, fireRate, playerId, towerId, sellPrice;
     int lastShot;
-    //GameTicker gameTicker;
+    // GameTicker gameTicker;
 
     int towerLevel = 0;
 
-    public Tower() {}
-    
+    public Tower() {
+    }
+
     public void upgradeTower() {
         towerLevel++;
         sellPrice += upgradeCost / 2;
@@ -28,8 +29,8 @@ public abstract class Tower {
 
     public void hasShot(Game game) {
         try {
-            game.gameSpace.put("gui", "towerShoot", new int[]{x,y,size}, game.player1.id);
-            game.gameSpace.put("gui", "towerShoot", new int[]{x,y,size}, game.player2.id);
+            game.gameSpace.put("gui", "towerShoot", towerId, game.player1.id);
+            game.gameSpace.put("gui", "towerShoot", towerId, game.player2.id);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -68,7 +69,7 @@ public abstract class Tower {
     public int getPlayerId() {
         return playerId;
     }
-    
+
     public int getUpgradeCost() {
         return upgradeCost;
     }
@@ -78,6 +79,7 @@ public abstract class Tower {
     }
 
     public String getStatsAsString() {
-        return "Damage: " + damage + " FireRate: " + fireRate + "SellValue : " + sellPrice;
+        return "Damage: " + damage + " \nAttackSpeed: " + Math.round(50D / (double )fireRate * 100D) / 100D + " hit/sec\n SellPrice: "
+                + sellPrice;
     }
 }
