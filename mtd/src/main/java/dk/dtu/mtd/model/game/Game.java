@@ -110,7 +110,8 @@ public class Game implements Runnable {
     }
 
     /**
-     * Updates players gui with either win or lose.
+     * Updates both players GUI with either win or lose.
+     * 
      * @param loserId
      * @param winnerId
      */
@@ -123,15 +124,11 @@ public class Game implements Runnable {
         }
     }
 
-    public void updateExit(int id1, int id2) {
-        try {
-            gameSpace.put("exit", id1);
-            gameSpace.put("gameClosed", id2);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 
+    /**
+     * Displays the winner and loser on the corresponding client GUI's and closes the game threads afterwards.
+     * @throws UnexpectedException
+     */
     public void displayWinner() throws UnexpectedException {
         if (player1.hasLost) {
             updateWinner(player1.id, player2.id);
@@ -143,7 +140,6 @@ public class Game implements Runnable {
 
         try {
             closeGame();
-            // Thread.sleep(5000L);
             System.out.println("Ending game!");
 
             gameSpace.put("gameClosed", player1.id);
@@ -159,8 +155,8 @@ public class Game implements Runnable {
 
         while (playing) {
             try {
-                // recive and handle all incoming tuples marced with "request".
-                // Tuple contens: ("request" , 'type of request' , 'player ID')
+                // recive and handle all incoming tuples marked with "request".
+                // Tuple contents: ("request" , 'type of request' , 'player ID')
                 handleGameRequest(gameSpace.get(new ActualField("request"),
                         new FormalField(String.class), new FormalField(Integer.class)));
             } catch (InterruptedException e) {
@@ -168,8 +164,7 @@ public class Game implements Runnable {
             }
         }
 
-        // When the playing loop is finished running the game should be closed from the
-        // lobby:
+        // When the playing loop is finished running, the lobby should close the game
         try {
             lobby.put("request", "closeGame", id);
         } catch (InterruptedException e) {
@@ -178,17 +173,9 @@ public class Game implements Runnable {
         System.out.println("Game " + id + " ending it's run loop");
     }
 
-    @SuppressWarnings("unchecked")
     void handleGameRequest(Object[] request) throws InterruptedException {
-        if (request[1].toString().equals("exit")) {
-
-            if ((int) request[2] == player1.id) {
-                updateExit(player1.id, player2.id);
-            } else {
-                updateExit(player2.id, player1.id);
-            }
-        } else if (request[1].toString().equals("hostChat")) { // Recieve message from chatHost that chat server is
-                                                               // ready
+        if (request[1].toString().equals("hostChat")) { // Recieve message from chatHost that chat server is
+                                                        // ready
             // Give guest message that chat is now hosted
             gameSpace.put("connectionStatus", "hostSuccess");
 
@@ -226,20 +213,6 @@ public class Game implements Runnable {
 
         } else if (request[1].toString().equals("sellTower")) {
             towerManager.removeTower((int) request[2]);
-
-        } else if (request[1].toString().equals("chat")) {
-
-            String msg = (String) gameSpace.get(new ActualField("data"), new ActualField("chat"),
-                    new FormalField(String.class))[2];
-
-            String player = String.valueOf((int) request[2]);
-            Object[] res = gameSpace.get(new ActualField("chatList"), new FormalField(LinkedList.class));
-            LinkedList<String> chat = (LinkedList<String>) res[1];
-            chat.add("Player " + player + ": " + msg);
-            gameSpace.put("chatList", chat);
-            // One for each player
-            gameSpace.put("gui", "chat", chat, player1.id);
-            gameSpace.put("gui", "chat", chat, player2.id);
 
         } else if (request[1].toString().equals("sendEnemies")) {
 

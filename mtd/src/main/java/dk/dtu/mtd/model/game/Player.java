@@ -40,7 +40,7 @@ public class Player {
 
     public void lose(Game game) {
         try {
-            game.gameSpace.put("request","resign", id);
+            game.gameSpace.put("request", "resign", id);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
