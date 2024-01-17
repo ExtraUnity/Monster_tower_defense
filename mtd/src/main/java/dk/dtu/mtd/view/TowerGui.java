@@ -52,9 +52,9 @@ public class TowerGui extends StackPane {
                 this.upgradePrice = 50;
                 this.stats = "Damage: 0 \nAttackSpeed: " + Math.round(5 / 10.0 * 100D) / 100D
                         + " coins/sec\n SellPrice: 50";
-                this.towerAttack.setImage(new Image("dk/dtu/mtd/assets/skelly.gif"));
-                this.towerAttack.setFitHeight(200);
-                this.towerAttack.setFitWidth(200);
+                this.towerAttack.setImage(new Image("dk/dtu/mtd/assets/MoneyTowerShoot.gif"));
+                this.towerAttack.setFitHeight(100);
+                this.towerAttack.setFitWidth(100);
                 break;
         }
 
@@ -109,7 +109,7 @@ public class TowerGui extends StackPane {
                 this.towerAttack.setImage(new Image("dk/dtu/mtd/assets/AOEtower.gif"));
                 break;
             case "moneyTower":
-                this.towerAttack.setImage(new Image("dk/dtu/mtd/assets/skelly.gif"));
+                this.towerAttack.setImage(new Image("dk/dtu/mtd/assets/MoneyTowerShoot.gif"));
                 break;
         }
         towerAttack.setX(x - (towerAttack.getFitWidth() / 2));

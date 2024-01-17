@@ -43,6 +43,7 @@ public class MoneyTower extends Tower{
                 game.player2.addReward(payOut);
             }
             game.updateReward(playerId);
+            hasShot(game);
 
             lastShot = game.gameTicker.gameTick;
             deltaTick = 0;
@@ -51,7 +52,7 @@ public class MoneyTower extends Tower{
 
     @Override
     public String getStatsAsString() {
-        return "payOut: " + payOut + " \nAttackSpeed: " + Math.round((50D / (double)fireRate * 100D)*payOut) / 100D + " coins/sec\nSellPrice: "
+        return "payOut: " + payOut + " \nGrowthSpeed: " + Math.round((50D / (double)fireRate * 100D)*payOut) / 100D + " coins/sec\nSellPrice: "
                 + sellPrice;
     }
     
