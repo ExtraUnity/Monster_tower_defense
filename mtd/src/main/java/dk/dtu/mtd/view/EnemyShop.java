@@ -12,6 +12,7 @@ import javafx.scene.layout.HBox;
 public class EnemyShop extends HBox {
 
     public EnemyShop() {
+        this.setSpacing(15);
         setMaxHeight(100);
         setMinWidth(300);
 
@@ -27,7 +28,7 @@ public class EnemyShop extends HBox {
             }
         });
 
-        final ImageView fatSkellyEnemy = new ImageView(new Image("dk/dtu/mtd/assets/slime.gif", 70, 0, true, true));
+        final ImageView fatSkellyEnemy = new ImageView(new Image("dk/dtu/mtd/assets/slimeIcon.png", 70, 0, true, true));
         
         fatSkellyEnemy.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
             @Override
