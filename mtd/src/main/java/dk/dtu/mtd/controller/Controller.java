@@ -48,22 +48,26 @@ public class Controller {
 
     }
 
-    public static void exitGame() {
-        // exit the game
+    //Returns gui to main menu and tells client to exit game
+    public static void closeGame() {
+        // Return GUI to main menu
         guiMonitior.playing = false;
+        guiThread.interrupt();
         Gui.closeGame();
+
+        //Tell client to close game
         client.exitGame();
     }
 
+    //Close game if running and tell client to disconnect from lobby
     public static void exit() {
-        // exit the application
 
         // if a game is running close the game
         if (guiMonitior != null && guiMonitior.playing) {
-            exitGame();
+            closeGame();
         }
 
-        client.exit();
+        client.disconnectLobby();
         System.out.println("Exited");
     }
 

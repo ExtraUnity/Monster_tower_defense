@@ -57,6 +57,9 @@ public class Game implements Runnable {
 
     }
 
+    /**
+     * Closes all running threads in game and requests to display winners
+     */
     public void closeGame() {
         waveManager.playing = false;
         gameTicker.playing = false;
@@ -106,10 +109,15 @@ public class Game implements Runnable {
         }
     }
 
-    public void updateWinner(int id1, int id2) {
+    /**
+     * Updates players gui with either win or lose.
+     * @param loserId
+     * @param winnerId
+     */
+    public void updateWinner(int loserId, int winnerId) {
         try {
-            gameSpace.put("gui", "playerLost", "", id1);
-            gameSpace.put("gui", "playerWon", "", id2);
+            gameSpace.put("gui", "playerLost", "", loserId);
+            gameSpace.put("gui", "playerWon", "", winnerId);
         } catch (Exception e) {
             e.printStackTrace();
         }
