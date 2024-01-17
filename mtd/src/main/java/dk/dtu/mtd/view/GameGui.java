@@ -181,7 +181,7 @@ public class GameGui extends StackPane {
                 (int) ((gameAreaWidth * x) / 1920), (int) ((gameAreaHeight * y) / 1080));
         towerLayer.getChildren().add(tower);
         
-        Rectangle clickArea = new Rectangle(100, 100);
+        Rectangle clickArea = new Rectangle(size, size);
 
         clickArea.setX(((gameAreaWidth * (x - (size / 2))) / 1920));
         clickArea.setY(((gameAreaHeight * (y - (size /2))) / 1080));
@@ -192,6 +192,8 @@ public class GameGui extends StackPane {
         clickArea.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
+                interactionLayer.getChildren().remove(InteractionLayer.towerSelectedGui);
+                interactionLayer.getChildren().add(InteractionLayer.towerSelectedGui);
                 interactionLayer.towerClicked(towerId, playerId);
                 event.consume();
             }
