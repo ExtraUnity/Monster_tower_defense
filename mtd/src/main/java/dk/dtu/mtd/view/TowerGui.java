@@ -45,9 +45,9 @@ public class TowerGui extends StackPane {
             case "aoeTower":
                 this.upgradePrice = 50;
                 this.stats = "Damage: 1 \nAttackSpeed: "+ Math.round(5/7.0 * 100D) / 100D + " hit/sec\n SellPrice: 50";
-                this.towerAttack.setImage(new Image("dk/dtu/mtd/assets/skellyIcon.png"));
-                this.towerAttack.setFitHeight(100);
-                this.towerAttack.setFitWidth(100);
+                this.towerAttack.setImage(new Image("dk/dtu/mtd/assets/AOEtower.gif"));
+                this.towerAttack.setFitHeight(200);
+                this.towerAttack.setFitWidth(200);
                 break;
         }
 
@@ -99,7 +99,7 @@ public class TowerGui extends StackPane {
                 break;
             case "aoeTower":
                 this.stats = "Damage: 1 \nAttackSpeed: "+ Math.round(5/7.0 * 100D) / 100D + " hit/sec\n SellPrice: 50";
-                this.towerAttack.setImage(new Image("dk/dtu/mtd/assets/skellyIcon.png"));
+                this.towerAttack.setImage(new Image("dk/dtu/mtd/assets/AOEtower.gif"));
                 break;
         }
         towerAttack.setX(x - (towerAttack.getFitWidth()/2));
