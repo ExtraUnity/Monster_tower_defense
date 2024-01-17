@@ -100,6 +100,10 @@ public class WaveManager implements Runnable {
                 for (int i = 0; i < 4; i++) {
                     enemies.add(new FatSkeleton());
                 }
+            case DEER_SKULL:
+                for (int i = 0; i < 4; i++) {
+                    enemies.add(new DeerSkull());
+                }
 
             default:
                 break;
@@ -209,6 +213,11 @@ public class WaveManager implements Runnable {
         if (wave % 5 == 0) {
             for (int i = 0; i < wave; i++) {
                 enemies.add(new FatSkeleton()); // New enemy type
+            }
+        }
+        if (wave % 10 == 0) {
+            for (int i = 0; i < (wave/10); i++) {
+                enemies.add(new DeerSkull()); // New enemy type
             }
         }
         if (wave == 2) {

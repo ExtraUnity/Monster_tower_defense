@@ -41,7 +41,20 @@ public class EnemyShop extends HBox {
         });
 
 
-        this.getChildren().addAll(skellyEnemy, fatSkellyEnemy);
+        final ImageView deerSkull = new ImageView(new Image("dk/dtu/mtd/assets/DeerSkullIcon.png", 70, 0, true, true));
+        deerSkull.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                System.out.println("Requesting enemies");
+                Controller.sendEnemies(EnemyType.DEER_SKULL);
+
+                event.consume();
+            }
+        });
+
+
+
+        this.getChildren().addAll(skellyEnemy, fatSkellyEnemy, deerSkull);
         setAlignment(Pos.CENTER);
     }
 }

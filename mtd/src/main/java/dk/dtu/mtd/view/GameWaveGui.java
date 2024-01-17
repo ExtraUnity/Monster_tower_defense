@@ -82,6 +82,8 @@ class EnemyImage extends ImageView {
             this.image = new Image("dk/dtu/mtd/assets/skelly.gif", 150, 0, true, false);
         } else if (type.equals("FatSkeleton")) {
             this.image = new Image("dk/dtu/mtd/assets/slime.gif", 100, 0, true, false);
+        } else if (type.equals("DeerSkull")) {
+            this.image = new Image("dk/dtu/mtd/assets/DeerSkull.gif", 100, 0, true, false);
         } else if (type.equals("tankEnemy")) {
             this.image = new Image("dk/dtu/mtd/assets/skelly.gif", 100, 0, true, false);
         } else if (type.equals("bossEnemy")) {

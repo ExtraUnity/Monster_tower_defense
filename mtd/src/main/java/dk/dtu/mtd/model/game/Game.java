@@ -237,6 +237,9 @@ public class Game implements Runnable {
                 case FAT_SKELETON:
                     enemy = new FatSkeleton();
                     break;
+                case DEER_SKULL:
+                    enemy = new DeerSkull();
+                    break;
                 default:
                     enemy = new Skeleton();
                     break;
