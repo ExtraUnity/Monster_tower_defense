@@ -46,7 +46,8 @@ public class Game implements Runnable {
 
         towerManager = new TowerManager(this, path);
         new Thread(towerManager).start();
-        updateReward();
+        updateReward(playerID1);
+        updateReward(playerID2);
 
         try {
             gameSpace.put("gui", "sides", "left", player1.id);
@@ -82,10 +83,13 @@ public class Game implements Runnable {
         }
     }
 
-    public void updateReward() {
+    public void updateReward(int playerID) {
         try {
-            gameSpace.put("gui", "reward", player1.getRewards(), player1.id);
-            gameSpace.put("gui", "reward", player2.getRewards(), player2.id);
+            if(playerID == player1.id){
+                gameSpace.put("gui", "reward", player1.getRewards(), player1.id);
+            } else {
+                gameSpace.put("gui", "reward", player2.getRewards(), player2.id);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -194,14 +198,18 @@ public class Game implements Runnable {
         } else if (request[1].toString().equals("reward")) {
             // Reciving a reward request
             int reward = (int) request[2];
-            if ((int) request[2] == player1.id) {
+
+            //TODO: make sure this if condition is correct
+            if ((int) request[2] == player2.id) {
                 player2.setRewards(player2.getRewards() + reward);
                 System.out.println("player2 recived" + reward + "rewards");
+                updateReward(player2.id);
             } else {
                 player1.setRewards(player1.getRewards() + reward);
                 System.out.println("player1 recived" + reward + "rewards");
+                updateReward(player1.id);
             }
-            updateReward();
+
         } else if (request[1].toString().equals("placeTower")) {
             towerManager.placeTower((int) request[2]);
 
@@ -240,7 +248,8 @@ public class Game implements Runnable {
                     System.out.println(enemy.cost);
                 }
                 sendingPlayer.spendRewards(enemy.cost);
-                updateReward();
+                updateReward(sendingPlayer.id);
+                //updateReward(player2.id);
                 sendingPlayer.increaseIncome(enemy.incomeIncrement);
             }
             int recieverId = senderId == player1.id ? player2.id : player1.id;
@@ -263,7 +272,8 @@ public class Game implements Runnable {
     public void addIncome() {
         player1.addReward(player1.income);
         player2.addReward(player2.income);
-        updateReward();
+        updateReward(player1.id);
+        updateReward(player2.id);
     }
 
 }

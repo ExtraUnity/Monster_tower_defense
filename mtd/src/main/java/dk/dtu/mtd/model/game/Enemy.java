@@ -126,7 +126,7 @@ public abstract class Enemy {
         } else {
             game.player2.addReward(reward);
         }
-        game.updateReward();
+        game.updateReward(playerId);
 
     }
 
