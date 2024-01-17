@@ -44,7 +44,7 @@ public abstract class Enemy {
 
     // Is this enemy at the finish line
     public boolean reachedFinish() {
-        return this.y > 1080 && this.y < 3500 && !isDead();
+        return this.y > 1030 && this.y < 3500 && !isDead();
     }
 
     // Method to define the movement of the enemy
