@@ -27,7 +27,7 @@ public class EnemyShop extends HBox {
             }
         });
 
-        final ImageView fatSkellyEnemy = new ImageView(new Image("dk/dtu/mtd/assets/SuperMonkey.png", 70, 0, true, true));
+        final ImageView fatSkellyEnemy = new ImageView(new Image("dk/dtu/mtd/assets/slime.gif", 70, 0, true, true));
         
         fatSkellyEnemy.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
             @Override
