@@ -107,6 +107,7 @@ public class WaveManager implements Runnable {
                     enemies.add(new DeerSkull());
                 }
                 System.out.println("Sending a wave of deer skulls");
+                break;
             case DEVIL:
                 for (int i = 0; i < 4; i++) {
                     enemies.add(new Devil());
