@@ -228,7 +228,11 @@ public class Game implements Runnable {
                     new FormalField(EnemyType.class));
             int senderId = (int) request[2];
             EnemyType type = (EnemyType) res[2];
+            
             Player sendingPlayer = senderId == player1.id ? player1 : player2;
+            System.out.println("Recieving request for " + type.name());
+            System.out.println("From " + senderId);
+            
             Enemy enemy;
             switch (type) {
                 case SKELETON:
