@@ -9,6 +9,9 @@ import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
 
 public class TowerShop extends HBox {
 
@@ -18,7 +21,14 @@ public class TowerShop extends HBox {
         setAlignment(Pos.CENTER);
         
         final ImageView basicTower = new ImageView(new Image("dk/dtu/mtd/assets/BasicTower.png", 70, 0, true, true));
-        this.getChildren().add(basicTower);
+
+        VBox basicTowerLayout = new VBox();
+        Text basicTowerPrice = new Text("100");
+        basicTowerPrice.setStroke(Color.WHITE);
+        basicTowerLayout.setAlignment(Pos.CENTER);
+        basicTowerLayout.getChildren().addAll(basicTowerPrice, basicTower);
+        this.getChildren().add(basicTowerLayout);
+
         basicTower.addEventHandler(MouseEvent.DRAG_DETECTED, new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
@@ -30,7 +40,14 @@ public class TowerShop extends HBox {
             }
         });
         final ImageView superTower = new ImageView(new Image("dk/dtu/mtd/assets/AOEtower.png", 70, 0, true, true));
-        this.getChildren().add(superTower);
+
+        VBox superTowerLayout = new VBox();
+        Text superTowerPrice = new Text("350");
+        superTowerPrice.setStroke(Color.WHITE);
+        superTowerLayout.setAlignment(Pos.CENTER);
+        superTowerLayout.getChildren().addAll(superTowerPrice, superTower);
+        this.getChildren().add(superTowerLayout);
+
         superTower.addEventHandler(MouseEvent.DRAG_DETECTED, new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
@@ -43,8 +60,16 @@ public class TowerShop extends HBox {
                 event.consume();
             }
         });
+
         final ImageView moneyTree = new ImageView(new Image("dk/dtu/mtd/assets/MoneyTower.png", 70, 0, true, true));
-        this.getChildren().add(moneyTree);
+
+        VBox moneyTreeLayout = new VBox();
+        Text moneyTreePrice = new Text("250");
+        moneyTreePrice.setStroke(Color.WHITE);
+        moneyTreeLayout.setAlignment(Pos.CENTER);
+        moneyTreeLayout.getChildren().addAll(moneyTreePrice, moneyTree);
+        this.getChildren().add(moneyTreeLayout);
+
         moneyTree.addEventHandler(MouseEvent.DRAG_DETECTED, new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
