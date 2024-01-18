@@ -94,19 +94,23 @@ public class WaveManager implements Runnable {
                 for (int i = 0; i < 6; i++) {
                     enemies.add(new Skeleton());
                 }
+                System.out.println("Sending a wave of skeletons");
                 break;
             case FAT_SKELETON:
                 for (int i = 0; i < 4; i++) {
                     enemies.add(new FatSkeleton());
                 }
+                System.out.println("Sending a wave of slimes");
             case DEER_SKULL:
                 for (int i = 0; i < 4; i++) {
                     enemies.add(new DeerSkull());
                 }
+                System.out.println("Sending a wave of deer skulls");
             case DEVIL:
                 for (int i = 0; i < 4; i++) {
                     enemies.add(new Devil());
                 }
+                System.out.println("Sending a wave of devils");
 
             default:
                 break;
