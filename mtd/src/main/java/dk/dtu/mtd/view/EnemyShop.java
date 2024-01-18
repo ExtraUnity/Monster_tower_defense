@@ -29,7 +29,6 @@ public class EnemyShop extends HBox {
         this.getChildren().addAll(skeleton, slime, devil, deerSkull);
         setAlignment(Pos.CENTER);
     }
-
 }
 
 class ShopElement extends VBox {
@@ -49,5 +48,4 @@ class ShopElement extends VBox {
         setAlignment(Pos.CENTER);
         getChildren().addAll(priceText, element);
     }
-
 }
