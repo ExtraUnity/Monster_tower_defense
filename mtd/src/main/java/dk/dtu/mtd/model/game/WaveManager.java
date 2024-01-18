@@ -93,7 +93,6 @@ public class WaveManager implements Runnable {
             case SKELETON:
                 for (int i = 0; i < 6; i++) {
                     enemies.add(new Skeleton());
-
                 }
                 break;
             case FAT_SKELETON:

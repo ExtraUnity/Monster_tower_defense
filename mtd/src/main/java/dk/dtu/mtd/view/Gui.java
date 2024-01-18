@@ -11,6 +11,12 @@ import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundPosition;
+import javafx.scene.layout.BackgroundRepeat;
+import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
@@ -42,6 +48,7 @@ public class Gui extends Application {
     static MainMenuGui mainMenu;
     static Text loadingText;
     static VBox prompt;
+    static Background background;
 
     @Override
     public void start(Stage primaryStage) {
@@ -55,6 +62,8 @@ public class Gui extends Application {
         root.getChildren().add(lobbyPrompt());
         primaryStage.setScene(scene);
         primaryStage.show();
+        background = new Background(new BackgroundImage(new Image("dk/dtu/mtd/assets/TowerDefenceBackground.png"),BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT,BackgroundPosition.CENTER,new BackgroundSize(1920, 1080, false, false, false, false)));
+        root.setBackground(background);
     }
 
     public static void loading() {
