@@ -2,7 +2,6 @@ package dk.dtu.mtd.view;
 
 import java.util.LinkedList;
 
-import javafx.animation.PauseTransition;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.image.Image;
@@ -18,10 +17,8 @@ import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Screen;
-import javafx.util.Duration;
 
 public class GameGui extends StackPane {
     static StackPane root;

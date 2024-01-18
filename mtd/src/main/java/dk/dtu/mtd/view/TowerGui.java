@@ -101,6 +101,11 @@ public class TowerGui extends StackPane {
     }
 
     public void shoot() {
+        try {
+            this.getChildren().remove(towerAttack);
+        } catch (Exception e) {
+            // No exceptino needed
+        }
         switch (name) {
             case "basicTower":
                 this.towerAttack.setImage(new Image("dk/dtu/mtd/assets/basicTowerShoot.gif"));
