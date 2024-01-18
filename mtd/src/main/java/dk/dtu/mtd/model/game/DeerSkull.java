@@ -8,12 +8,4 @@ public class DeerSkull extends Enemy{
         incomeIncrement = 20;
     }
 
-    @Override
-    public void attack() {
-    }
-
-    @Override
-    protected void performDeathAnimation() {
-    }
-    
 }

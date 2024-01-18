@@ -7,13 +7,4 @@ public class Devil extends Enemy{
         cost = 250;
         incomeIncrement = 5;
     }
-
-    @Override
-    public void attack() {
-    }
-
-    @Override
-    protected void performDeathAnimation() {
-    }
-    
 }

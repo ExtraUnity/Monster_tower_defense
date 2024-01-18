@@ -163,7 +163,6 @@ public class TowerManager implements Runnable {
             }
             game.updateReward(playerId);
         } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }

@@ -32,7 +32,6 @@ public abstract class Enemy {
 
     protected void die(int playerId, Game game) {
         transferRewardToPlayer(playerId, game);
-        performDeathAnimation();
     }
 
     // remove an enemy that is not neccesarely dead.
@@ -73,8 +72,6 @@ public abstract class Enemy {
 
     }
 
-    // Abstract method to define the attack behavior of the enemy
-    public abstract void attack();
 
     // Getters and setters for the attributes
     public int getHealth() {
@@ -129,8 +126,5 @@ public abstract class Enemy {
         game.updateReward(playerId);
 
     }
-
-    // Abstract method for death animation
-    protected abstract void performDeathAnimation();
 
 }
