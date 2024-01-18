@@ -1,7 +1,6 @@
 package dk.dtu.mtd.model.game;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.InputMismatchException;
 import java.util.LinkedList;
 
@@ -16,8 +15,8 @@ public class WaveManager implements Runnable {
     private int currentWaveId;
     public Wave waveLeft;
     public Wave waveRight;
-    public ArrayList<Enemy> leftEnemies;
-    public ArrayList<Enemy> rightEnemies;
+    public volatile ArrayList<Enemy> leftEnemies;
+    public volatile ArrayList<Enemy> rightEnemies;
     public boolean playing;
     int waveRound;
     Game game;
@@ -38,11 +37,7 @@ public class WaveManager implements Runnable {
             System.out.println("Summoning wave " + waveRound);
             game.updateWave();
             spawnWave(waveRound);
-            // after each wave both players are given 25 coins
-            for(int i = 0; i < leftEnemies.size(); i++){
-                System.out.print("" + leftEnemies.get(i).cost);
-            }
-            System.out.println();
+
             waveRound++;
             try {
                 Thread.sleep(1000L);
@@ -147,6 +142,13 @@ public class WaveManager implements Runnable {
                     e.printStackTrace();
                 }
                 attackWave.run();
+
+                if (playerId == game.player1.id) {
+                    leftEnemies.removeAll(enemies);
+                } else {
+                    rightEnemies.removeAll(enemies);
+                }
+                
             }
 
         }).start();
@@ -198,7 +200,6 @@ public class WaveManager implements Runnable {
                     e.printStackTrace();
                 }
                 waveRight.run();
-                // player2Done.set(true);
 
                 try {
                     game.gameSpace.put("waveDoneToken");
