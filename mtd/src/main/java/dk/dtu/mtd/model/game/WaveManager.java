@@ -87,7 +87,7 @@ public class WaveManager implements Runnable {
     }
 
     void sendEnemies(EnemyType type, int playerId) {
-
+        System.out.println();
         ArrayList<Enemy> enemies = new ArrayList<Enemy>();
         switch (type) {
             case SKELETON:
@@ -101,6 +101,7 @@ public class WaveManager implements Runnable {
                     enemies.add(new FatSkeleton());
                 }
                 System.out.println("Sending a wave of slimes");
+                break;
             case DEER_SKULL:
                 for (int i = 0; i < 4; i++) {
                     enemies.add(new DeerSkull());
@@ -111,7 +112,7 @@ public class WaveManager implements Runnable {
                     enemies.add(new Devil());
                 }
                 System.out.println("Sending a wave of devils");
-
+                break;
             default:
                 break;
         }
