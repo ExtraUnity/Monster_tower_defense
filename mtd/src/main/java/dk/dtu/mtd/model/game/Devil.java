@@ -3,9 +3,9 @@ package dk.dtu.mtd.model.game;
 public class Devil extends Enemy{
 
     public Devil() {
-        super(4, 7, 1, 3);
+        super(7, 10, 1, 3);
         cost = 250;
-        incomeIncrement = 10;
+        incomeIncrement = 5;
     }
 
     @Override

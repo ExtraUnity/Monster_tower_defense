@@ -21,10 +21,10 @@ public class EnemyShop extends HBox {
         setMinWidth(350);
         this.setPadding(new Insets(5));
 
-        ShopElement skeleton = new ShopElement("dk/dtu/mtd/assets/skellyIcon.png", "50", EnemyType.SKELETON);
-        ShopElement slime = new ShopElement("dk/dtu/mtd/assets/slimeIcon.png", "100", EnemyType.FAT_SKELETON);
+        ShopElement skeleton = new ShopElement("dk/dtu/mtd/assets/skellyIcon.png", "100", EnemyType.SKELETON);
+        ShopElement slime = new ShopElement("dk/dtu/mtd/assets/slimeIcon.png", "350", EnemyType.FAT_SKELETON);
         ShopElement devil = new ShopElement("dk/dtu/mtd/assets/DevilIcon.png", "250", EnemyType.DEVIL);
-        ShopElement deerSkull = new ShopElement("dk/dtu/mtd/assets/DeerSkullIcon.png", "500", EnemyType.DEER_SKULL);
+        ShopElement deerSkull = new ShopElement("dk/dtu/mtd/assets/DeerSkullIcon.png", "600", EnemyType.DEER_SKULL);
 
         this.getChildren().addAll(skeleton, slime, devil, deerSkull);
         setAlignment(Pos.CENTER);

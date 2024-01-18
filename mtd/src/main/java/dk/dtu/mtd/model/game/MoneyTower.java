@@ -12,7 +12,7 @@ public class MoneyTower extends Tower{
         this.type = "moneyTower";
         this.lastShot = -1;
         this.towerId = towerId;
-        radius = 50;
+        radius = 100;
         damage = 0;
         size = 100;
         fireRate = 800;

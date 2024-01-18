@@ -91,25 +91,25 @@ public class WaveManager implements Runnable {
         ArrayList<Enemy> enemies = new ArrayList<Enemy>();
         switch (type) {
             case SKELETON:
-                for (int i = 0; i < 6; i++) {
+                for (int i = 0; i < 4; i++) {
                     enemies.add(new Skeleton());
                 }
                 System.out.println("Sending a wave of skeletons");
                 break;
             case FAT_SKELETON:
-                for (int i = 0; i < 4; i++) {
+                for (int i = 0; i < 3; i++) {
                     enemies.add(new FatSkeleton());
                 }
                 System.out.println("Sending a wave of slimes");
                 break;
             case DEER_SKULL:
-                for (int i = 0; i < 4; i++) {
+                for (int i = 0; i < 1; i++) {
                     enemies.add(new DeerSkull());
                 }
                 System.out.println("Sending a wave of deer skulls");
                 break;
             case DEVIL:
-                for (int i = 0; i < 4; i++) {
+                for (int i = 0; i < 8; i++) {
                     enemies.add(new Devil());
                 }
                 System.out.println("Sending a wave of devils");
@@ -124,6 +124,9 @@ public class WaveManager implements Runnable {
         } else {
             attackWave = new Wave(enemies, game.gameSpace, 1920 - 680, game.player2.id, currentWaveId++, game);
             rightEnemies.addAll(enemies);
+        }
+        if (type == EnemyType.DEVIL){
+            attackWave.setSpawnRate(25);
         }
 
         new Thread(new Runnable() {
@@ -218,15 +221,20 @@ public class WaveManager implements Runnable {
         if (wave < 1) {
             throw new InputMismatchException("Wave cannot be non-positive");
         }
-        // every 5th wave will have an additional set of fat skeletons
-        if (wave % 5 == 0) {
-            for (int i = 0; i < wave; i++) {
+        // every 4th wave will have an additional set of fat skeletons
+        if (wave % 4 == 0) {
+            for (int i = 0; i < (wave/2); i++) {
                 enemies.add(new FatSkeleton()); // New enemy type
             }
         }
-        if (wave % 10 == 0) {
-            for (int i = 0; i < (wave/10); i++) {
+        if (wave % 12 == 0) {
+            for (int i = 0; i < (wave/12); i++) {
                 enemies.add(new DeerSkull()); // New enemy type
+            }
+        }
+        if (wave % 3 == 0) {
+            for (int i = 0; i < ((int) wave*1.5); i++) {
+                enemies.add(new Devil()); // New enemy type
             }
         }
         if (wave == 2) {
@@ -242,16 +250,9 @@ public class WaveManager implements Runnable {
                 enemies.add(new Skeleton());
             }
 
-        } else if (wave == 3) {
-            for (int i = 0; i < 10; i++) {
-                enemies.add(new Devil());
-            }
         } else {
             for (int i = 0; i < wave; i++) {
                 enemies.add(new Skeleton());
-            }
-            for (int i = 0; i < (wave-10); i++) {
-                enemies.add(new Devil());
             }
         }
         return enemies;
