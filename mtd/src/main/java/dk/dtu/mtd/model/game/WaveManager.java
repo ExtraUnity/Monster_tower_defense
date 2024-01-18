@@ -259,16 +259,18 @@ public class WaveManager implements Runnable {
     }
 
     public void setWaveSpawnRate(Wave wave) {
-        if (waveRound == 1) {
+        if (waveRound < 6) {
             wave.setSpawnRate(150);
-        } else if (waveRound == 3 ) {
-            wave.setSpawnRate(40);
-        } else if (waveRound % 5 == 0) {
+        } else if (waveRound < 11 ) {
+            wave.setSpawnRate(100);
+        } else if (waveRound < 21) {
             wave.setSpawnRate(75);
-        } else if (waveRound == 7) {
+        } else if (waveRound < 31) {
+            wave.setSpawnRate(50);
+        } else if (waveRound < 51) {
             wave.setSpawnRate(25);
         } else {
-            wave.setSpawnRate(100);
+            wave.setSpawnRate(10);
         }
     }
 
