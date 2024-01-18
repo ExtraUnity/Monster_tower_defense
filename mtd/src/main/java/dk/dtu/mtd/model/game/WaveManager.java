@@ -339,7 +339,12 @@ class Wave {
                 }
 
                 for (int i = 0; i < spawned; i++) {
-                    enemies.get(i).move();
+                    if(playerId == game.player1.id){
+                        enemies.get(i).move(game, "left");
+                    } else {
+                        enemies.get(i).move(game, "right");
+                    }
+
                     if (enemies.get(i).reachedFinish() && !enemies.get(i).isDead()) {
                         enemies.get(i).setY(3000);
                         enemies.get(i).transferDamageToPlayer(playerId, game);

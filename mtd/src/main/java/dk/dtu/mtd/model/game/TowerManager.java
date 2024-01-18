@@ -12,7 +12,7 @@ public class TowerManager implements Runnable {
     public volatile int currentTowerId;
 
     Game game;
-    Path  path;
+    Path path;
 
     public TowerManager(Game game, Path path) {
         this.towerList = new ArrayList<Tower>();

@@ -8,7 +8,7 @@ public class BasicTower extends Tower {
         this.y = y;
         this.playerId = playerId;
         this.type = "basicTower";
-        //this.gameTicker = gameTicker;
+        // this.gameTicker = gameTicker;
         this.lastShot = -1;
         this.towerId = towerId;
         radius = 300;
@@ -27,20 +27,28 @@ public class BasicTower extends Tower {
     }
 
     public void shoot(List<Enemy> enemies, Game game) {
-        if(this.lastShot == -1) {
+        if (this.lastShot == -1) {
             this.lastShot = game.gameTicker.gameTick;
         }
         int deltaTick = game.gameTicker.gameTick - lastShot;
 
+        Enemy furtherst = new Skeleton();
+        int currentTick = game.gameTicker.gameTick;
         if (deltaTick > fireRate) {
             for (int i = 0; i < enemies.size(); i++) {
                 if (inRange(enemies.get(i)) && !enemies.get(i).isDead()) {
-                    enemies.get(i).takeDamage(damage, playerId, game);
-                    hasShot(game);
-                    lastShot = game.gameTicker.gameTick;
-                    deltaTick = 0;
-                    break;
+                    // find the enemy in the front
+                    if (furtherst.age == -1 || ((currentTick - enemies.get(i).age) * enemies.get(i).speed) > ((currentTick - furtherst.age) * furtherst.speed)) {
+                        furtherst = enemies.get(i);
+                    }
                 }
+            }
+
+            if (furtherst.age != -1) {
+                furtherst.takeDamage(damage, playerId, game);
+                hasShot(game);
+                lastShot = game.gameTicker.gameTick;
+                deltaTick = 0;
             }
         }
     }

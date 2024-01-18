@@ -8,6 +8,7 @@ public abstract class Enemy {
     public int cost;
     public int incomeIncrement;
     protected int x, y;
+    protected int age = -1;
 
     public Enemy(int health, int speed, int damage, int reward) {
         this.health = health;
@@ -49,7 +50,23 @@ public abstract class Enemy {
 
     // Method to define the movement of the enemy
     // THIS IS CURSED DON'T HATE ME
-    public void move() {
+    public void move(Game game, String side) {
+        if (age == -1) {
+            age = game.gameTicker.gameTick;
+        }
+
+        int t = (game.gameTicker.gameTick - age) * speed;
+
+        /*
+         * if (side.equals("left")) {
+         * this.x = (int) (400 * Math.cos(t / 600.) + 480);
+         * this.y = (int) ((t * 1080.) / 5000.);
+         * } else {
+         * this.x = (int) (400 * Math.cos(t / 600.) + 480) * (-1) + 1920;
+         * this.y = (int) ((t * 1080.) / 5000.);
+         * }
+         */
+
         if (this.x < 0) {
             System.out.println("This enemy not spawned");
             return;
@@ -70,7 +87,7 @@ public abstract class Enemy {
         } else {
             this.y += this.speed;
         }
-
+ 
     }
 
     // Abstract method to define the attack behavior of the enemy
@@ -111,7 +128,7 @@ public abstract class Enemy {
 
     // Method to transfer damage to the tower
     protected void transferDamageToPlayer(int playerId, Game game) {
-        if(playerId == game.player1.id) {
+        if (playerId == game.player1.id) {
             game.player1.takeDamage(this.damage, game);
         } else {
             game.player2.takeDamage(this.damage, game);
@@ -120,7 +137,8 @@ public abstract class Enemy {
 
     // Method to transfer reward to the player
     protected void transferRewardToPlayer(int playerId, Game game) {
-        //System.out.println("Transering reward " + reward + " to player with id " + playerId);
+        // System.out.println("Transering reward " + reward + " to player with id " +
+        // playerId);
         if (playerId == game.player1.id) {
             game.player1.addReward(reward);
         } else {

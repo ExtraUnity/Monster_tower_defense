@@ -29,6 +29,8 @@ public class Path {
         player2Path.add("1630 310 170 770"); // Fourth section
     }
 
+    
+
     public boolean isOnPath(int x, int y) {
 
         for (String section:player1Path) {
