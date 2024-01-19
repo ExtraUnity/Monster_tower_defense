@@ -198,6 +198,9 @@ class GUIMonitior implements Runnable {
                     // Update the positions of every monster in the gui. (Left side)
                 } else if (update[1].toString().equals("enemyUpdateLeft")) {
                     LinkedList<String> coords = (LinkedList<String>) update[2];
+                    // TODO: idea send all the waves coordinates as one long string, spilt at some character, then get the waveiIds
+                    
+
                     int waveId = Integer.valueOf(coords.removeLast());
 
                     Platform.runLater(new Runnable() {

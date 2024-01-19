@@ -57,16 +57,14 @@ public abstract class Enemy {
 
         int t = (game.gameTicker.gameTick - age) * speed;
 
-        /*
-         * if (side.equals("left")) {
-         * this.x = (int) (400 * Math.cos(t / 600.) + 480);
-         * this.y = (int) ((t * 1080.) / 5000.);
-         * } else {
-         * this.x = (int) (400 * Math.cos(t / 600.) + 480) * (-1) + 1920;
-         * this.y = (int) ((t * 1080.) / 5000.);
-         * }
-         */
-
+        
+        if (side.equals("left")) {
+            this.x = (int) (400 * Math.cos(t / 600.) + 480);
+        } else {
+            this.x = (int) (400 * Math.cos(t / 600.) + 480) * (-1) + 1920;
+        }
+        this.y = (int) ((t * 1080.) / 5000.);
+        /* 
         if (this.x < 0) {
             System.out.println("This enemy not spawned");
             return;
@@ -87,6 +85,7 @@ public abstract class Enemy {
         } else {
             this.y += this.speed;
         }
+        */
  
     }
 

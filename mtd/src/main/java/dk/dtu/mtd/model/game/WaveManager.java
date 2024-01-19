@@ -124,7 +124,7 @@ public class WaveManager implements Runnable {
             attackWave = new Wave(enemies, game.gameSpace, 1920 - 680, game.player2.id, currentWaveId++, game);
             rightEnemies.addAll(enemies);
         }
-        if (type == EnemyType.DEVIL){
+        if (type == EnemyType.DEVIL) {
             attackWave.setSpawnRate(25);
         }
 
@@ -148,7 +148,7 @@ public class WaveManager implements Runnable {
                 } else {
                     rightEnemies.removeAll(enemies);
                 }
-                
+
             }
 
         }).start();
@@ -230,17 +230,17 @@ public class WaveManager implements Runnable {
         }
         // every 4th wave will have an additional set of fat skeletons
         if (wave % 4 == 0) {
-            for (int i = 0; i < (wave/2); i++) {
+            for (int i = 0; i < (wave / 2); i++) {
                 enemies.add(new FatSkeleton()); // New enemy type
             }
         }
         if (wave % 12 == 0) {
-            for (int i = 0; i < (wave/12); i++) {
+            for (int i = 0; i < (wave / 12); i++) {
                 enemies.add(new DeerSkull()); // New enemy type
             }
         }
         if (wave % 3 == 0) {
-            for (int i = 0; i < ((int) wave*1.5); i++) {
+            for (int i = 0; i < ((int) wave * 1.5); i++) {
                 enemies.add(new Devil()); // New enemy type
             }
         }
@@ -268,7 +268,7 @@ public class WaveManager implements Runnable {
     public void setWaveSpawnRate(Wave wave) {
         if (waveRound == 1) {
             wave.setSpawnRate(150);
-        } else if (waveRound == 3 ) {
+        } else if (waveRound == 3) {
             wave.setSpawnRate(40);
         } else if (waveRound % 5 == 0) {
             wave.setSpawnRate(75);
@@ -303,7 +303,7 @@ class Wave {
     Space space;
     final int START_X;
     final int START_Y = 50;
-    
+
     int playerId;
     int waveId;
     Game game;
@@ -325,11 +325,11 @@ class Wave {
     public void run() {
         int spawned = 0;
         int lastSpawnTick = game.gameTicker.gameTick;
-        int deltaTick = 0;
+        int deltaSpawnTick = 0;
         while (true) {
-            deltaTick = game.gameTicker.gameTick - lastSpawnTick;
+            deltaSpawnTick = game.gameTicker.gameTick - lastSpawnTick;
             try {
-                if (spawned < enemies.size() && deltaTick >= spawnRate) {
+                if (spawned < enemies.size() && deltaSpawnTick >= spawnRate) {
                     // spawn enemy
                     enemies.get(spawned).setY(START_Y);
                     enemies.get(spawned).setX(START_X);
@@ -339,7 +339,7 @@ class Wave {
                 }
 
                 for (int i = 0; i < spawned; i++) {
-                    if(playerId == game.player1.id){
+                    if (playerId == game.player1.id) {
                         enemies.get(i).move(game, "left");
                     } else {
                         enemies.get(i).move(game, "right");
@@ -355,6 +355,18 @@ class Wave {
                         enemies.get(i).eliminateFromRoster();
                     }
                 }
+                
+                /*
+                 * String coords = "";
+                 * 
+                 * for (int i = 0; i < enemies.size(); i++) {
+                 * String xy = enemies.get(i).isDead() ? "4000 4000"
+                 * : "" + enemies.get(i).getX() + " " + enemies.get(i).getY();
+                 * coords += xy + ",";
+                 * }
+                 * coords += waveId + "W";
+                 * 
+                 */
                 LinkedList<String> coordinates = new LinkedList<String>();
                 for (int i = 0; i < enemies.size(); i++) {
                     String xy = enemies.get(i).isDead() ? "4000 4000"
