@@ -4,6 +4,7 @@ import org.jspace.ActualField;
 import org.jspace.FormalField;
 import java.io.IOException;
 import java.net.UnknownHostException;
+import java.util.Arrays;
 import java.util.LinkedList;
 import dk.dtu.mtd.model.Client;
 import dk.dtu.mtd.model.game.Tower;
@@ -196,6 +197,37 @@ class GUIMonitior implements Runnable {
                     });
                     // ("gui", "enemyUpdateLeft", LinkedList<String> coordinates , playerId)
                     // Update the positions of every monster in the gui. (Left side)
+                } else if(update[1].toString().equals("wavesUpdate")){
+                    System.out.println((String) update[2]);
+                    String[] waves = ((String) update[2]).split("W");
+                    System.out.println(Arrays.toString(waves));
+
+                    for (int i = 0; i < waves.length-1; i++){
+                        String[] wave = waves[i].split(",");
+                        System.out.println(Arrays.toString(wave));
+                    
+                        int waveId = Integer.valueOf(wave[0]);
+                        System.out.println("WaveId: " + waveId);
+                        String[] coords = Arrays.copyOfRange(wave, 2, wave.length);
+
+                        Platform.runLater(new Runnable() {
+                            @Override
+                            public void run() {
+                                for (Node n : GameGui.gameArea.getChildren()) {
+                                    if (n instanceof GameWaveGui) {
+                                        GameWaveGui gui = (GameWaveGui) n;
+                                        if (gui.waveGuiId == waveId) {
+                                            gui.updateEnemies2(coords);
+                                        }
+                                    }
+                                }
+    
+                            }
+    
+                        });
+                    }
+
+                
                 } else if (update[1].toString().equals("enemyUpdateLeft")) {
                     LinkedList<String> coords = (LinkedList<String>) update[2];
                     // TODO: idea send all the waves coordinates as one long string, spilt at some character, then get the waveiIds

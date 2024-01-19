@@ -48,6 +48,20 @@ public class GameWaveGui extends StackPane {
         this.getChildren().add(wavePane);
     }
 
+    public void updateEnemies2(String[] coordinates) {
+        try {
+            for (int i = 0; i < enemyArray.size(); i++) {
+                System.out.println(coordinates[i]);
+                //String[] coord = coordinates[i].split(" ");
+                //enemyArray.get(i).xCoord = (gameAreaWidth * ((Double.valueOf(coord[0])) / 1920)) - 50;
+                //enemyArray.get(i).yCoord = (gameAreaHeight * ((Double.valueOf(coord[1])) / 1080)) - 50;
+            }
+        } catch (Exception e) {
+            System.out.println("Could not update enemies");
+        }
+
+    }
+
     public void updateEnemies(LinkedList<String> coordinates) {
         try {
             for (int i = 0; i < enemyArray.size(); i++) {

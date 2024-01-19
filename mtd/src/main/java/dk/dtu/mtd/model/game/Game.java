@@ -16,10 +16,12 @@ public class Game implements Runnable {
     public Player player2;
     public Space gameSpace;
     private Space lobby;
-    public WaveManager waveManager;
+    public WaveManager2 waveManager;
+    public WaveManager waveManagerOld;
     public TowerManager towerManager;
     public Path path;
     private volatile boolean playing;
+
 
     public Game(int id, int playerID1, int playerID2, Space lobby) {
         this.id = id;
@@ -40,8 +42,12 @@ public class Game implements Runnable {
 
         gameTicker = new GameTicker(this);
         new Thread(gameTicker).start();
+
+
+        waveManagerOld = new WaveManager(this);
+        new Thread(waveManager).start();
         // create new waveManager, this can be run as a thread:
-        waveManager = new WaveManager(this);
+        waveManager = new WaveManager2(this);
         new Thread(waveManager).start();
 
         towerManager = new TowerManager(this, path);
@@ -263,7 +269,7 @@ public class Game implements Runnable {
                 sendingPlayer.increaseIncome(enemy.incomeIncrement);
             }
             int recieverId = senderId == player1.id ? player2.id : player1.id;
-            waveManager.sendEnemies(type, recieverId);
+            waveManagerOld.sendEnemies(type, recieverId);
 
         } else if (request[1].toString().equals("resign")) {
             if ((int) request[2] == player1.id) {

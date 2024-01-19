@@ -38,6 +38,7 @@ public class WaveManager2 implements Runnable {
         System.out.println("Starting waveManager2");
         waveRunner.start();
         while (playing) {
+            System.out.println("Summoning next wave");
             Wave2 wave = new Wave2(game, waveRound, WaveType.REGULAR, nextWaveId);
             activeWaves.add(wave);
 
@@ -46,9 +47,16 @@ public class WaveManager2 implements Runnable {
             } catch (InterruptedException e) {
                 System.out.println("WaveManager2 could not get afformation of next wave");
             }
+            
 
             waveRound++;
             nextWaveId++;
+
+            try {
+                Thread.sleep(1000L);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
         System.out.println("Closing waveManager2");
     }
@@ -71,14 +79,21 @@ public class WaveManager2 implements Runnable {
                     coordinates += i.getCoordinates();
                 }
             }
-            try {
-                game.gameSpace.put("gui", "wavesUpdate", coordinates, game.player1.id);
-                game.gameSpace.put("gui", "wavesUpdate", coordinates, game.player2.id);
-            } catch (InterruptedException e) {
-                System.out.println("failed to deliver next coordinateset for waveGui");
+            if(!coordinates.equals("")){
+                try {
+                    game.gameSpace.put("gui", "wavesUpdate", coordinates, game.player1.id);
+                    game.gameSpace.put("gui", "wavesUpdate", coordinates, game.player2.id);
+                    Thread.sleep(40L);
+                } catch (InterruptedException e) {
+                    System.out.println("failed to deliver next coordinateset for waveGui");
+                }
+    
             }
         }
+    }
 
+    public Object getCurrentWaveNumber() {
+        return waveRound;
     }
 
 }
@@ -123,6 +138,7 @@ class Wave2 {
     public String getCoordinates() {
         String coords = "";
 
+        coords += waveId + ",";
         for (int i = 0; i < leftEnemies.size(); i++) {
             leftEnemies.get(i).move(game, "left");
             String xy = leftEnemies.get(i).isDead() ? "4000 4000"
@@ -137,7 +153,7 @@ class Wave2 {
             coords += xy + ",";
         }
 
-        coords += waveId + "W";
+        coords +=  "W";
         return coords;
     }
 
